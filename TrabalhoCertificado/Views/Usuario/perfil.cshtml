@@ -1,0 +1,59 @@
+﻿@*
+    O que fazer?
+    Edição de usuário
+    falta muita coisa pakspd
+*@
+@{
+}
+@model Usuario;
+<div class="limiter">
+    <div >
+        
+        <form class="form-check" method="post">
+
+
+
+            <h6 class="display-4"><span class="badge badge-primary"> Meu perfil </span></h6>
+
+
+            <div class="form-group">
+                <label class="badge badge-dark" asp-for="nome">Seu nome</label>
+                <input class="form-control" type="text" asp-for="nome" value="@User.Identity.Name" disabled />
+            </div>
+
+            
+            <div class="form-group">
+                <label class="badge badge-dark" asp-for="Email">Seu e-mail</label>
+                <input class="form-control" type="text" asp-for="Email" value="" disabled />
+            </div>
+
+            <div class="wrap-input100 validate-input" data-validate="Digite sua Senha">
+                <input class="input100" type="password" asp-for="Senha" placeholder="Senha">
+                <span class="focus-input100" data-placeholder="&#xf191;"></span>
+
+            </div>
+            <span asp-validation-for="Senha" class="text-danger mb-2"></span>
+
+            <div class="wrap-input100 validate-input" data-validate="Confirme sua Senha">
+                <input class="input100" type="password" asp-for="SenhaConfirmar" placeholder="Confirmar Senha">
+                <span class="focus-input100" data-placeholder="&#xf191;"></span>
+            </div>
+            <span asp-validation-for="SenhaConfirmar" class="text-danger mb-2"></span>
+
+
+
+        </form>
+        </div>
+    </div>
+
+
+<div id="dropDownSelect1"></div>
+
+
+<!--===============================================================================================-->
+<script src="~/js/main.js"></script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>

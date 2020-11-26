@@ -55,6 +55,16 @@ namespace TrabalhoCertificado.Controllers
             return View();
 
         }
+        public ActionResult Logoff()
+        {
+             
+            HttpContext.SignOutAsync();
+            return RedirectToAction("Index");
+        }
+        public ActionResult perfil()
+        {
+            return View();
+        }
 
         [HttpPost]
         public IActionResult Index(Usuario login)
@@ -94,5 +104,6 @@ namespace TrabalhoCertificado.Controllers
             return View();
 
         }
+
     }
 }
