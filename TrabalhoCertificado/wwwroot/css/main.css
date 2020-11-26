@@ -418,7 +418,7 @@ iframe {
   display: -moz-box;
   display: -ms-flexbox;
   display: flex;
-  justify-content: center;
+  justify-content: right;
   align-items: center;
   padding: 0 20px;
   min-width: 120px;
@@ -437,6 +437,35 @@ iframe {
   -o-transition: all 0.4s;
   -moz-transition: all 0.4s;
   transition: all 0.4s;
+}
+
+.login100-form-btnCadastro {
+	font-family: Poppins-Medium;
+	font-size: 16px;
+	color: #555555;
+	line-height: 1.2;
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: -moz-box;
+	display: -ms-flexbox;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 0 20px;
+	min-width: 80px;
+	height: 30px;
+	border-radius: 25px;
+	background: #9152f8;
+	background: -webkit-linear-gradient(bottom, #7579ff, #b224ef);
+	background: -o-linear-gradient(bottom, #7579ff, #b224ef);
+	background: -moz-linear-gradient(bottom, #7579ff, #b224ef);
+	background: linear-gradient(bottom, #7579ff, #b224ef);
+	position: relative;
+	z-index: 1;
+	-webkit-transition: all 0.4s;
+	-o-transition: all 0.4s;
+	-moz-transition: all 0.4s;
+	transition: all 0.4s;
 }
 
 .login100-form-btn::before {
