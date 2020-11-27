@@ -17,5 +17,12 @@ namespace TrabalhoCertificado.Data
         //public DbSet<Site> TBSite { get; set; }
         public DbSet<Usuario> TBUsuario { get; set; }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Usuario>()
+                .HasIndex(b => b.Email)
+                .IsUnique();
+        }
+
     }
 }
