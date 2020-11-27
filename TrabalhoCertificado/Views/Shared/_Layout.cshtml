@@ -4,54 +4,56 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - TrabalhoCertificado</title>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <style>
+        body, h1, h2, h3, h4, h5, h6 {
+            font-family: "Lato", sans-serif
+        }
+
+        .w3-bar, h1, button {
+            font-family: "Montserrat", sans-serif
+        }
+
+        .fa-anchor, .fa-coffee {
+            font-size: 200px
+        }
+    </style>
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">TrabalhoCertificado</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Inicio</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacidade</a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="float-right">
-                    <div class="dropdown">
-                        <button class="btn btn-secondary dropdown-toggle" data-toggle="dropdown">@User.Identity.Name</button>
-                        <div class="dropdown-menu dropdown-menu-right">
-                            <a class="dropdown-item " asp-controller="usuario" asp-action="perfil">Meu perfil</a>
-                            <a class="dropdown-item " onclick="return sair()" asp-controller="usuario" asp-action="Logoff">Sair</a>
-
-                            <script language="JavaScript">
-                                function sair() {
-                                    return confirm("Tem certeza que deseja sair da aplicação?")
-                                }
-                            </script>
-
-                        </div>
+        <div class="w3-top">
+            <div class="w3-bar w3-blue w3-card w3-left-align w3-large">
+                <a class="w3-bar-item w3-button w3-hide-medium w3-hide-large w3-right w3-padding-large w3-hover-white w3-large w3-theme-d2" href="javascript:void(0);" onclick="openNav()"><i class="fa fa-bars"></i></a>
+                <a asp-area="" asp-controller="Home" asp-action="Index" class="w3-bar-item w3-button w3-padding-large w3-pink"><i class="fa fa-home w3-margin-right"></i>Trabalho Certificado</a>
+                <a href="#" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white">Link 1</a>
+                <a href="#" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white">Link 2</a>
+                <a href="#" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white">Link 3</a>
+                <div class="w3-dropdown-hover w3-hide-small w3-right ">
+                    <button class="w3-button w3-padding-large" title="Notifications">Bem vindo, @User.Identity.Name<span class="w3-badge w3-right w3-small w3-green">1</span></button>
+                    <div class="w3-dropdown-content w3-card-4 w3-bar-block" style="width:100px">
+                        <a asp-controller="usuario" asp-action="perfil" class="w3-bar-item w3-button">Meu perfil</a>
+                        <a href="#" class="w3-bar-item w3-button">Link 2</a>
+                        <a asp-controller="usuario" asp-action="Logoff" class="w3-bar-item w3-button" onclick="return sair()">Sair<span class="w3-badge w3-right w3-small w3-red">0</span></a>
                     </div>
                 </div>
             </div>
-        </nav>
+        </div>
     </header>
     <div class="container">
         <main role="main" class="pb-3">
+            <br /><br /><br />
+
+
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
+    <footer class="border-top footer text-muted text-center">
         <div class="container">
             &copy; 2020 - TrabalhoCertificado - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacidade</a>
         </div>
