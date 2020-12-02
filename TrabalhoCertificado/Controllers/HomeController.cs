@@ -18,15 +18,28 @@ namespace TrabalhoCertificado.Controllers
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
+
         }
+
 
         public IActionResult Index()
         {
+
+            if (User.IsInRole("administrador"))
+            {
+                return RedirectToAction("Index", "Admin");
+            }
+
             return View();
         }
 
         public IActionResult Privacy()
         {
+            if (User.IsInRole("administrador"))
+            {
+                return RedirectToAction("Index", "Admin");
+            }
+
             return View();
         }
 

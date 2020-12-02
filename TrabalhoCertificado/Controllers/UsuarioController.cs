@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TrabalhoCertificado.Data;
 using TrabalhoCertificado.Models;
@@ -26,16 +29,20 @@ namespace TrabalhoCertificado.Controllers
 
         public IActionResult Index()
         {
-            if (User.Identity.IsAuthenticated)
+            if (User.Identity.IsAuthenticated && User.IsInRole("usuario"))
                 return RedirectToAction("Index", "Home");
+            if (User.Identity.IsAuthenticated && User.IsInRole("administrador"))
+                return RedirectToAction("Index", "Admin");
 
             return View();
         }
 
         public IActionResult Cadastro()
         {
-            if (User.Identity.IsAuthenticated)
+            if (User.Identity.IsAuthenticated && User.IsInRole("usuario"))
                 return RedirectToAction("Index", "Home");
+            if (User.Identity.IsAuthenticated && User.IsInRole("administrador"))
+                return RedirectToAction("Index", "Admin");
 
             return View();
         }
@@ -61,7 +68,7 @@ namespace TrabalhoCertificado.Controllers
                     {
                         usuario.previlegios = "usuario";
                     }
-                    usuario.Senha = sha256encrypt(usuario.Senha);
+                    usuario.senhaEncry = sha256encrypt(usuario.Senha);
                     context.TBUsuario.Add(usuario);
                     context.SaveChanges();
 
@@ -71,6 +78,7 @@ namespace TrabalhoCertificado.Controllers
                     }
                     else
                     {
+                        SendMail(usuario.Email, "Seu cadastro foi efetuado com sucesso, aguarde o administrador ativa-lo", "Cadastro Efetuado");
                         ViewBag.Confirmacao = "Cadastrado, aguarde aprovação do administrador, será enviado um email quando aprovado";
                     }
 
@@ -121,17 +129,17 @@ namespace TrabalhoCertificado.Controllers
                 login.Email = login.Email.Trim();
                 login.Senha = login.Senha.Trim();
 
-                login.Senha = sha256encrypt(login.Senha);
-                List<Usuario> l = (List<Usuario>)context.TBUsuario.Where(x => x.Email == login.Email && x.Senha == login.Senha).ToList();
-                if (l != null && l.Count == 1)
+                login.senhaEncry = sha256encrypt(login.Senha);
+                Usuario l = context.TBUsuario.FirstOrDefault(x => x.Email == login.Email && x.senhaEncry == login.senhaEncry);
+                if (l != null)
                 {
-                    if (l[0].ativado)
+                    if (l.ativado)
                     {
                         List<Claim> claims = new List<Claim>
                         {
-                            new Claim(ClaimTypes.Sid, l[0].ID.ToString()),
-                            new Claim(ClaimTypes.Name, l[0].nome.ToString()),
-                            new Claim(ClaimTypes.Role, l[0].previlegios.ToString()),
+                            new Claim(ClaimTypes.Sid, l.ID.ToString()),
+                            new Claim(ClaimTypes.Name, l.nome.ToString()),
+                            new Claim(ClaimTypes.Role, l.previlegios.ToString()),
                         };
 
                         ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -144,6 +152,10 @@ namespace TrabalhoCertificado.Controllers
                         };
 
                         HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
+                        if(l.previlegios == "administrador")
+                        {
+                            return RedirectToAction("Index", "Admin");
+                        }
                         return RedirectToAction("Index", "Home");
                     }
                     
@@ -165,6 +177,69 @@ namespace TrabalhoCertificado.Controllers
 
         }
 
+        
+        [Authorize(Roles = "administrador")]
+        public ActionResult Ativar(int? id)
+        {
+            if(id.HasValue)
+            {
+                Usuario u = context.TBUsuario.FirstOrDefault(x => x.ID == id);
+
+                if(u != null)
+                {
+                    try
+                    {
+                        if (u.previlegios == "administrador")
+                            throw new Exception("Administrador não pode ser alterado");
+                        u.ativado = true;
+                        context.Update(u);
+                        context.SaveChanges();
+                        TempData["sucesso"] = "Usuario Ativado com sucesso";
+
+                        SendMail(u.Email, "Seu cadastro foi ativado em nosso site!", "Ativação de Cadastro");
+                        return RedirectToAction("Index", "Admin");
+                    }
+                    catch (Exception)
+                    {
+                        TempData["erro"] = "Usuario não Ativado";
+                        return RedirectToAction("Index", "Admin");
+                    }
+                }
+            }
+            return NoContent();
+        }
+
+        [Authorize(Roles = "administrador")]
+        public ActionResult Desativar(int? id)
+        {
+            if (id.HasValue)
+            {
+                Usuario u = context.TBUsuario.FirstOrDefault(x => x.ID == id);
+
+                if (u != null)
+                {
+                    try
+                    {
+                        if (u.previlegios == "administrador")
+                            throw new Exception("Administrador não pode ser alterado");
+                        u.ativado = false;
+                        context.Update(u);
+                        context.SaveChanges();
+                        TempData["sucesso"] = "Usuario Desativado com sucesso";
+
+                        SendMail(u.Email, "Seu cadastro foi desativado em nosso site, voce não pode ser acesso!", "Ativação de Cadastro");
+                        return RedirectToAction("Index", "Admin");
+                    }
+                    catch (Exception)
+                    {
+                        TempData["erro"] = "Usuario não Desativado";
+                        return RedirectToAction("Index", "Admin");
+                    }
+                }
+            }
+            return NoContent();
+        }
+
         public static string sha256encrypt(string frase)
         {
             UTF8Encoding encoder = new UTF8Encoding();
@@ -178,6 +253,46 @@ namespace TrabalhoCertificado.Controllers
                 builder.Append(hashedDataBytes[i].ToString("x2"));
             }
             return builder.ToString();
+        }
+
+        public bool SendMail(string email, string texto, string titulo)
+        {
+            try
+            {
+                // Estancia da Classe de Mensagem
+                MailMessage _mailMessage = new MailMessage();
+                // Remetente
+                _mailMessage.From = new MailAddress("trabalhocertificados@gmail.com");
+
+                // Destinatario seta no metodo abaixo
+
+                //Contrói o MailMessage
+                _mailMessage.CC.Add(email);
+                _mailMessage.Subject = titulo;
+                _mailMessage.IsBodyHtml = true;
+                _mailMessage.Body = texto;
+
+                //CONFIGURAÇÃO COM PORTA
+                SmtpClient _smtpClient = new SmtpClient("smtp.gmail.com", Convert.ToInt32("587"));
+
+                //CONFIGURAÇÃO SEM PORTA
+                // SmtpClient _smtpClient = new SmtpClient(UtilRsource.ConfigSmtp);
+
+                // Credencial para envio por SMTP Seguro (Quando o servidor exige autenticação)
+                _smtpClient.UseDefaultCredentials = false;
+                _smtpClient.Credentials = new NetworkCredential("trabalhocertificados@gmail.com", "trabalho@!#");
+
+                _smtpClient.EnableSsl = true;
+
+                _smtpClient.Send(_mailMessage);
+
+                return true;
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
     }

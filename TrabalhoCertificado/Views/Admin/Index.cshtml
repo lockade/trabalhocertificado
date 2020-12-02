@@ -1,0 +1,133 @@
+﻿@model IEnumerable<Usuario>
+
+
+
+
+
+@if (TempData["sucesso"] != null)
+{
+    <div class="alert alert-success">@TempData["sucesso"]</div>
+}
+
+@if (TempData["erro"] != null)
+{
+    <div class="alert alert-danger">@TempData["erro"]</div>
+}
+
+<div class="container">
+    <h2>Cadastros</h2>
+    @if (Model != null)
+    {
+        <div class="container row">
+            @foreach (Usuario usuario in Model)
+            {
+                @if (usuario.ativado)
+                {
+                    ViewBag.sucDang = "alert-success";
+                }
+                else
+                {
+                    ViewBag.sucDang = "alert-danger";
+                }
+
+                <div class="card m-2 @ViewBag.sucDang" style="width: 18rem;">
+                    <div class="card-body ">
+                        <p class="card-text">@Html.DisplayNameFor(model => model.ID): @usuario.ID </p>
+                        <p class="card-text">@Html.DisplayNameFor(model => model.nome): @usuario.nome </p>
+                        <p class="card-text">@Html.DisplayNameFor(model => model.Email): @usuario.Email </p>
+                        <p class="card-text">@Html.DisplayNameFor(model => model.previlegios): @usuario.previlegios </p>
+
+                        @if (usuario.ativado)
+                        {
+                            <p class="text-black">@Html.DisplayNameFor(model => model.ativado):<span class="card-text text-success">Sim</span></p>
+                            <a class='btn btn-sm btn-danger text-white mx-auto' data-toggle='modal' data-target='#modalDesativar' data-code='@usuario.ID' data-nome="@usuario.nome" data-email="@usuario.Email">Desativar</a>
+
+                        }
+                        else
+                        {
+                            <p class="text-black">@Html.DisplayNameFor(model => model.ativado):<span class="card-text text-danger">Não</span></p>
+                            <a class='btn btn-sm btn-success text-white mx-auto' data-toggle='modal' data-target='#modalAtivar' data-code='@usuario.ID' data-nome="@usuario.nome" data-email="@usuario.Email">Ativar</a>
+                        }
+
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+<form>
+    <div class="modal" id="modalDesativar" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="d-flex justify-content-center">
+                        <div>
+                            <i class="fa fa-4x fa-minus-circle text-danger"></i>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-center" style="padding-top: 12px;">
+                        <span class="h4">Tem certeza?</span>
+                    </div>
+                    <div>
+                        <small style="text-align: center"><span id="ss" class="text-center"></span></small>
+                    </div>
+                </div>
+                <div class="modal-footer d-flex justify-content-center" style="border-top: 0px;">
+                    <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-sm btn-danger text-white" asp-action="Desativar" asp-controller="Usuario" id="btnDesativar">Desativar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<form>
+    <div class="modal" id="modalAtivar" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="d-flex justify-content-center">
+                        <div>
+                            <i class="fa fa-4x fa-minus-circle text-success"></i>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-center" style="padding-top: 12px;">
+                        <span class="h4">Tem certeza?</span>
+                    </div>
+                    <div>
+                        <small style="text-align: center"><span id="spanAtivado" class="text-center"></span></small>
+                    </div>
+                </div>
+                <div class="modal-footer d-flex justify-content-center" style="border-top: 0px;">
+                    <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-sm btn-success text-white" asp-action="Ativar" asp-controller="Usuario" id="btnAtivar">Ativar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script>
+    window.onload = function () {
+        $('#modalDesativar').on('show.bs.modal', function (e) {
+            let code = $(e.relatedTarget).data('code');
+            let nome = $(e.relatedTarget).data('nome');
+            let email = $(e.relatedTarget).data('email');
+            let s = document.getElementById('btnDesativar').getAttribute('formaction');
+            $("#spanDesativado").html("Deseja realmente desativar este cadastro com o nome \"" + nome + "\" e email \"" + email + "\" do sistema ?");
+            document.getElementById('btnDesativar').removeAttribute('formaction');
+            document.getElementById('btnDesativar').setAttribute('formaction', s + '/' + code);
+        });
+
+        $('#modalAtivar').on('show.bs.modal', function (e) {
+            let code = $(e.relatedTarget).data('code');
+            let nome = $(e.relatedTarget).data('nome');
+            let email = $(e.relatedTarget).data('email');
+            let s = document.getElementById('btnAtivar').getAttribute('formaction');
+            $("#spanAtivado").html("Deseja realmente ativar este cadastro com o nome \"" + nome + "\" e email \"" + email + "\" do sistema ?");
+            document.getElementById('btnAtivar').removeAttribute('formaction');
+            document.getElementById('btnAtivar').setAttribute('formaction', s + '/' + code);
+        });
+    }
+</script>
