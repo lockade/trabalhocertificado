@@ -1,0 +1,46 @@
+﻿@model Usuario
+@{ Layout = "LayoutAdmin";}
+
+
+
+
+
+
+    <div class="container">
+        <h2>Alterar Email</h2>
+
+        @if (TempData["sucesso"] != null)
+        {
+            <div class="alert alert-success">@TempData["sucesso"]</div>
+        }
+
+        @if (TempData["erro"] != null)
+        {
+            <div class="alert alert-danger">@TempData["erro"]</div>
+        }
+
+        <div class="container row mx-auto">
+            @if (Model != null)
+            {
+                <form method="post" asp-controller="Admin" asp-action="AlterarEmail" class="container-fluid col-12">
+                    <input type="hidden" asp-for="ID" />
+
+
+                    <div class="form-group ">
+                        <label asp-for="Email"></label>
+                        <input asp-for="Email" class="form-control p-0" />
+                        <span asp-validation-for="Email" class="text-danger small"></span>
+                    </div>
+
+                    <div class="form-group ">
+                        <button type="submit" class="btn btn-primary mx-auto">Salvar</button>
+                    </div>
+
+
+
+                </form>
+            }
+        </div>
+    </div>
+
+

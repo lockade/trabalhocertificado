@@ -1,0 +1,68 @@
+﻿@{
+    Layout = "LayoutUsuario";
+}
+@model RecuperarSenhaLinks;
+
+@if (ViewBag.Confirmacao != null)
+{
+    <span class="login100-form-title p-b-34 p-t-27">
+        Sucesso!
+    </span>
+    <span class="alert alert-success text-center">@ViewBag.Confirmacao</span>
+}
+else
+{
+    <span class="login100-form-title p-b-34 p-t-27">
+        Recuperar Senha
+    </span>
+
+
+    @if (ViewBag.Confirmacao != null)
+    {
+        <div class="alert alert-danger text-center">@ViewBag.Confirmacao</div>
+    }
+    else
+    {
+        @if (ViewBag.TempoEx != null)
+        {
+            <div class="alert alert-danger text-center">@ViewBag.TempoEx</div>
+        }
+        else
+        {
+            @if (Model != null)
+            {
+                <input type="hidden" asp-for="IDEncry" />
+                <input type="hidden" asp-for="Email" />
+                <div class="wrap-input100 validate-input" data-validate="Digite sua Senha">
+                    <input class="input100" type="password" asp-for="Senha" placeholder="Senha">
+                    <span class="focus-input100" data-placeholder="&#xf191;"></span>
+
+                </div>
+                <span asp-validation-for="Senha" class="text-danger mb-2"></span>
+
+                <div class="wrap-input100 validate-input" data-validate="Confirme sua Senha">
+                    <input class="input100" type="password" asp-for="SenhaConfirmar" placeholder="Confirmar Senha">
+                    <span class="focus-input100" data-placeholder="&#xf191;"></span>
+                </div>
+                <span asp-validation-for="SenhaConfirmar" class="text-danger mb-2"></span>
+
+                <div class="container-login100-form-btn">
+                    <button class="login100-form-btn">
+                        Salvar
+                    </button>
+                </div>
+
+
+            }
+
+
+        }
+    }
+    
+}
+
+<div class="text-center p-t-90">
+    <a class="txt1" asp-controller="Usuario" asp-action="index">
+        Voltar para login
+    </a>
+</div>

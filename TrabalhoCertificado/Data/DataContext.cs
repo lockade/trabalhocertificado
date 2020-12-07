@@ -17,11 +17,18 @@ namespace TrabalhoCertificado.Data
         //public DbSet<Site> TBSite { get; set; }
         public DbSet<Usuario> TBUsuario { get; set; }
 
+        
+        public DbSet<RecuperarSenhaLinks> TBRecuperarSenhaLinks { get; set; }
+        
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Usuario>()
                 .HasIndex(b => b.Email)
                 .IsUnique();
+
+            modelBuilder.Entity<RecuperarSenhaLinks>()
+                .HasKey(b => b.IDEncry);
         }
 
     }

@@ -1,113 +1,62 @@
 ﻿@{
-    Layout = null;
+    Layout = "LayoutUsuario";
 }
 @model Usuario;
 
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <title>Entrar</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!--===============================================================================================-->
-    <link rel="icon" type="image/png" href="~/images/icons/favicon.ico" />
-    <!--===============================================================================================-->
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="~/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="~/fonts/iconic/css/material-design-iconic-font.min.css">
-    <!--===============================================================================================-->
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="~/css/util.css">
-    <link rel="stylesheet" type="text/css" href="~/css/main.css">
-    <!--===============================================================================================-->
-</head>
-<body>
+    @if (ViewBag.Confirmacao != null)
+    {
+        <span class="login100-form-title p-b-34 p-t-27">
+            Sucesso!
+        </span>
+        <span class="alert alert-success text-center">@ViewBag.Confirmacao</span>
+    }
+    else
+    {
+        <span class="login100-form-title p-b-34 p-t-27">
+            Cadastro
+        </span>
 
-    <div class="limiter">
-        <div class="container-login100">
-            <div class="wrap-login100">
-                <form class="login100-form validate-form" method="post">
-                    <span class="login100-form-logo">
-                        <i class="zmdi zmdi-landscape"></i>
-                    </span>
-
-
-
-                    @if (ViewBag.Confirmacao != null)
-                    {
-                        <span class="login100-form-title p-b-34 p-t-27">
-                            Sucesso!
-                        </span>
-                        <span class="alert alert-success text-center">@ViewBag.Confirmacao</span>
-                    }
-                    else
-                    {
-                        <span class="login100-form-title p-b-34 p-t-27">
-                            Cadastro
-                        </span>
-
-                        <div class="wrap-input100 validate-input" data-validate="Digite seu Nome">
-                            <input class="input100" type="text" asp-for="nome" placeholder="Nome Completo">
-                            <span class="focus-input100" data-placeholder="&#xf207;"></span>
-                        </div>
-                        <span asp-validation-for="nome" class="text-danger mb-2"></span>
-
-                        <div class="wrap-input100 validate-input" data-validate="Digite seu Email">
-                            <input class="input100" type="text" asp-for="Email" placeholder="Email">
-                            <span class="focus-input100" data-placeholder="&#xf207;"></span>
-                        </div>
-                        <span asp-validation-for="Email" class="text-danger mb-2"></span>
-
-                        <div class="wrap-input100 validate-input" data-validate="Digite sua Senha">
-                            <input class="input100" type="password" asp-for="Senha" placeholder="Senha">
-                            <span class="focus-input100" data-placeholder="&#xf191;"></span>
-
-                        </div>
-                        <span asp-validation-for="Senha" class="text-danger mb-2"></span>
-
-                        <div class="wrap-input100 validate-input" data-validate="Confirme sua Senha">
-                            <input class="input100" type="password" asp-for="SenhaConfirmar" placeholder="Confirmar Senha">
-                            <span class="focus-input100" data-placeholder="&#xf191;"></span>
-                        </div>
-                        <span asp-validation-for="SenhaConfirmar" class="text-danger mb-2"></span>
-
-                        @if (ViewBag.Erro != null)
-                        {
-                            <div class="alert alert-danger text-center">@ViewBag.Erro</div>
-                        }
-
-                        <div class="container-login100-form-btn">
-                            <button class="login100-form-btn">
-                                Cadastrar
-                            </button>
-                        </div>
-                    }
-
-
-
-                    <div class="text-center p-t-90">
-                        <a class="txt1" asp-action="index">
-                            Voltar para login
-                        </a>
-                    </div>
-
-                </form>
-            </div>
+        <div class="wrap-input100 validate-input" data-validate="Digite seu Nome">
+            <input class="input100" type="text" asp-for="nome" placeholder="Nome Completo">
+            <span class="focus-input100" data-placeholder="&#xf207;"></span>
         </div>
+        <span asp-validation-for="nome" class="text-danger mb-2"></span>
+
+        <div class="wrap-input100 validate-input" data-validate="Digite seu Email">
+            <input class="input100" type="text" asp-for="Email" placeholder="Email">
+            <span class="focus-input100" data-placeholder="&#xf207;"></span>
+        </div>
+        <span asp-validation-for="Email" class="text-danger mb-2"></span>
+
+        <div class="wrap-input100 validate-input" data-validate="Digite sua Senha">
+            <input class="input100" type="password" asp-for="Senha" placeholder="Senha">
+            <span class="focus-input100" data-placeholder="&#xf191;"></span>
+
+        </div>
+        <span asp-validation-for="Senha" class="text-danger mb-2"></span>
+
+        <div class="wrap-input100 validate-input" data-validate="Confirme sua Senha">
+            <input class="input100" type="password" asp-for="SenhaConfirmar" placeholder="Confirmar Senha">
+            <span class="focus-input100" data-placeholder="&#xf191;"></span>
+        </div>
+        <span asp-validation-for="SenhaConfirmar" class="text-danger mb-2"></span>
+
+        @if (ViewBag.Erro != null)
+        {
+            <div class="alert alert-danger text-center">@ViewBag.Erro</div>
+        }
+
+        <div class="container-login100-form-btn">
+            <button class="login100-form-btn">
+                Cadastrar
+            </button>
+        </div>
+    }
+
+
+
+    <div class="text-center p-t-90">
+        <a class="txt1" asp-action="index">
+            Voltar para login
+        </a>
     </div>
-
-
-    <div id="dropDownSelect1"></div>
-
-    
-    <!--===============================================================================================-->
-    <script src="~/js/main.js"></script>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
-    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
-
-</body>
-</html>

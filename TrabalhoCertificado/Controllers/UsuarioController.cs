@@ -37,6 +37,114 @@ namespace TrabalhoCertificado.Controllers
             return View();
         }
 
+
+        public IActionResult AlterarSenha(string ID)
+        {
+            if (User.Identity.IsAuthenticated && User.IsInRole("usuario"))
+                return RedirectToAction("Index", "Home");
+            if (User.Identity.IsAuthenticated && User.IsInRole("administrador"))
+                return RedirectToAction("Index", "Admin");
+
+            if(ID != null)
+            {
+                //localizar no banco e renderizar a alteração
+                RecuperarSenhaLinks s = context.TBRecuperarSenhaLinks.FirstOrDefault(x => x.IDEncry == ID);
+                if(s != null)
+                {
+                    //existe no banco
+                    TimeSpan diff = DateTime.Now - s.tempo;
+
+                    if (!(diff.TotalSeconds <= 3600))
+                        ViewBag.TempoEx = "Tempo Expirado!";
+                }
+
+
+                return View(s);
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
+        }
+
+
+
+
+        [HttpPost]
+        public IActionResult AlterarSenha(RecuperarSenhaLinks r)
+        {
+            if (ModelState.IsValid)
+            {
+                RecuperarSenhaLinks temp = context.TBRecuperarSenhaLinks.FirstOrDefault(x => x.IDEncry == r.IDEncry);
+                if (temp != null)
+                {
+                    Usuario u = context.TBUsuario.FirstOrDefault(x => x.Email == temp.Email);
+                    u.senhaEncry = sha256encrypt(r.Senha);
+                    context.TBUsuario.Update(u);
+                    context.TBRecuperarSenhaLinks.Remove(temp);
+                    ViewBag.Confirmacao = "Senha Alterada";
+                    context.SaveChanges();
+
+                }
+                else
+                {
+                    ViewBag.Confirmacao = "Erro";
+                }
+
+
+            }
+            return View();
+        }
+
+        public IActionResult RecuperarSenha()
+        {
+            if (User.Identity.IsAuthenticated && User.IsInRole("usuario"))
+                return RedirectToAction("Index", "Home");
+            if (User.Identity.IsAuthenticated && User.IsInRole("administrador"))
+                return RedirectToAction("Index", "Admin");
+
+            return View();
+        }
+
+
+        [HttpPost]
+        public IActionResult RecuperarSenha(RecuperarSenhaLinks usuario)
+        {
+            if(usuario.Email == "")
+            {
+                ViewBag.Erro = "Email vazio.";
+                return View();
+            }
+            Usuario u = context.TBUsuario.FirstOrDefault(x => x.Email == usuario.Email);
+
+            if (u != null)
+            {
+                RecuperarSenhaLinks s = new RecuperarSenhaLinks();
+                s.IDEncry = sha256encrypt("GustavoJeffersonNatasha" + u.ID);
+                s.tempo = DateTime.Now;
+                s.Email = u.Email;
+                RecuperarSenhaLinks temp = context.TBRecuperarSenhaLinks.FirstOrDefault(x => x.IDEncry == s.IDEncry);
+                if (temp != null)
+                    context.TBRecuperarSenhaLinks.Remove(temp);
+                context.TBRecuperarSenhaLinks.Add(s);
+                context.SaveChanges();
+
+                string link = "<a href=\"" + "https://" + HttpContext.Request.Host + "/Usuario/AlterarSenha/" + s.IDEncry + "\">Alterar Senha</a>";
+                SendMail(u.Email, "Link para recuperação: " + link, "Recuperação de Senha - Certificados");
+                ViewBag.Confirmacao = "Um email foi enviado com um link para alteração da senha (validade de 1 hora)";
+            }
+            else
+            {
+                ViewBag.Erro = "Email não encontrado";
+            }
+
+            return View();
+        }
+
+        
+
+
+
         public IActionResult Cadastro()
         {
             if (User.Identity.IsAuthenticated && User.IsInRole("usuario"))

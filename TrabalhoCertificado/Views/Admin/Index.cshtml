@@ -18,6 +18,21 @@
     <h2>Cadastros</h2>
     @if (Model != null)
     {
+        if (ViewBag.Acao == null)
+        {
+            ViewBag.Acao = "Index";
+        }
+
+        <form class="mx-auto row" method="get" asp-controller="Admin" asp-action="@ViewBag.Acao">
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" placeholder="Pesquise por nome e email" aria-describedby="basic-addon2">
+                <button class="btn btn-outline-primary" type="submit" id="button-addon2"><i class="fas fa-search fa-sm"></i></button>
+            </div>
+        </form>
+
+        
+
+
         <div class="container row">
             @foreach (Usuario usuario in Model)
             {
@@ -48,6 +63,8 @@
                             <p class="text-black">@Html.DisplayNameFor(model => model.ativado):<span class="card-text text-danger">Não</span></p>
                             <a class='btn btn-sm btn-success text-white mx-auto' data-toggle='modal' data-target='#modalAtivar' data-code='@usuario.ID' data-nome="@usuario.nome" data-email="@usuario.Email">Ativar</a>
                         }
+
+                        <a class="btn btn-warning" asp-controller="Admin" asp-action="AlterarEmail" asp-route-id="@usuario.ID">Alterar Email</a>
 
                     </div>
                 </div>
@@ -107,6 +124,8 @@
         </div>
     </div>
 </form>
+
+
 
 <script>
     window.onload = function () {
