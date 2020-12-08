@@ -38,14 +38,14 @@
             {
                 @if (usuario.ativado)
                 {
-                    ViewBag.sucDang = "alert-success";
+                    ViewBag.sucDang = "border border-success";
                 }
                 else
                 {
-                    ViewBag.sucDang = "alert-danger";
+                    ViewBag.sucDang = "border border-danger";
                 }
 
-                <div class="card m-2 @ViewBag.sucDang" style="width: 18rem;">
+                <div class="card m-2 @ViewBag.sucDang col-lg-5" style="width: 18rem;">
                     <div class="card-body ">
                         <p class="card-text">@Html.DisplayNameFor(model => model.ID): @usuario.ID </p>
                         <p class="card-text">@Html.DisplayNameFor(model => model.nome): @usuario.nome </p>
@@ -64,7 +64,7 @@
                             <a class='btn btn-sm btn-success text-white mx-auto' data-toggle='modal' data-target='#modalAtivar' data-code='@usuario.ID' data-nome="@usuario.nome" data-email="@usuario.Email">Ativar</a>
                         }
 
-                        <a class="btn btn-warning" asp-controller="Admin" asp-action="AlterarEmail" asp-route-id="@usuario.ID">Alterar Email</a>
+                        <a class="btn btn-sm btn-info" asp-controller="Admin" asp-action="AlterarEmail" asp-route-id="@usuario.ID">Alterar Email</a>
 
                     </div>
                 </div>

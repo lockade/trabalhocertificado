@@ -3,6 +3,11 @@
 }
 @model Usuario;
 
+    @if(TempData["success"] != null)
+    {
+        <span class="alert alert-success">@TempData["success"]</span>
+    }
+
 
     <span class="login100-form-title p-b-34 p-t-27">Entrar
     </span>
@@ -17,7 +22,6 @@
         <input class="input100" type="password" asp-for="Senha" placeholder="Senha">
         <span class="focus-input100" data-placeholder="&#xf191;"></span>
     </div>
-    <span asp-validation-for="Senha" class="text-danger"></span>
 
     @if (ViewBag.Erro != null)
     {
@@ -25,7 +29,7 @@
     }
 
     <div class="container-login100-form-btn">
-        <button class="login100-form-btn">Entrar
+        <button class="login100-form-btn" type="submit">Entrar
         </button>
     </div>
 

@@ -1,0 +1,51 @@
+﻿
+@model Usuario;
+<div class="container">
+    <h3>Alterar Senha</h3>
+
+    @if (TempData["erro"] != null)
+    {
+        <span class="alert alert-danger">@TempData["erro"]</span>
+    }
+
+    @if (Model != null)
+    {
+
+<form method="post" class="mt-4" asp-controller="Usuario" asp-action="RemoverConta">
+    <input type="hidden" asp-for="ID" />
+    <input type="hidden" asp-for="Email" />
+    <div class="mb-3">
+        <label class="form-label">Senha Atual</label>
+        <input asp-for="senhaEncry" type="password" value="">
+    </div>
+
+    <a data-toggle='modal' data-target='#modalRemover' class="btn btn-danger text-white">Remover</a>
+
+    <div class="modal" id="modalRemover" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="d-flex justify-content-center">
+                        <div>
+                            <i class="fa fa-4x fa-minus-circle text-danger"></i>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-center" style="padding-top: 12px;">
+                        <span class="h4">Conta será Excluida PERMANENTEMENTE, Tem Certeza ?</span>
+                    </div>
+                    <div>
+                </div>
+                <div class="modal-footer d-flex justify-content-center" style="border-top: 0px;">
+                    <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-sm btn-danger" id="btnRemover">Remover</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+    }
+</div>
+
+@section Scripts{
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

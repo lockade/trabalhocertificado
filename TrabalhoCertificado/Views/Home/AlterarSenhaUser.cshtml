@@ -1,0 +1,53 @@
+﻿
+@model Usuario;
+
+@if (User.IsInRole("administrador") == true)
+{
+    ViewBag.layout = "LayoutAdmin";
+}
+else
+{
+    ViewBag.layout = "_Layout";
+}
+@{ Layout = ViewBag.layout;}
+
+<div class="container">
+    <h3>Alterar Senha</h3>
+    @if (TempData["success"] != null)
+    {
+        <span class="alert alert-success">@TempData["success"]</span>
+    }
+
+    @if (TempData["erro"] != null)
+    {
+        <span class="alert alert-danger">@TempData["erro"]</span>
+    }
+
+    @if (Model != null)
+    {
+
+        <form method="post" class="mt-4" asp-controller="Usuario" asp-action="AlterarSenhaUser">
+            <input type="hidden" asp-for="ID" />
+            <input type="hidden" asp-for="Email" />
+            <div class="mb-3">
+                <label class="form-label">Senha Atual</label>
+                <input asp-for="senhaEncry" type="password" value="">
+            </div>
+            <div class="mb-3">
+                <label asp-for="Senha" class="form-label">Nova Senha</label>
+                <input asp-for="Senha">
+                <span asp-validation-for="Senha" class="text-danger mb-2"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="SenhaConfirmar" class="form-label">Nova Senha - Confirmar</label>
+                <input asp-for="SenhaConfirmar">
+                <span asp-validation-for="SenhaConfirmar" class="text-danger mb-2"></span>
+            </div>
+            <button type="submit" class="btn btn-primary">Salvar</button>
+        </form>
+    }
+</div>
+
+@section Scripts{
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

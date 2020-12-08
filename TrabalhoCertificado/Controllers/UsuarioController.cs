@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using TrabalhoCertificado.Data;
 using TrabalhoCertificado.Models;
 
@@ -223,10 +224,28 @@ namespace TrabalhoCertificado.Controllers
             return RedirectToAction("Index");
         }
 
-        public ActionResult perfil()
+
+        private void AlterarClaim(string id, string nome, string previ)
         {
-            return View();
+            List<Claim> claims = new List<Claim>
+                        {
+                            new Claim(ClaimTypes.Sid, id),
+                            new Claim(ClaimTypes.Name, nome),
+                            new Claim(ClaimTypes.Role, previ),
+                        };
+
+            ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+            AuthenticationProperties authProperties = new AuthenticationProperties
+            {
+                AllowRefresh = true,
+                ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10),
+                IsPersistent = true,
+            };
+
+            HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
         }
+        
 
         [HttpPost]
         public IActionResult Index(Usuario login)
@@ -243,24 +262,9 @@ namespace TrabalhoCertificado.Controllers
                 {
                     if (l.ativado)
                     {
-                        List<Claim> claims = new List<Claim>
-                        {
-                            new Claim(ClaimTypes.Sid, l.ID.ToString()),
-                            new Claim(ClaimTypes.Name, l.nome.ToString()),
-                            new Claim(ClaimTypes.Role, l.previlegios.ToString()),
-                        };
 
-                        ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-
-                        AuthenticationProperties authProperties = new AuthenticationProperties
-                        {
-                            AllowRefresh = true,
-                            ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10),
-                            IsPersistent = true,
-                        };
-
-                        HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
-                        if(l.previlegios == "administrador")
+                        AlterarClaim(l.ID.ToString(), l.nome.ToString(), l.previlegios.ToString());
+                        if (l.previlegios == "administrador")
                         {
                             return RedirectToAction("Index", "Admin");
                         }
@@ -348,6 +352,114 @@ namespace TrabalhoCertificado.Controllers
             return NoContent();
         }
 
+        [Authorize]
+        [HttpPost]
+        public ActionResult AlterarNome(Usuario u)
+        {
+            Usuario c = null;
+            try
+            {
+                var sid = int.Parse(User.Claims.Where(c => c.Type == ClaimTypes.Sid).Select(c => c.Value).SingleOrDefault());
+
+                c = context.TBUsuario.FirstOrDefault(x => x.ID == sid);
+
+                if (u.ID != c.ID)
+                    return NoContent();
+
+                c.nome = u.nome;
+                context.TBUsuario.Update(c);
+                context.SaveChanges();
+
+                TempData["success"] = "Nome alterado com sucesso";
+            }
+            catch (Exception)
+            {
+                TempData["erro"] = "Nome não alterado";
+            }
+
+            if (c != null)
+                AlterarClaim(c.ID.ToString(), c.nome, c.previlegios);
+
+
+            return RedirectToAction("perfil", "Home");
+        }
+
+        [Authorize]
+        [HttpPost]
+        public ActionResult AlterarSenhaUser(Usuario u)
+        {
+            Usuario c = null;
+            try
+            {
+                var sid = int.Parse(User.Claims.Where(c => c.Type == ClaimTypes.Sid).Select(c => c.Value).SingleOrDefault());
+                string senhaC = sha256encrypt(u.Senha);
+                u.senhaEncry = sha256encrypt(u.senhaEncry);
+                c = context.TBUsuario.FirstOrDefault(x => x.ID == sid && u.Email == x.Email && x.senhaEncry == u.senhaEncry);
+
+                if (c == null)
+                    throw new Exception();
+                if (u.ID != c.ID)
+                    throw new Exception();
+
+                if (ModelState.GetFieldValidationState("Senha") != ModelValidationState.Valid)
+                {
+                    TempData["erro"] = "Nova senha deve possuir no mínimo 8 caracteres, ao menos 1 letra maíuscula, 1 letra minúscula e 1 caractere especial";
+                    return RedirectToAction("AlterarSenhaUser", "Home");
+                }
+
+
+                c.senhaEncry = senhaC;
+                context.TBUsuario.Update(c);
+                context.SaveChanges();
+
+                TempData["success"] = "Senha alterada com sucesso";
+            }
+            catch (Exception)
+            {
+                TempData["erro"] = "Senha não alterada";
+            }
+
+
+            return RedirectToAction("AlterarSenhaUser", "Home");
+        }
+
+        [Authorize(Roles = "usuario")]
+        [HttpPost]
+        public ActionResult RemoverConta(Usuario u)
+        {
+            Usuario c = null;
+            try
+            {
+                var sid = int.Parse(User.Claims.Where(c => c.Type == ClaimTypes.Sid).Select(c => c.Value).SingleOrDefault());
+                u.senhaEncry = sha256encrypt(u.senhaEncry);
+                c = context.TBUsuario.FirstOrDefault(x => x.ID == sid && u.Email == x.Email && x.senhaEncry == u.senhaEncry);
+
+                if (c == null)
+                    throw new Exception();
+                if (u.ID != c.ID)
+                    throw new Exception();
+
+
+                //DEVE-SE REMOVER TODOS OS DADOS TAMBEM
+
+                context.TBUsuario.Remove(c);
+                context.SaveChanges();
+
+                TempData["success"] = "Conta Excluida";
+            }
+            catch (Exception)
+            {
+                TempData["erro"] = "Conta não excluida, senha inválida";
+                return RedirectToAction("RemoverConta", "Home");
+            }
+
+            //deslogar
+            HttpContext.SignOutAsync();
+
+
+            return RedirectToAction("Index", "Home");
+        }
+
         public static string sha256encrypt(string frase)
         {
             UTF8Encoding encoder = new UTF8Encoding();
@@ -362,6 +474,8 @@ namespace TrabalhoCertificado.Controllers
             }
             return builder.ToString();
         }
+
+
 
         public bool SendMail(string email, string texto, string titulo)
         {

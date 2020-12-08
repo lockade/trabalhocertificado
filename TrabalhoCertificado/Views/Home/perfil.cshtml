@@ -1,0 +1,42 @@
+﻿@model Usuario;
+@if (User.IsInRole("administrador"))
+{
+    ViewBag.layout = "LayoutAdmin";
+}
+else
+{
+    ViewBag.layout = "_Layout";
+}
+@{ Layout = ViewBag.layout;}
+<div class="container">
+    <h3>Meu Perfil</h3>
+    @if (TempData["success"] != null)
+    {
+        <span class="alert alert-success">@TempData["success"]</span>
+    }
+
+    @if (TempData["erro"] != null)
+    {
+        <span class="alert alert-danger">@TempData["erro"]</span>
+    }
+
+    @if (Model != null)
+    {
+
+        <form method="post" class="mt-4" asp-controller="Usuario" asp-action="AlterarNome">
+            <input type="hidden" asp-for="ID" />
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input asp-for="Email" id="email" disabled>
+            </div>
+            <div class="mb-3">
+                <label for="nome" class="form-label">Nome</label>
+                <input asp-for="nome" id="nome">
+                <span asp-validation-for="nome" class="text-danger mb-2"></span>
+            </div>
+            <button type="submit" class="btn btn-primary">Salvar</button>
+        </form>
+
+
+    }
+</div>
