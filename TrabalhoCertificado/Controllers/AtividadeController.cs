@@ -10,7 +10,7 @@ namespace TrabalhoCertificado.Controllers
     {
         public IActionResult Index()
         {
-            return Ok("OK, DEU CERTO!");
+            return View();
         }
     }
 }

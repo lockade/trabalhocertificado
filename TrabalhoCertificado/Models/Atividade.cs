@@ -11,26 +11,27 @@ namespace TrabalhoCertificado.Models
         [Display(Name = "Identificador")]
         public int ID { get; set; }
         [Required(ErrorMessage = "Nome obrigatório")]
-        string nome { get; set; }
+        [Display(Name ="Nome da atividade")]
+        public string nome { get; set; }
 
         [Display(Name = "Tipo de atividade (Curso, Projeto, etc.)")]
         [Required(ErrorMessage = "É necessário definir o tipo de projeto")]
         TipoAtividade atividade { get; set; }
-        string descricao { get; set; }
+        public string descricao { get; set; }
 
         [Display(Name = "Data de início")]
         [Required(ErrorMessage = "É necessário adicionar a data de início.")]
         [DataType(DataType.Date)]
-        DateTime dataInicio { get; set; }
+        public DateTime dataInicio { get; set; }
 
         [Display(Name = "Data de finalização")]
         [Required(ErrorMessage = "É necessário adicionar a data de finalização.")]
         [DataType(DataType.Date)]
-        DateTime dataFim { get; set; }
+        public DateTime dataFim { get; set; }
 
         [Display(Name = "Data de validade")]
         [DataType(DataType.Date)]
-        DateTime? DataValidade { get; set; }
+        public DateTime? DataValidade { get; set; }
 
         [Display(Name = "Anexo de arquivos e/ou imagens")]
         public string anexo { get; set; }
