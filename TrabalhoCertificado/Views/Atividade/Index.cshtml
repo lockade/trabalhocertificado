@@ -1,110 +1,139 @@
 ﻿@model AtividadeLink
 
-    <button type="button" name="novaatividade" class="btn btn-outline-success btn-lg btn-block" data-toggle="modal" data-target="#modalAtividade">Cadastrar nova atividade</button>
-    <table id="table" class="table table-hover table-mc-light-blue">
-        <thead>
-            <tr>
-                <th class="p-1 mb-2 bg-info text-white">@Model.atividade.ID</th>
-                <th class="p-2 mb-2 bg-secondary text-white">@Model.atividade.nome</th>
-                <th class="p-2 mb-2 bg-primary text-white">Status</th>
-                <th class="p-2 mb-2 bg-warning text-dark"><label> Editar</label></th>
-                <th class="p-2 mb-2 bg-danger text-white">Remover</th>
-            </tr>
-        </thead>
-        <tbody>
-            @if (Model.atividades != null)
+<button type="button" name="novaatividade" class="btn btn-outline-success btn-lg btn-block" data-toggle="modal" data-target="#modalAtividade">Cadastrar nova atividade</button>
+<table id="table" class="table table-hover table-mc-light-blue">
+    <thead>
+        <tr>
+            <th class="p-1 mb-2 bg-info text-white"><label asp-for="@Model.atividade.ID"></label></th>
+            <th class="p-2 mb-2 bg-secondary text-white"><label asp-for="@Model.atividade.nome"></label></th>
+            <th class="p-2 mb-2 bg-primary text-white">Status</th>
+            <th class="p-2 mb-2 bg-warning text-dark"><label> Editar</label></th>
+            <th class="p-2 mb-2 bg-danger text-white">Remover</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.atividades != null)
+        {
+            @foreach (Atividade atividade in Model.atividades)
             {
-                @foreach (Atividade atividade in Model.atividades)
-                {
-                    <tr>
-                        <td data-title="ID">@atividade.ID</td>
-                        <td data-title="Name">@atividade.nome</td>
-                        <td data-title="Link">
-                            Completo
-                        </td>
-                        <td>Editar</td>
-                        <td>Remover</td>
-                    </tr>
-                }
+                <tr>
+                    <td data-title="ID">@atividade.ID</td>
+                    <td data-title="Name">@atividade.nome</td>
+                    <td data-title="Link">
+                        Completo
+                    </td>
+                    <td>Editar</td>
+                    <td>Remover</td>
+                </tr>
             }
-        </tbody>
-    </table>
+        }
+    </tbody>
+</table>
 
-    <div class="modal fade" id="modalAtividade" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Registrar atividade</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
+<div class="modal fade" id="modalAtividade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Registrar atividade</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form method="post" asp-action="NovaAtividade">
                 <div class="modal-body">
-                    <form asp-controller="Atividade" asp-action="Create">
-                        <div class="form-group">
-                            <label asp-for="@Model.atividade.nome"></label>
-                            <input class="form-control" asp-for="@Model.atividade.nome" placeholder="Nome da atividade">
-                            <span asp-validation-for="@Model.atividade.nome" class="text-sm-center"></span>
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="@Model.atividade.descricao"></label>
-                            <input asp-for="@Model.atividade.descricao" class="form-control" placeholder="Descrição da atividade">
-                            <span asp-validation-for="@Model.atividade.descricao" class="text-sm-center"></span>
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="@Model.atividade.dataInicio"></label>
-                            <input asp-for="@Model.atividade.dataInicio" class="form-control" placeholder="Data de inicio da atividade">
-                            <span asp-validation-for="@Model.atividade.dataInicio" class="text-sm-center"></span>
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="@Model.atividade.dataFim"></label>
-                            <input asp-for="@Model.atividade.dataFim" class="form-control" placeholder="Data de inicio da atividade">
-                            <span asp-validation-for="@Model.atividade.dataFim" class="text-sm-center"></span>
-                        </div>
-                        <div class="form-group">
+                    <div class="form-group">
+                        <label asp-for="@Model.atividade.nome"></label>
+                        <input class="form-control" asp-for="@Model.atividade.nome" placeholder="Nome da atividade">
+                        <span asp-validation-for="@Model.atividade.nome" class="text-sm-center"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="@Model.atividade.descricao"></label>
+                        <input asp-for="@Model.atividade.descricao" class="form-control" placeholder="Descrição da atividade">
+                        <span asp-validation-for="@Model.atividade.descricao" class="text-sm-center"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="@Model.atividade.dataInicio"></label>
+                        <input asp-for="@Model.atividade.dataInicio" class="form-control" placeholder="Data de inicio da atividade">
+                        <span asp-validation-for="@Model.atividade.dataInicio" class="text-sm-center"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="@Model.atividade.dataFim"></label>
+                        <input asp-for="@Model.atividade.dataFim" class="form-control" placeholder="Data de inicio da atividade">
+                        <span asp-validation-for="@Model.atividade.dataFim" class="text-sm-center"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="@Model.atividade.atividade"></label>
+                        @if (Model.tipoAtividades.Count() == 0)
+                        {
+                            <br /><span class="text-sm-center"> É necessário cadastrar um tipo de atividade para definir uma atividade!</span>
+                        }
+                        @foreach (TipoAtividade atividade in Model.tipoAtividades)
+                        {
+                            <select id="atividades" class="user-select-auto">
+                                <option value="@atividade.ID"> @atividade.NomeAtividade</option>
+                            </select>
+                        }
 
-                            @foreach (TipoAtividade atividade in Model.tipoAtividades)
-                            {
-                                <label asp-for="@Model.atividade.atividade"></label>
-                                <select id="atividades" class="user-select-auto">
-                                    <option value="@atividade.ID"> @atividade.NomeAtividade</option>
-                                </select>
+                        <br />Possui data de validade? Sim <input type="checkbox" id="checkbox" onclick="CheckFunc()">
+                        <div class="form-group" id="informacoes" style="display:none">
+                            <label asp-for="@Model.atividade.DataValidade"></label>
+                            <input asp-for="@Model.atividade.DataValidade" class="form-control" placeholder="Data de validade da atividade">
+                            <span asp-validation-for="@Model.atividade.DataValidade" class="text-sm-center"></span>
+                        </div>
+                        <script>
+                            function CheckFunc() {
+                                var checkBox = document.getElementById("checkbox");
+                                var text = document.getElementById("informacoes");
+                                if (checkBox.checked == true) {
+                                    text.style.display = "block";
+                                } else {
+                                    text.style.display = "none";
+                                }
                             }
+                        </script>
 
-                            <button type="button" name="novotipoatividade" class="btn btn-outline-danger btn-sm btn-block" data-dismiss="modal" aria-label="Close" data-toggle="modal" data-target="#modaltipoAtividade">
-
-                                Cadastrar novo tipo de Atividade
-
-
-
-                            </button>
-
-
+                        <div class="form-group">
+                            <label asp-for="@Model.atividade.anexo"></label>
+                            <input id="ArquivoUpload" type="file" asp-for="@Model.atividade.anexo" />
+                            <span asp-validation-for="@Model.atividade.anexo" class="text-sm-center"></span>
                         </div>
-                    </form>
+
+
+                        <button type="button" name="novotipoatividade" class="btn btn-outline-danger btn-sm btn-block" data-dismiss="modal" aria-label="Close" data-toggle="modal" data-target="#modaltipoAtividade">
+
+                            Cadastrar novo tipo de Atividade
+
+                        </button>
+
+
+                    </div>
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
                     <button type="submit" class="btn btn-primary">Salvar</button>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
+    
+</div>
 
 
-    <div class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog" id="modaltipoAtividade" aria-hidden="true">
-        <div class="modal-dialog modal-sm">
+<div class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog" id="modaltipoAtividade" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
 
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Registrar tipo de atividade</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Registrar tipo de atividade</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
 
-
+            <form method="post" asp-action="NovoTipoAtividade">
                 <div class="form-group">
+
                     <label class="badge-success" asp-for="@Model.tipoAtividade.NomeAtividade"></label>
                     <input asp-for="@Model.tipoAtividade.NomeAtividade" class="form-control" placeholder="Nome do tipo de atividade">
                     <span asp-validation-for="@Model.tipoAtividade.NomeAtividade" class="text-danger mb-2"></span>
@@ -116,6 +145,7 @@
                 </div>
                 <button type="submit" class="btn btn-primary">Salvar</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-            </div>
+            </form>
         </div>
     </div>
+</div>

@@ -10,7 +10,7 @@ using TrabalhoCertificado.Data;
 namespace TrabalhoCertificado.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20201219203530_MigracaoInicial")]
+    [Migration("20201222081555_MigracaoInicial")]
     partial class MigracaoInicial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -94,7 +94,7 @@ namespace TrabalhoCertificado.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("TipoAtividade");
+                    b.ToTable("TBTiposAtividades");
                 });
 
             modelBuilder.Entity("TrabalhoCertificado.Models.Usuario", b =>

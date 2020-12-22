@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -17,7 +18,7 @@ namespace TrabalhoCertificado.Models
 
         [Display(Name = "Tipo de atividade (Curso, Projeto, etc.)")]
         [Required(ErrorMessage = "É necessário definir o tipo de projeto")]
-        public List<TipoAtividade> atividade { get; set; }
+        public TipoAtividade atividade { get; set; }
         [MaxLength(250, ErrorMessage = "Quantidade máxima de caracteres estourada, que é máximo de duzentos e cinquenta caracteres.")]
         [Display(Name = "Descrição da atividade")]
         public string descricao { get; set; }

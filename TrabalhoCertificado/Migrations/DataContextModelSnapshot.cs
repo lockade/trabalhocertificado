@@ -92,7 +92,7 @@ namespace TrabalhoCertificado.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("TipoAtividade");
+                    b.ToTable("TBTiposAtividades");
                 });
 
             modelBuilder.Entity("TrabalhoCertificado.Models.Usuario", b =>

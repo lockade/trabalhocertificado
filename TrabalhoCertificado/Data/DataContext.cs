@@ -17,7 +17,7 @@ namespace TrabalhoCertificado.Data
         //public DbSet<Site> TBSite { get; set; }
         public DbSet<Usuario> TBUsuario { get; set; }
         public DbSet<Atividade> TBAtividades { get; set; }
-        
+        public DbSet<TipoAtividade> TBTiposAtividades { get; set; }
         public DbSet<RecuperarSenhaLinks> TBRecuperarSenhaLinks { get; set; }
         
 
