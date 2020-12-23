@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using TrabalhoCertificado.Data;
@@ -27,6 +28,22 @@ namespace TrabalhoCertificado.Controllers
 
             atividadesLink.tipoAtividades = tipoAtividades;
             atividadesLink.atividades = atividades;
+            
+            
+            Usuario usuario = null;
+            try
+            {
+                var sid = int.Parse(User.Claims.Where(c => c.Type == ClaimTypes.Sid).Select(c => c.Value).SingleOrDefault());
+                usuario = context.TBUsuario.FirstOrDefault(x => x.ID == sid);
+                TempData["id"] = usuario.ID;
+                TempData["nome"] = usuario.nome;
+            }
+            catch
+            {
+                TempData["erro"] = "Usuario não encontrado!";
+            }
+        
+            
             return View(atividadesLink);
         }
 
@@ -48,7 +65,7 @@ namespace TrabalhoCertificado.Controllers
                     return View();
                 }
 
-                TempData["sucesso"] = true;
+                TempData["NovaAtividade"] = true;
                 return RedirectToAction("Index");
             }
             else
@@ -75,7 +92,7 @@ namespace TrabalhoCertificado.Controllers
                     return View();
                 }
 
-                TempData["sucesso"] = true;
+                TempData["NovoTipoAtividade"] = true;
                 return RedirectToAction("Index");
             }
             else
@@ -83,6 +100,10 @@ namespace TrabalhoCertificado.Controllers
                 //model possui algum erro
                 return View();
             }
+        }
+        public void EditarAtividade(int ID)
+        {
+            TempData["idAtividade"] = ID;
         }
     }
 }

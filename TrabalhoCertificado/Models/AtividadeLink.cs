@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 namespace TrabalhoCertificado.Models
 {
     public class AtividadeLink
-    {        
+    {       
+        //POST
         public Atividade atividade { get; set; }
         public TipoAtividade tipoAtividade {get;set;}
+        //GET
         public IEnumerable<Atividade> atividades { get; set; }
         public IEnumerable<TipoAtividade> tipoAtividades { get; set; }
     }

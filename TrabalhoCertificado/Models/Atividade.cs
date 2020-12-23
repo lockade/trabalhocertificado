@@ -18,7 +18,8 @@ namespace TrabalhoCertificado.Models
 
         [Display(Name = "Tipo de atividade (Curso, Projeto, etc.)")]
         [Required(ErrorMessage = "É necessário definir o tipo de projeto")]
-        public TipoAtividade atividade { get; set; }
+        public int idTipoAtiv { get; set; }
+        
         [MaxLength(250, ErrorMessage = "Quantidade máxima de caracteres estourada, que é máximo de duzentos e cinquenta caracteres.")]
         [Display(Name = "Descrição da atividade")]
         public string descricao { get; set; }
@@ -41,5 +42,6 @@ namespace TrabalhoCertificado.Models
         [DataType(DataType.Upload)]
         public string anexo { get; set; }
 
+        public int idUsuario { get; set; }
     }
 }

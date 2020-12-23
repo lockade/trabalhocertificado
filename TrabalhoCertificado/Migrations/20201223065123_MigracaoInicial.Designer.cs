@@ -10,7 +10,7 @@ using TrabalhoCertificado.Data;
 namespace TrabalhoCertificado.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20201222081555_MigracaoInicial")]
+    [Migration("20201223065123_MigracaoInicial")]
     partial class MigracaoInicial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -34,9 +34,6 @@ namespace TrabalhoCertificado.Migrations
                     b.Property<string>("anexo")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("atividadeID")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("dataFim")
                         .HasColumnType("datetime2");
 
@@ -47,14 +44,18 @@ namespace TrabalhoCertificado.Migrations
                         .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
+                    b.Property<int>("idTipoAtiv")
+                        .HasColumnType("int");
+
+                    b.Property<int>("idUsuario")
+                        .HasColumnType("int");
+
                     b.Property<string>("nome")
                         .IsRequired()
                         .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
                     b.HasKey("ID");
-
-                    b.HasIndex("atividadeID");
 
                     b.ToTable("TBAtividades");
                 });
@@ -92,6 +93,9 @@ namespace TrabalhoCertificado.Migrations
                         .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
+                    b.Property<int>("idUsuario")
+                        .HasColumnType("int");
+
                     b.HasKey("ID");
 
                     b.ToTable("TBTiposAtividades");
@@ -128,15 +132,6 @@ namespace TrabalhoCertificado.Migrations
                         .IsUnique();
 
                     b.ToTable("TBUsuario");
-                });
-
-            modelBuilder.Entity("TrabalhoCertificado.Models.Atividade", b =>
-                {
-                    b.HasOne("TrabalhoCertificado.Models.TipoAtividade", "atividade")
-                        .WithMany()
-                        .HasForeignKey("atividadeID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }
