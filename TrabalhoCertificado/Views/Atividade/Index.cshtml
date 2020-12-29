@@ -1,6 +1,5 @@
-﻿@model AtividadeLink
-
-
+﻿@model AtividadeLink;
+<!-- TESTE DE ERROS NA HORA DE PASSAR ITENS PELA CONTROLLER   -->
 <br />
 @if (TempData["erro"] == null)
 {
@@ -12,8 +11,13 @@
             <br />
             <br />
         }
+        else
+        {
+            <span class="alert alert-danger">Tipo de atividade não foi cadastrado com sucesso!</span>
+            <br />
+            <br />
+        }
     }
-
     if (TempData["NovaAtividade"] != null)
     {
         if ((bool)TempData["NovaAtividade"] == true)
@@ -22,9 +26,39 @@
             <br />
             <br />
         }
+        else
+        {
+            <span class="alert alert-danger">Atividade não foi cadastrado com sucesso!</span>
+            <br />
+            <br />
+
+        }
     }
+    if (TempData["EditarAtividade"] != null)
+    {
+        if ((bool)TempData["EditarAtividade"] == true)
+        {
+            <span class="alert alert-success">Atividade editada com sucesso!</span>
+            <br />
+            <br />
+        }
+        else
+        {
+            <span class="alert alert-danger">Atividade não foi editada com sucesso!</span>
+            <br />
+            <br />
+
+        }
+    }
+
+
+    <!-- FIM DE TESTE DE ERROS NA HORA DE PASSAR ITENS PELA CONTROLLER   -->
+
+
+
     <button type="button" name="novaatividade" class="btn btn-outline-success btn-lg btn-block" data-toggle="modal" data-target="#modalAtividade">Cadastrar nova atividade</button>
-    <table id="table" class="table table-hover table-mc-light-blue">
+
+    <table id="table" class="table table-striped table-dark">
         <thead>
             <tr>
                 <th class="p-1 mb-2 bg-info text-white"><label asp-for="@Model.atividade.ID"></label></th>
@@ -43,22 +77,25 @@
                     @if (atividade.idUsuario == (int)TempData["id"])
                     {
 
+
                         <tr>
-                            <td data-title="ID">@atividade.ID</td>
-                            <td data-title="Name">@atividade.nome</td>
+                            <td class="btnDetalhes" data-title="ID" data-toggle="modal" data-target="#ModalDetalhes" data-value="@atividade.ID">@atividade.ID</td>
+                            <td data-title="Name" class="btnDetalhes" data-toggle="modal" data-target="#ModalDetalhes" data-value="@atividade.ID">@atividade.nome</td>
                             <td data-title="Link">
                                 Completo
                             </td>
+                            <td> <button type="button" class="btnEditar" data-toggle="modal" data-target="#ModalEditar" data-value="@atividade.ID">Editar</button></td>
+                            <td><button type="button" class="btnDetalhes" data-toggle="modal" data-target="#ModalEdicao" data-value="@atividade.ID">Deletar</button></td>
 
-                            <td><button data-target="#editarAtividade" data-toggle="modal" asp-action="EditarAtividade" asp-route-id="@atividade.ID">Editar Atividade </button></td>
-                            <td>Remover</td>
                         </tr>
+
                     }
                 }
             }
-        </tbody>
-    </table>
 
+        </tbody>
+
+    </table>
     <div class="modal fade" id="modalAtividade" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -75,22 +112,22 @@
 
                             <label asp-for="@Model.atividade.nome"></label>
                             <input class="form-control" asp-for="@Model.atividade.nome" placeholder="Nome da atividade">
-                            <span asp-validation-for="@Model.atividade.nome" class="text-sm-center"></span>
+                            <span asp-validation-for="@Model.atividade.nome" class="text-danger font-weight-light "></span>
                         </div>
                         <div class="form-group">
                             <label asp-for="@Model.atividade.descricao"></label>
                             <input asp-for="@Model.atividade.descricao" class="form-control" placeholder="Descrição da atividade">
-                            <span asp-validation-for="@Model.atividade.descricao" class="text-sm-center"></span>
+                            <span asp-validation-for="@Model.atividade.descricao" class="text-danger font-weight-light "></span>
                         </div>
                         <div class="form-group">
                             <label asp-for="@Model.atividade.dataInicio"></label>
                             <input asp-for="@Model.atividade.dataInicio" class="form-control" placeholder="Data de inicio da atividade">
-                            <span asp-validation-for="@Model.atividade.dataInicio" class="text-sm-center"></span>
+                            <span asp-validation-for="@Model.atividade.dataInicio" class="text-danger font-weight-light "></span>
                         </div>
                         <div class="form-group">
                             <label asp-for="@Model.atividade.dataFim"></label>
                             <input asp-for="@Model.atividade.dataFim" class="form-control" placeholder="Data de inicio da atividade">
-                            <span asp-validation-for="@Model.atividade.dataFim" class="text-sm-center"></span>
+                            <span asp-validation-for="@Model.atividade.dataFim" class="text-danger font-weight-light "></span>
                         </div>
                         <div class="form-group">
                             <label asp-for="@Model.atividade.idTipoAtiv"></label>
@@ -114,24 +151,14 @@
                             <div class="form-group" id="informacoes" style="display:none">
                                 <label asp-for="@Model.atividade.DataValidade"></label>
                                 <input asp-for="@Model.atividade.DataValidade" class="form-control" placeholder="Data de validade da atividade">
-                                <span asp-validation-for="@Model.atividade.DataValidade" class="text-sm-center"></span>
+                                <span asp-validation-for="@Model.atividade.DataValidade" class="text-danger font-weight-light "></span>
                             </div>
-                            <script>
-                                function CheckFunc() {
-                                    var checkBox = document.getElementById("checkbox");
-                                    var text = document.getElementById("informacoes");
-                                    if (checkBox.checked == true) {
-                                        text.style.display = "block";
-                                    } else {
-                                        text.style.display = "none";
-                                    }
-                                }
-                            </script>
+                           
 
                             <div class="form-group">
                                 <label asp-for="@Model.atividade.anexo"></label>
                                 <input id="ArquivoUpload" type="file" asp-for="@Model.atividade.anexo" />
-                                <span asp-validation-for="@Model.atividade.anexo" class="text-sm-center"></span>
+                                <span asp-validation-for="@Model.atividade.anexo" class="text-danger font-weight-light "></span>
                             </div>
 
 
@@ -189,38 +216,93 @@
 
 
 
+    <div class="modal fade" id="ModalDetalhes" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Detalhes</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="conteudoModalDetalhes">
 
-
-    <form >
-        <div class="modal fade" id="editarAtividade" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLongTitle">Editar atividade</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
                     </div>
-                    <div class="modal-body">
-                        @if(TempData["idAtividade"] != null)
-                        {
-                            TempData["idAtividade"].ToString();
-                        }
-                        else
-                        {
-                            <a>NADA!</a>
-                        }
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Save changes</button>
-                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Ok</button>
                 </div>
             </div>
         </div>
-    </form>
+    </div>
+
+
+    <div class="modal fade" id="ModalEditar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Editar</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="conteudoModalEditar">
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
 }
+
 else
 {
     <span class="alert alert-danger">@TempData["erro"]</span>
+}
+
+@section scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $.ajaxSetup({ cache: false });
+            $(".btnDetalhes").click(function () {
+
+                var id = $(this).data("value");
+                $("#conteudoModalDetalhes").load("/Atividade/Detalhes/" + id, function () {
+                    $('#ModalDetalhes').modal("show.bs.modal");
+                });
+            });
+        });
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $.ajaxSetup({ cache: false });
+            $(".btnEditar").click(function () {
+
+                var id = $(this).data("value");
+                $("#conteudoModalEditar").load("/Atividade/Editar/" + id, function () {
+                    $('#ModalEditar').modal("show.bs.modal");
+                });
+            });
+        });
+
+    </script>
+    
+    <script>
+        function CheckFunc() {
+            var checkBox = document.getElementById("checkbox");
+            var text = document.getElementById("informacoes");
+            if (checkBox.checked == true) {
+                text.style.display = "block";
+            } else {
+                text.style.display = "none";
+            }
+        }
+    </script>
 }

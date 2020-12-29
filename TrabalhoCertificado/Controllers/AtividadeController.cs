@@ -70,8 +70,7 @@ namespace TrabalhoCertificado.Controllers
             }
             else
             {
-                //model possui algum erro
-                return View();
+                return RedirectToAction("Index");
             }
         }
         [HttpPost]
@@ -97,13 +96,82 @@ namespace TrabalhoCertificado.Controllers
             }
             else
             {
-                //model possui algum erro
-                return View();
+                return RedirectToAction("Index");
             }
         }
-        public void EditarAtividade(int ID)
+        public ActionResult Detalhes(int? id)
         {
-            TempData["idAtividade"] = ID;
+            if (id == null)
+            {
+                return new BadRequestResult();
+            }
+            Atividade atividade = context.TBAtividades.Find(id);
+            TipoAtividade tipoAtividade = context.TBTiposAtividades.Find(atividade.idTipoAtiv);
+            if (atividade == null)
+            {
+                return NotFound("Atividade não foi encontrado!");
+            }
+            if(tipoAtividade == null)
+            {
+                return NotFound("Tipo de atividade não foi encontrado!");
+            }
+            AtividadeLink atividadeLink = new AtividadeLink();
+            atividadeLink.atividade = atividade;
+            atividadeLink.tipoAtividade = tipoAtividade;
+            return PartialView(atividadeLink);
+        }
+        public ActionResult Editar(int? id)
+        {   
+            if (id == null)
+            {
+                return new BadRequestResult();
+            }
+            Atividade atividade = context.TBAtividades.Find(id);
+            if (atividade == null)
+            {
+                return NotFound("Atividade não foi encontrado!");
+            }
+            TipoAtividade tipoAtividade = context.TBTiposAtividades.Find(atividade.idTipoAtiv);          
+            if (tipoAtividade == null)
+            {
+                return NotFound("Tipo de atividade não foi encontrado!");
+            }
+            AtividadeLink atividadeLink = new AtividadeLink();
+            atividadeLink.atividade = atividade;
+            atividadeLink.tipoAtividade = tipoAtividade;
+            TempData["id"] = atividade.idUsuario;
+            atividadeLink.tipoAtividades = context.TBTiposAtividades.ToList();
+            return PartialView(atividadeLink);
+        }
+        [HttpPost]
+        public ActionResult Editar(AtividadeLink item)
+        {
+           
+            if (ModelState.IsValid)
+            {
+                if (item == null)
+                {
+                    return new BadRequestResult();
+                }
+                try
+                {
+                    context.TBTiposAtividades.Add(item.tipoAtividade);
+                    context.SaveChanges();
+                }
+                catch
+                {
+                    //erro na hora de salvar
+                    ViewBag.MensagemErro = "A atividade não pode ser cadastrado";
+                    return View();
+                }
+
+                TempData["EditarAtividade"] = true;
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return RedirectToAction("Index");
+            }
         }
     }
 }

@@ -1,0 +1,36 @@
+﻿@model AtividadeLink;
+
+
+<div>
+    <h4>Atividade: @Model.atividade.nome</h4>
+
+    <div class="modal-body">
+        <div class="form-group">
+            <input asp-for="@Model.atividade.ID" value="@TempData["id"]" type="hidden" />
+
+            <label asp-for="@Model.atividade.nome"></label>
+            <input class="form-control" value="@Model.atividade.nome" readonly />
+        </div>
+        <div class="form-group">
+            <label asp-for="@Model.atividade.descricao"></label>
+            <input class="form-control" value="@Model.atividade.descricao" readonly />
+        </div>
+        <div class="form-group">
+            <label asp-for="@Model.atividade.dataInicio"></label>
+            <input class="form-control" value="@Model.atividade.dataInicio" readonly />
+        </div>
+        <div class="form-group">
+            <label asp-for="@Model.atividade.dataFim"></label>
+            <input class="form-control" value="@Model.atividade.dataFim" readonly />
+        </div>
+        <div>
+            <label asp-for="@Model.atividade.DataValidade"></label>
+            <input class="form-control" value="@Model.atividade.DataValidade" readonly />
+        </div>
+        <div class="form-group">
+            <label asp-for="@Model.tipoAtividade.NomeAtividade"></label>
+            <input class="form-control" value="@Model.tipoAtividade.NomeAtividade" readonly />
+        </div>
+        <!-- Adicionar a visualização de anexo dos arquivos!!!!-->
+    </div>
+</div>
