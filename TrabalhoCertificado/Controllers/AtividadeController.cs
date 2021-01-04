@@ -7,7 +7,11 @@ using Microsoft.AspNetCore.Mvc;
 using TrabalhoCertificado.Data;
 using TrabalhoCertificado.Models;
 
-
+//O que falta?
+//Anexo de arquivos
+//Erros do Partial View de "Editar"
+//Script do JavaScript não funciona no PartialView de editar. Não sei o que ocorre (???)
+//O PartialView não consegue utilizar Validation (Possivelmente erro de Script também) (???)
 namespace TrabalhoCertificado.Controllers
 {
     public class AtividadeController : Controller
@@ -155,7 +159,7 @@ namespace TrabalhoCertificado.Controllers
                 }
                 try
                 {
-                    context.TBTiposAtividades.Add(item.tipoAtividade);
+                    context.TBAtividades.Update(item.atividade);
                     context.SaveChanges();
                 }
                 catch
@@ -170,6 +174,7 @@ namespace TrabalhoCertificado.Controllers
             }
             else
             {
+                TempData["EditarAtividade"] = false;
                 return RedirectToAction("Index");
             }
         }

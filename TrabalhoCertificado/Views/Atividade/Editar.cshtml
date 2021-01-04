@@ -4,30 +4,34 @@
         <h4>Editar: @Model.atividade.nome</h4>
 
         <div class="modal-body">
-
+            <input asp-for="@Model.atividade.ID" value="@Model.atividade.ID" type="hidden" />
+            <input asp-for="@Model.atividade.idUsuario" value="@TempData["id"]" type="hidden" />
+            
             <div class="form-group">
-                <input asp-for="@Model.atividade.ID" value="@Model.atividade.ID" type="hidden" />
-                <input asp-for="@Model.atividade.idUsuario" value="@TempData["id"]" type="hidden" />
                 <label asp-for="@Model.atividade.nome"></label>
-                <input class="form-control" value="@Model.atividade.nome" />
+                <input asp-for="@Model.atividade.nome" class="form-control" value="@Model.atividade.nome" />
                 <span asp-validation-for="@Model.atividade.nome" class="text-danger font-weight-light "></span>
             </div>
+           
             <div class="form-group">
                 <label asp-for="@Model.atividade.descricao"></label>
-                <input class="form-control" value="@Model.atividade.descricao" />
+                <input asp-for="@Model.atividade.descricao" class="form-control" value="@Model.atividade.descricao" />
             </div>
+            
             <div class="form-group">
                 <label asp-for="@Model.atividade.dataInicio"></label><br />
                 <span class="text-primary font-weight-light "> Data de inicio anterior: @Model.atividade.dataInicio.ToShortDateString() </span>
                 <input asp-for="@Model.atividade.dataInicio" class="form-control" value="@Model.atividade.dataInicio" />
                 <span asp-validation-for="@Model.atividade.dataInicio" class="text-danger font-weight-light "></span>
             </div>
+            
             <div class="form-group">
                 <label asp-for="@Model.atividade.dataFim"></label><br />
                 <span class="text-primary font-weight-light "> Data de finalização anterior: @Model.atividade.dataFim.ToShortDateString() </span>
                 <input asp-for="@Model.atividade.dataFim" class="form-control" value="@Model.atividade.dataFim" />
                 <span asp-validation-for="@Model.atividade.dataFim" class="text-danger font-weight-light "></span>
             </div>
+            
             <br />Possui data de validade? Sim <input type="checkbox" id="checkbox" onclick="CheckFunc()">
             <div class="form-group" id="informacoes" style="display:none">
                 <label asp-for="@Model.atividade.DataValidade"></label><br />
@@ -61,7 +65,7 @@
             <!-- Adicionar a visualização de anexo dos arquivos!!!!-->
 
 
-            <button class="btn btn-primary" asp-action="Editar" type="submit"> Editar </button>
+            <button class="btn btn-primary" asp-action="Editar" type="submit"> Submeter </button>
 
         </div>
     </div>
