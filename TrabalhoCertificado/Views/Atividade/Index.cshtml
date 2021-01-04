@@ -153,7 +153,7 @@
                                 <input asp-for="@Model.atividade.DataValidade" class="form-control" placeholder="Data de validade da atividade">
                                 <span asp-validation-for="@Model.atividade.DataValidade" class="text-danger font-weight-light "></span>
                             </div>
-                           
+
 
                             <div class="form-group">
                                 <label asp-for="@Model.atividade.anexo"></label>
@@ -263,36 +263,37 @@ else
 {
     <span class="alert alert-danger">@TempData["erro"]</span>
 }
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $.ajaxSetup({ cache: false });
+        $(".btnDetalhes").click(function () {
+
+            var id = $(this).data("value");
+            $("#conteudoModalDetalhes").load("/Atividade/Detalhes/" + id, function () {
+                $('#ModalDetalhes').modal("show.bs.modal");
+            });
+        });
+    });
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $.ajaxSetup({ cache: false });
+        $(".btnEditar").click(function () {
+
+            var id = $(this).data("value");
+            $("#conteudoModalEditar").load("/Atividade/Editar/" + id, function () {
+                $('#ModalEditar').modal("show.bs.modal");
+            });
+        });
+    });
+
+</script>
+
 
 @section scripts{
-    <script type="text/javascript">
-        $(document).ready(function () {
 
-            $.ajaxSetup({ cache: false });
-            $(".btnDetalhes").click(function () {
-
-                var id = $(this).data("value");
-                $("#conteudoModalDetalhes").load("/Atividade/Detalhes/" + id, function () {
-                    $('#ModalDetalhes').modal("show.bs.modal");
-                });
-            });
-        });
-    </script>
-    <script type="text/javascript">
-        $(document).ready(function () {
-
-            $.ajaxSetup({ cache: false });
-            $(".btnEditar").click(function () {
-
-                var id = $(this).data("value");
-                $("#conteudoModalEditar").load("/Atividade/Editar/" + id, function () {
-                    $('#ModalEditar').modal("show.bs.modal");
-                });
-            });
-        });
-
-    </script>
-    
     <script>
         function CheckFunc() {
             var checkBox = document.getElementById("checkbox");
