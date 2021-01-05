@@ -10,10 +10,7 @@ using TrabalhoCertificado.Models;
 //O que falta?
 //Remoção, Edição e Visualização do TipoAtividades.
 //Anexo de arquivos
-//Erros das PartialViews
-//Script do JavaScript não funciona no PartialView de editar. Não sei o que ocorre (???)
-//O PartialView não consegue utilizar Validation (Possivelmente erro de Script também) (???)
-//TENTATIVA DE @RENDERSECTION DENTRO DAS PARTIAL VIEW, INFELIZMENTE INCONCLUSIVA.
+//Implementar remoção de atividades.
 namespace TrabalhoCertificado.Controllers
 {
     public class AtividadeController : Controller

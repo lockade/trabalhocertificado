@@ -1,6 +1,8 @@
 ﻿@model AtividadeLink;
 
-@RenderSection("scripts", false)
+@{
+    Layout = null;
+}
 <form method="post" asp-action="Editar">
     <div>
         <h4>Editar: @Model.atividade.nome</h4>
@@ -34,12 +36,21 @@
                 <span asp-validation-for="@Model.atividade.dataFim" class="text-danger font-weight-light "></span>
             </div>
 
-            <br />Possui data de validade? Sim <input type="checkbox" id="checkbox" onclick="CheckFunc()">
-            <div class="form-group" id="informacoes" style="display:none">
+            <br />Possui data de validade? Sim <input type="checkbox" id="checkbox1" onclick="CheckFunc1()">
+            <div class="form-group" id="informacoes1" style="display:none">
+                <br />
                 <label asp-for="@Model.atividade.DataValidade"></label><br />
-                <span class="text-primary font-weight-light "> Data de validade anterior: @Model.atividade.DataValidade </span>
-                <input asp-for="@Model.atividade.DataValidade" class="form-control" placeholder="Data de validade da atividade">
-                <span asp-validation-for="@Model.atividade.DataValidade" class="text-danger font-weight-light "></span>
+                @if (Model.atividade.DataValidade == null)
+                {
+                    <input asp-for="@Model.atividade.DataValidade" class="form-control" placeholder="Data de validade da atividade">
+                    <span asp-validation-for="@Model.atividade.DataValidade" class="text-danger font-weight-light "></span>
+                }
+                else
+                {
+                    <span class="text-primary font-weight-light "> Data de validade anterior: @Model.atividade.DataValidade </span>
+                    <input asp-for="@Model.atividade.DataValidade" class="form-control" placeholder="Data de validade da atividade">
+                    <span asp-validation-for="@Model.atividade.DataValidade" class="text-danger font-weight-light "></span>
+                }
             </div>
 
 
@@ -72,3 +83,16 @@
         </div>
     </div>
 </form>
+<script type="text/javascript">
+    function CheckFunc1() {
+        var checkBox1 = document.getElementById("checkbox1");
+        var text1 = document.getElementById("informacoes1");
+        if (checkBox1.checked == true) {
+            text1.style.display = "block";
+        } else {
+            text1.style.display = "none";
+        }
+    }
+</script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>

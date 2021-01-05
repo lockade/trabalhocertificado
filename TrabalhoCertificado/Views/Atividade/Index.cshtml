@@ -84,7 +84,7 @@
                             <td data-title="Link">
                                 Completo
                             </td>
-                            <td> <button type="button" class="btnEditar" data-toggle="modal" data-target="#ModalEditar" data-value="@atividade.ID">Editar</button></td>
+                            <td class="btnEditar" data-toggle="modal" data-target="#ModalEditar" data-value="@atividade.ID"> Editar </td>
                             <td><button type="button" class="btnDetalhes" data-toggle="modal" data-target="#ModalEdicao" data-value="@atividade.ID">Deletar</button></td>
 
                         </tr>
@@ -244,7 +244,6 @@
                 </div>
                 <div class="modal-body">
                     <div id="conteudoModalEditar">
-
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -263,38 +262,37 @@ else
 {
     <span class="alert alert-danger">@TempData["erro"]</span>
 }
-<script type="text/javascript">
-    $(document).ready(function () {
-
-        $.ajaxSetup({ cache: false });
-        $(".btnDetalhes").click(function () {
-
-            var id = $(this).data("value");
-            $("#conteudoModalDetalhes").load("/Atividade/Detalhes/" + id, function () {
-                $('#ModalDetalhes').modal("show.bs.modal");
-            });
-        });
-    });
-</script>
-<script type="text/javascript">
-    $(document).ready(function () {
-
-        $.ajaxSetup({ cache: false });
-        $(".btnEditar").click(function () {
-
-            var id = $(this).data("value");
-            $("#conteudoModalEditar").load("/Atividade/Editar/" + id, function () {
-                $('#ModalEditar').modal("show.bs.modal");
-            });
-        });
-    });
-
-</script>
-
 
 @section scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
 
-    <script>
+            $.ajaxSetup({ cache: false });
+            $(".btnDetalhes").click(function () {
+
+                var id = $(this).data("value");
+                $("#conteudoModalDetalhes").load("/Atividade/Detalhes/" + id, function () {
+                    $('#ModalDetalhes').modal("show.bs.modal");
+                });
+            });
+        });
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $.ajaxSetup({ cache: false });
+            $(".btnEditar").click(function () {
+
+                var id = $(this).data("value");
+                $("#conteudoModalEditar").load("/Atividade/Editar/" + id, function () {
+                    $('#ModalEditar').modal("show.bs.modal");
+                });
+            });
+        });
+
+    </script>
+    
+    <script type="text/javascript">
         function CheckFunc() {
             var checkBox = document.getElementById("checkbox");
             var text = document.getElementById("informacoes");
@@ -305,4 +303,5 @@ else
             }
         }
     </script>
+
 }
