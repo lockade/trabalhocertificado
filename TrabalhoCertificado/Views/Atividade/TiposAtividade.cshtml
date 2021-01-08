@@ -1,0 +1,85 @@
+﻿@model AtividadeLink;
+
+<div class="d-flex justify-content-around">
+    <button type="button" name="tiposAtividade" class="btn btn-outline-primary btn-lg btn-toolbar" data-toggle="modal" data-target="#ModalTiposAtividade">Cadastrar Novo Tipo Atividade</button>
+
+</div>
+
+<br />
+<table id="table" class="table table-striped table-dark">
+    <thead>
+        <tr>
+            <th class="p-1 mb-2 bg-info text-white"><label asp-for="@Model.tipoAtividade.ID"></label></th>
+            <th class="p-2 mb-2 bg-secondary text-white"><label asp-for="@Model.tipoAtividade.NomeAtividade"></label></th>
+
+            <th class="p-2 mb-2 bg-warning text-dark"><label> Editar</label></th>
+            <th class="p-2 mb-2 bg-danger text-white">Remover</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @if (Model.tipoAtividades != null)
+        {
+
+            @foreach (TipoAtividade atividade in Model.tipoAtividades)
+            {
+                @if (atividade.idUsuario == (int)TempData["id"])
+                {
+
+
+                    <tr>
+                        <td class="btnTiposDetalhes" data-title="ID" data-toggle="modal" data-target="#ModalTiposAtividades" data-value="@atividade.ID">@atividade.ID</td>
+                        <td data-title="Name" class="btnTiposDetalhes" data-toggle="modal" data-target="#ModalTiposAtividades" data-value="@atividade.ID">@atividade.NomeAtividade</td>
+                        <td class="btn-warning text-dark btnTiposEditar" id="btnTiposEditar" onclick="clique()" data-toggle="modal" data-target="#ModalTiposEditar" data-value="@atividade.ID"> Editar </td>
+                        <td class="btn-danger text-white btnTiposDeletar" data-toggle="modal" data-target="#ModalTiposAtividades" data-value="@atividade.ID">Remover</td>
+
+                    </tr>
+
+                }
+            }
+        }
+
+
+
+
+
+    </tbody>
+</table>
+
+
+
+
+<div class="modal fade" id="ModalTiposEditar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Editar</h5>
+            </div>
+            <div class="modal-body">
+                <div id="conteudoModalEditar">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script type="text/javascript">
+    function clique() {
+        $.ajaxSetup({ cache: false });
+        var id = $("#btnTiposEditar").data("value");
+        $("#conteudoModalEditar").load("/Atividade/TiposEditar/" + id, function () {
+            $('#ModalTiposEditar').modal("show.bs.modal");
+        });
+      
+        }
+
+</script>
+
+

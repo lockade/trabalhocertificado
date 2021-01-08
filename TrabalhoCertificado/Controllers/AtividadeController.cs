@@ -10,7 +10,6 @@ using TrabalhoCertificado.Models;
 //O que falta?
 //Remoção, Edição e Visualização do TipoAtividades.
 //Anexo de arquivos
-//Implementar remoção de atividades.
 namespace TrabalhoCertificado.Controllers
 {
     public class AtividadeController : Controller
@@ -31,8 +30,8 @@ namespace TrabalhoCertificado.Controllers
 
             atividadesLink.tipoAtividades = tipoAtividades;
             atividadesLink.atividades = atividades;
-            
-            
+
+
             Usuario usuario = null;
             try
             {
@@ -45,8 +44,8 @@ namespace TrabalhoCertificado.Controllers
             {
                 TempData["erro"] = "Usuario não encontrado!";
             }
-        
-            
+
+
             return View(atividadesLink);
         }
 
@@ -114,7 +113,7 @@ namespace TrabalhoCertificado.Controllers
             {
                 return NotFound("Atividade não foi encontrado!");
             }
-            if(tipoAtividade == null)
+            if (tipoAtividade == null)
             {
                 return NotFound("Tipo de atividade não foi encontrado!");
             }
@@ -124,7 +123,7 @@ namespace TrabalhoCertificado.Controllers
             return PartialView(atividadeLink);
         }
         public ActionResult Editar(int? id)
-        {   
+        {
             if (id == null)
             {
                 return new BadRequestResult();
@@ -134,7 +133,7 @@ namespace TrabalhoCertificado.Controllers
             {
                 return NotFound("Atividade não foi encontrado!");
             }
-            TipoAtividade tipoAtividade = context.TBTiposAtividades.Find(atividade.idTipoAtiv);          
+            TipoAtividade tipoAtividade = context.TBTiposAtividades.Find(atividade.idTipoAtiv);
             if (tipoAtividade == null)
             {
                 return NotFound("Tipo de atividade não foi encontrado!");
@@ -149,7 +148,7 @@ namespace TrabalhoCertificado.Controllers
         [HttpPost]
         public ActionResult Editar(AtividadeLink item)
         {
-           
+
             if (ModelState.IsValid)
             {
                 if (item == null)
@@ -165,7 +164,133 @@ namespace TrabalhoCertificado.Controllers
                 {
                     //erro na hora de salvar
                     ViewBag.MensagemErro = "A atividade não pode ser cadastrado";
-                    return View();
+                }
+
+                TempData["EditarAtividade"] = true;
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                TempData["EditarAtividade"] = false;
+                return RedirectToAction("Index");
+            }
+        }
+        public ActionResult RemoverAtividade(int? id)
+        {
+            if (id == null)
+            {
+                return new BadRequestResult();
+            }
+            Atividade atividade = context.TBAtividades.Find(id);
+            if (atividade == null)
+            {
+                return NotFound("Atividade não foi encontrado!");
+            }
+
+            AtividadeLink atividadeLink = new AtividadeLink();
+            atividadeLink.atividade = atividade;
+            TempData["id"] = atividade.idUsuario;
+            return PartialView(atividadeLink);
+        }
+        
+        public ActionResult TiposAtividade()
+        {
+            List<TipoAtividade> atividades;
+            try { 
+            atividades = context.TBTiposAtividades.ToList();
+            }
+            catch
+            {
+                TempData["ErroTipoAtividades"] = true;
+                return RedirectToAction("Index");
+            }
+            
+            Usuario usuario = null;
+            try
+            {
+                var sid = int.Parse(User.Claims.Where(c => c.Type == ClaimTypes.Sid).Select(c => c.Value).SingleOrDefault());
+                usuario = context.TBUsuario.FirstOrDefault(x => x.ID == sid);
+                TempData["id"] = usuario.ID;
+                TempData["nome"] = usuario.nome;
+            }
+            catch
+            {
+                TempData["erro"] = "Usuario não encontrado!";
+                return RedirectToAction("Index");
+            }
+
+
+            AtividadeLink atividadeLink = new AtividadeLink();
+            atividadeLink.tipoAtividades = atividades;
+            return PartialView(atividadeLink);
+        }
+
+        [HttpPost]
+        public ActionResult RemoverAtividade(AtividadeLink item)
+        {
+
+            item.atividade = context.TBAtividades.Find(item.atividade.ID);
+
+            if (item == null || item.atividade == null)
+            {
+                return new BadRequestResult();
+            }
+            try
+            {
+
+                context.TBAtividades.Remove(item.atividade);
+                context.SaveChanges();
+            }
+            catch
+            {
+                //erro na hora de deletar
+                return NotFound("Não foi possivel deletar a atividade.");
+            }
+
+            TempData["deletarAtividade"] = true;
+            return RedirectToAction("Index");
+
+
+           
+    }
+
+        public ActionResult TiposEditar(int? id)
+        {
+            if (id == null)
+            {
+                return new BadRequestResult();
+            }
+            TipoAtividade atividade = context.TBTiposAtividades.Find(id);
+            if (atividade == null)
+            {
+                return NotFound("Atividade não foi encontrado!");
+            }
+
+            AtividadeLink atividadeLink = new AtividadeLink();
+            atividadeLink.tipoAtividade = atividade;
+            TempData["id"] = atividade.idUsuario;
+            return PartialView(atividadeLink);
+        }
+
+        [HttpPost]
+        public ActionResult TiposEditar(AtividadeLink item)
+        {
+
+            if (ModelState.IsValid)
+            {
+                if (item == null)
+                {
+                    return new BadRequestResult();
+                }
+                try
+                {
+                    context.TBTiposAtividades.Update(item.tipoAtividade);
+                    context.SaveChanges();
+                }
+                catch
+                {
+                    //erro na hora de salvar
+                    ViewBag.MensagemErro = "A atividade não pode ser cadastrado";
                 }
 
                 TempData["EditarAtividade"] = true;
@@ -178,4 +303,9 @@ namespace TrabalhoCertificado.Controllers
             }
         }
     }
+
 }
+
+        
+
+

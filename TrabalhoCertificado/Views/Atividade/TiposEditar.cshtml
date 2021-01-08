@@ -1,0 +1,28 @@
+﻿@model AtividadeLink;
+@{
+    Layout = null;
+}
+
+<br />
+<br />
+<h1>EDITAR</h1>
+form method="post" asp-action="TiposEditar">
+<div>
+    <h4>Editar: @Model.tipoAtividade.NomeAtividade</h4>
+
+    <div class="modal-body">
+        <input asp-for="@Model.tipoAtividade.ID" value="@Model.tipoAtividade.ID" type="hidden" />
+        <input asp-for="@Model.tipoAtividade.idUsuario" value="@TempData["id"]" type="hidden" />
+
+        <div class="form-group">
+            <label asp-for="@Model.tipoAtividade.NomeAtividade"></label>
+            <input asp-for="@Model.tipoAtividade.NomeAtividade" class="form-control" value="@Model.tipoAtividade.NomeAtividade" />
+            <span asp-validation-for="@Model.tipoAtividade.NomeAtividade" class="text-danger font-weight-light "></span>
+        </div>
+
+
+        </div>
+    </div>
+
+
+

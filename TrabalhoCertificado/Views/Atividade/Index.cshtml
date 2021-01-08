@@ -51,13 +51,57 @@
         }
     }
 
+    if (TempData["deletarAtividade"] != null)
+    {
+        if ((bool)TempData["deletarAtividade"] == true)
+        {
+            <span class="alert alert-success">Atividade deletada com sucesso!</span>
+            <br />
+            <br />
+        }
+    }
 
-    <!-- FIM DE TESTE DE ERROS NA HORA DE PASSAR ITENS PELA CONTROLLER   -->
+    if (TempData["ErroTipoAtividades"] != null)
+    {
+        if ((bool)TempData["ErroTipoAtividades"] == true)
+        {
+            <span class="alert alert-success">Não foi possível pegar as informações de Tipos de Atividades.</span>
+            <br />
+            <br />
+        }
+        <!-- FIM DE TESTE DE ERROS NA HORA DE PASSAR ITENS PELA CONTROLLER   -->
+    }
+    <div class="alert alert-success col-6" id="alerta" role="alert" style="display:block">
+        <h4 class="alert-heading">Bem-vindo a página de Atividades e Tipos de Atividades</h4>
+        <p>
+            Certo, aqui você pode criar, visualizar, editar e deletar atividades. Você pode cadastrar atividades que serão concluídas, ou não foram concluídas.
+            Já os tipos de atividades, é um tipo para tais atividades. Por exemplo: eu tenho feito um curso de inglês. O tipo de atividade é o "curso", e atividade é inglês.
+        </p>
+        <hr>
+        <p class="mb-0">Clique no nome e/ou no identificador para checar os detalhes das atividades.</p>
+        <button class="btn btn-outline-primary" id="btnConclusao" onclick="FuncAlerta()">Certo, entendi</button>
+    </div>
+
+    <div class="d-flex justify-content-around">
+        <button type="button" name="tiposAtividade" class="btn btn-outline-primary btn-lg btn-toolbar"data-toggle="modal" data-target="#ModalTiposAtividade" >Tipos de atividades</button>
 
 
+        <button type="button" name="novaatividade" class="btn btn-outline-success btn-lg btn-toolbar" data-toggle="modal" data-target="#modalAtividade">Cadastrar nova atividade</button>
+    </div>
 
-    <button type="button" name="novaatividade" class="btn btn-outline-success btn-lg btn-block" data-toggle="modal" data-target="#modalAtividade">Cadastrar nova atividade</button>
+    <br />
 
+
+    <div class="d-flex justify-content-start">
+        <div class="input-group input-group-lg">
+            <div class="input-group-prepend">
+                <span class="input-group-text d-inline p-2 bg-dark text-white">Buscar Atividade</span>
+            </div>
+            <input type="text" class="form-control">
+        </div>
+        <input type="button" class="btn btn-primary" value="Buscar" />
+    </div>
+    <br />
     <table id="table" class="table table-striped table-dark">
         <thead>
             <tr>
@@ -84,8 +128,8 @@
                             <td data-title="Link">
                                 Completo
                             </td>
-                            <td class="btnEditar" data-toggle="modal" data-target="#ModalEditar" data-value="@atividade.ID"> Editar </td>
-                            <td><button type="button" class="btnDetalhes" data-toggle="modal" data-target="#ModalEdicao" data-value="@atividade.ID">Deletar</button></td>
+                            <td class="btn-warning text-dark btnEditar" data-toggle="modal" data-target="#ModalEditar" data-value="@atividade.ID"> Editar </td>
+                            <td class="btn-danger text-white btnDeletar" data-toggle="modal" data-target="#ModalDeletar" data-value="@atividade.ID">Remover</td>
 
                         </tr>
 
@@ -234,8 +278,6 @@
             </div>
         </div>
     </div>
-
-
     <div class="modal fade" id="ModalEditar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -253,6 +295,43 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="ModalDeletar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Exclusão</h5>
+                </div>
+                <div class="modal-body">
+                    <div id="conteudoModal">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="ModalTiposAtividade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Tipos Atividade</h5>
+                </div>
+                <div class="modal-body">
+                    <div id="conteudoModal">
+                        @await Html.PartialAsync("TiposAtividade.cshtml", Model);
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 
@@ -264,6 +343,22 @@ else
 }
 
 @section scripts{
+
+
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $.ajaxSetup({ cache: false });
+            $(".btnDeletar").click(function () {
+
+                var id = $(this).data("value");
+                $("#conteudoModal").load("/Atividade/RemoverAtividade/" + id, function () {
+                    $('#ModalDeletar').modal("show.bs.modal");
+                });
+            });
+        });
+    </script>
     <script type="text/javascript">
         $(document).ready(function () {
 
@@ -277,6 +372,8 @@ else
             });
         });
     </script>
+
+
     <script type="text/javascript">
         $(document).ready(function () {
 
@@ -291,7 +388,7 @@ else
         });
 
     </script>
-    
+
     <script type="text/javascript">
         function CheckFunc() {
             var checkBox = document.getElementById("checkbox");
@@ -303,5 +400,13 @@ else
             }
         }
     </script>
-
+    <script>
+        function FuncAlerta() {
+            var alert = document.getElementById("alerta");
+            alert.style.display = "none";
+        }
+    </script>
 }
+        
+
+

@@ -25,14 +25,14 @@
             <div class="form-group">
                 <label asp-for="@Model.atividade.dataInicio"></label><br />
                 <span class="text-primary font-weight-light "> Data de inicio anterior: @Model.atividade.dataInicio.ToShortDateString() </span>
-                <input asp-for="@Model.atividade.dataInicio" class="form-control" value="@Model.atividade.dataInicio" />
+                <input asp-for="@Model.atividade.dataInicio" class="form-control" value="@Model.atividade.dataInicio.ToShortDateString()" />
                 <span asp-validation-for="@Model.atividade.dataInicio" class="text-danger font-weight-light "></span>
             </div>
 
             <div class="form-group">
                 <label asp-for="@Model.atividade.dataFim"></label><br />
                 <span class="text-primary font-weight-light "> Data de finalização anterior: @Model.atividade.dataFim.ToShortDateString() </span>
-                <input asp-for="@Model.atividade.dataFim" class="form-control" value="@Model.atividade.dataFim" />
+                <input asp-for="@Model.atividade.dataFim" class="form-control" value="@Model.atividade.dataFim.ToShortDateString()" />
                 <span asp-validation-for="@Model.atividade.dataFim" class="text-danger font-weight-light "></span>
             </div>
 
