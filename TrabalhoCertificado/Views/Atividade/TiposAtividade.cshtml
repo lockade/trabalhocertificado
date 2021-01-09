@@ -1,9 +1,64 @@
 ﻿@model AtividadeLink;
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers;
+@if (TempData["EditarTipoAtividade"] != null)
+{
+    if ((bool)TempData["EditarTipoAtividade"] == true)
+    {
+        <span class="alert alert-success">Tipo de atividade editada com sucesso!</span>
+        <br />
+        <br />
+    }
+    else
+    {
+        <span class="alert alert-danger">Tipo de atividade editada com sucesso!</span>
+        <br />
+        <br />
+    }
+
+
+}
+@if (TempData["deletarTipoAtividade"] != null)
+{
+    if ((bool)TempData["deletarTipoAtividade"] == true)
+    {
+        <span class="alert alert-success">Tipo de atividade removida com sucesso!</span>
+        <br />
+        <br />
+    }
+}
+<div class="alert alert-success col-6" id="alerta1" role="alert" style="display:block">
+    <h4 class="alert-heading">Bem-vindo a página de Atividades</h4>
+    <p>
+        Certo, aqui você pode criar, visualizar, editar e deletar atividades. Você pode cadastrar atividades que serão concluídas, ou não foram concluídas.
+        Já os tipos de atividades, é um tipo para tais atividades. Por exemplo: eu tenho feito um curso de inglês. O tipo de atividade é o "curso", e atividade é inglês.
+    </p>
+    <hr>
+    <p class="mb-0">Clique no nome e/ou no identificador para checar os detalhes das atividades.</p>
+    <button class="btn btn-outline-primary" id="btnConclusao1" onclick="FuncAlerta1()">Certo, entendi</button>
+</div>
+
+<div class="d-flex justify-content-start">
+    <a asp-controller="Atividade" asp-action="Index">
+        <input type="button" class="btn btn-outline-primary btn-lg btn-toolbar" value="Atividade" />
+    </a>
+</div>
+
+<script>
+    function FuncAlerta1() {
+        var alert1 = document.getElementById("alerta1");
+        alert1.style.display = "none";
+    }
+</script>
+
+
 
 <div class="d-flex justify-content-around">
     <button type="button" name="tiposAtividade" class="btn btn-outline-primary btn-lg btn-toolbar" data-toggle="modal" data-target="#ModalTiposAtividade">Cadastrar Novo Tipo Atividade</button>
 
 </div>
+
+
+
 
 <br />
 <table id="table" class="table table-striped table-dark">
@@ -30,8 +85,11 @@
                     <tr>
                         <td class="btnTiposDetalhes" data-title="ID" data-toggle="modal" data-target="#ModalTiposAtividades" data-value="@atividade.ID">@atividade.ID</td>
                         <td data-title="Name" class="btnTiposDetalhes" data-toggle="modal" data-target="#ModalTiposAtividades" data-value="@atividade.ID">@atividade.NomeAtividade</td>
-                        <td class="btn-warning text-dark btnTiposEditar" id="btnTiposEditar" onclick="clique()" data-toggle="modal" data-target="#ModalTiposEditar" data-value="@atividade.ID"> Editar </td>
+                        <td class="btn-warning text-dark btnTiposEditar" data-toggle="modal" data-target="#ModalTiposAtividades" data-value="@atividade.ID"> Editar </td>
                         <td class="btn-danger text-white btnTiposDeletar" data-toggle="modal" data-target="#ModalTiposAtividades" data-value="@atividade.ID">Remover</td>
+
+
+
 
                     </tr>
 
@@ -49,14 +107,14 @@
 
 
 
-<div class="modal fade" id="ModalTiposEditar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="ModalTiposAtividades" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Editar</h5>
             </div>
             <div class="modal-body">
-                <div id="conteudoModalEditar">
+                <div id="conteudoModalTipos">
                 </div>
             </div>
             <div class="modal-footer">
@@ -69,17 +127,49 @@
 
 
 
+@section scripts{
 
-<script type="text/javascript">
-    function clique() {
-        $.ajaxSetup({ cache: false });
-        var id = $("#btnTiposEditar").data("value");
-        $("#conteudoModalEditar").load("/Atividade/TiposEditar/" + id, function () {
-            $('#ModalTiposEditar').modal("show.bs.modal");
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $.ajaxSetup({ cache: false });
+            $(".btnTiposDetalhes").click(function () {
+
+                var id = $(this).data("value");
+                console.log(id);
+                $("#conteudoModalTipos").load("/Atividade/TiposDetalhes/" + id, function () {
+                    $('#ModalTiposAtividades').modal("show.bs.modal");
+                });
+            });
         });
-      
-        }
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
 
-</script>
+            $.ajaxSetup({ cache: false });
+            $(".btnTiposEditar").click(function () {
 
+                var id = $(this).data("value");
+                console.log(id);
+                $("#conteudoModalTipos").load("/Atividade/TiposEditar/" + id, function () {
+                    $('#ModalTiposAtividades').modal("show.bs.modal");
+                });
+            });
+        });
+    </script>
 
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $.ajaxSetup({ cache: false });
+            $(".btnTiposDeletar").click(function () {
+
+                var id = $(this).data("value");
+                console.log(id);
+                $("#conteudoModalTipos").load("/Atividade/RemoverTipoAtividade/" + id, function () {
+                    $('#ModalTiposAtividades').modal("show.bs.modal");
+                });
+            });
+        });
+    </script>
+}

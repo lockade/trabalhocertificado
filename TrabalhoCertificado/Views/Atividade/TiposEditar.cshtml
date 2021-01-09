@@ -3,26 +3,31 @@
     Layout = null;
 }
 
-<br />
-<br />
-<h1>EDITAR</h1>
-form method="post" asp-action="TiposEditar">
 <div>
-    <h4>Editar: @Model.tipoAtividade.NomeAtividade</h4>
 
-    <div class="modal-body">
-        <input asp-for="@Model.tipoAtividade.ID" value="@Model.tipoAtividade.ID" type="hidden" />
+    <form method="post" asp-action="TiposEditar">
+    <div class="form-group">
         <input asp-for="@Model.tipoAtividade.idUsuario" value="@TempData["id"]" type="hidden" />
-
-        <div class="form-group">
-            <label asp-for="@Model.tipoAtividade.NomeAtividade"></label>
-            <input asp-for="@Model.tipoAtividade.NomeAtividade" class="form-control" value="@Model.tipoAtividade.NomeAtividade" />
-            <span asp-validation-for="@Model.tipoAtividade.NomeAtividade" class="text-danger font-weight-light "></span>
-        </div>
-
-
-        </div>
+        <input asp-for="@Model.tipoAtividade.ID" type="hidden" />
+        <label class="badge-success" asp-for="@Model.tipoAtividade.NomeAtividade"></label>
+        <input asp-for="@Model.tipoAtividade.NomeAtividade" class="form-control" placeholder="@Model.tipoAtividade.NomeAtividade">
+        <span asp-validation-for="@Model.tipoAtividade.NomeAtividade" class="text-danger mb-2"></span>
     </div>
+    <div class="form-group">
+        <label class="badge-success" asp-for="@Model.tipoAtividade.DescAtividade"></label>
+        @if (Model.tipoAtividade.DescAtividade == null)
+        {
+            <input asp-for="@Model.tipoAtividade.DescAtividade" class="form-control" placeholder="Coloque uma descrição para o Tipo de Atividade">
+        }
+        else
+        {
+        <input asp-for="@Model.tipoAtividade.DescAtividade" class="form-control" placeholder="@Model.tipoAtividade.DescAtividade">
+        }
+        <span asp-validation-for="@Model.tipoAtividade.DescAtividade" class="text-danger mb-2"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Salvar</button>
+        </form>
+</div>
 
 
 

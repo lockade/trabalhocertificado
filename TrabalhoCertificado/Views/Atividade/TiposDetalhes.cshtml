@@ -1,0 +1,26 @@
+﻿@model AtividadeLink;
+
+
+<div>
+    <h4>Atividade: @Model.tipoAtividade.NomeAtividade</h4>
+
+    <div class="modal-body">
+        <div class="form-group">
+            <input asp-for="@Model.tipoAtividade.ID" value="@TempData["id"]" type="hidden" />
+
+            <label asp-for="@Model.tipoAtividade.NomeAtividade"></label>
+            <input class="form-control" value="@Model.tipoAtividade.NomeAtividade" readonly />
+        </div>
+        <div class="form-group">
+            <label asp-for="@Model.tipoAtividade.DescAtividade"></label>
+            @if (Model.tipoAtividade.DescAtividade == null)
+            {
+                <input class="form-control" value="Esse tipo de atividade não possue descrição" readonly />
+            }
+            else
+            {
+            <input class="form-control" value="@Model.tipoAtividade.DescAtividade" readonly />
+            }
+        </div>
+    </div>
+</div>

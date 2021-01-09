@@ -1,4 +1,7 @@
 ﻿@model AtividadeLink;
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+
 <!-- TESTE DE ERROS NA HORA DE PASSAR ITENS PELA CONTROLLER   -->
 <br />
 @if (TempData["erro"] == null)
@@ -72,7 +75,7 @@
         <!-- FIM DE TESTE DE ERROS NA HORA DE PASSAR ITENS PELA CONTROLLER   -->
     }
     <div class="alert alert-success col-6" id="alerta" role="alert" style="display:block">
-        <h4 class="alert-heading">Bem-vindo a página de Atividades e Tipos de Atividades</h4>
+        <h4 class="alert-heading">Bem-vindo a página de Atividades</h4>
         <p>
             Certo, aqui você pode criar, visualizar, editar e deletar atividades. Você pode cadastrar atividades que serão concluídas, ou não foram concluídas.
             Já os tipos de atividades, é um tipo para tais atividades. Por exemplo: eu tenho feito um curso de inglês. O tipo de atividade é o "curso", e atividade é inglês.
@@ -83,7 +86,9 @@
     </div>
 
     <div class="d-flex justify-content-around">
-        <button type="button" name="tiposAtividade" class="btn btn-outline-primary btn-lg btn-toolbar"data-toggle="modal" data-target="#ModalTiposAtividade" >Tipos de atividades</button>
+        <a asp-controller="Atividade" asp-action="TiposAtividade">
+            <input type="button" class="btn btn-outline-primary btn-lg btn-toolbar" value="Tipos de Atividade" />
+        </a>
 
 
         <button type="button" name="novaatividade" class="btn btn-outline-success btn-lg btn-toolbar" data-toggle="modal" data-target="#modalAtividade">Cadastrar nova atividade</button>
@@ -312,24 +317,6 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" id="ModalTiposAtividade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Tipos Atividade</h5>
-                </div>
-                <div class="modal-body">
-                    <div id="conteudoModal">
-                        @await Html.PartialAsync("TiposAtividade.cshtml", Model);
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-
-                </div>
-            </div>
-        </div>
-    </div>
 
 
 
@@ -407,6 +394,6 @@ else
         }
     </script>
 }
-        
+
 
 
