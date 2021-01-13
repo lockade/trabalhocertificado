@@ -1,0 +1,104 @@
+﻿@model AtividadeLink;
+@{ 
+    Layout = null;
+}
+<form enctype="multipart/form-data" method="post" asp-action="NovaAtividade">
+    <div class="modal-body">
+        <div class="form-group">
+            <input asp-for="@Model.atividade.idUsuario" value="@TempData["id"]" type="hidden" />
+
+            <label asp-for="@Model.atividade.nome"></label>
+            <input class="form-control" asp-for="@Model.atividade.nome" placeholder="Nome da atividade">
+            <span asp-validation-for="@Model.atividade.nome" class="text-danger font-weight-light "></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="@Model.atividade.descricao"></label>
+            <input asp-for="@Model.atividade.descricao" class="form-control" placeholder="Descrição da atividade">
+            <span asp-validation-for="@Model.atividade.descricao" class="text-danger font-weight-light "></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="@Model.atividade.dataInicio"></label>
+            <input asp-for="@Model.atividade.dataInicio" class="form-control" placeholder="Data de inicio da atividade">
+            <span asp-validation-for="@Model.atividade.dataInicio" class="text-danger font-weight-light "></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="@Model.atividade.dataFim"></label>
+            <input asp-for="@Model.atividade.dataFim" class="form-control" placeholder="Data de inicio da atividade">
+            <span asp-validation-for="@Model.atividade.dataFim" class="text-danger font-weight-light "></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="@Model.atividade.idTipoAtiv"></label>
+            @if (Model.tipoAtividades.Count() == 0)
+            {
+                <br /><span class="text-sm-center"> É necessário cadastrar um tipo de atividade para definir uma atividade!</span>
+            }
+            else
+            {
+                <select asp-for="@Model.atividade.idTipoAtiv" id="atividades" class="user-select-auto">
+                    @foreach (TipoAtividade tipoAtividade in Model.tipoAtividades)
+                    {
+                        if (tipoAtividade.idUsuario == (int)TempData["id"])
+                        {
+                            <option value="@tipoAtividade.ID"> @tipoAtividade.NomeAtividade</option>
+                        }
+                    }
+                </select>
+            }
+            <br />Possui data de validade? Sim <input type="checkbox" id="checkbox" onclick="CheckFunc()">
+            <div class="form-group" id="informacoes" style="display:none">
+                <label asp-for="@Model.atividade.DataValidade"></label>
+                <input asp-for="@Model.atividade.DataValidade" class="form-control" placeholder="Data de validade da atividade">
+                <span asp-validation-for="@Model.atividade.DataValidade" class="text-danger font-weight-light "></span>
+            </div>
+
+
+            <div class="form-group">
+                <label asp-for="@Model.atividade.Arquivo"></label>
+                <div class="custom-file">
+                    <input asp-for="@Model.atividade.Arquivo" onchange="GetNomeArquivo()" class="form-control custom-file-input" id="ArquivoInput" />
+                    <label class="custom-file-label" id="ArquivoNome">Escolha o arquivo ...</label>
+                </div>
+            </div>
+
+
+            <button type="button" name="novotipoatividade" class="btn btn-outline-danger btn-sm btn-block" data-dismiss="modal" aria-label="Close" data-toggle="modal" data-target="#modaltipoAtividade">
+
+                Cadastrar novo tipo de Atividade
+
+            </button>
+
+
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+        <button type="submit" class="btn btn-primary">Salvar</button>
+    </div>
+</form>
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+
+<script type="text/javascript">
+    function GetNomeArquivo() {
+        var nomearquivo = document.getElementById("ArquivoInput").value;
+        nomearquivo = nomearquivo.split("\\").pop();
+        document.getElementById("ArquivoNome").innerHTML = nomearquivo;
+    }
+
+</script>
+<script type="text/javascript">
+    function CheckFunc() {
+        var checkBox = document.getElementById("checkbox");
+        var text = document.getElementById("informacoes");
+        if (checkBox.checked == true) {
+            text.style.display = "block";
+        } else {
+            text.style.display = "none";
+        }
+    }
+</script>
+@section scripts{
+
+
+}

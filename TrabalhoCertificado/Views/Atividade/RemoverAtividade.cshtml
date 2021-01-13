@@ -1,10 +1,7 @@
 ﻿@model AtividadeLink;
 
-@{
-    Layout = null;
-}
 <form method="post" asp-action="RemoverAtividade">
     <input asp-for="@Model.atividade.ID" value="@Model.atividade.ID" type="hidden" />
-    <button type="submit" class="btn btn-outline-danger btn-lg btn-block" asp-action="RemoverAtividade">Remover Atividade</button>
+    <button type="submit" class="btn btn-outline-danger btn-lg btn-block">Remover Atividade</button>
     <button type="button" class="btn btn-outline-success btn-lg btn-block" data-dismiss="modal">Cancelar</button>
 </form>

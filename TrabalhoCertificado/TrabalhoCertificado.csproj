@@ -16,6 +16,8 @@
     <Compile Remove="Migrations\20201221080013_MigracaoInicial.Designer.cs" />
     <Compile Remove="Migrations\20201221080152_MigracaoInicial.cs" />
     <Compile Remove="Migrations\20201221080152_MigracaoInicial.Designer.cs" />
+    <Compile Remove="Migrations\20210111234334_MigracaoInicial.cs" />
+    <Compile Remove="Migrations\20210111234334_MigracaoInicial.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -26,6 +28,10 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\arquivos\" />
   </ItemGroup>
 
 </Project>

@@ -1,5 +1,13 @@
 ﻿@model AtividadeLink;
+@{
+    string arquivo = null;
+    Layout = null;
+    if (Model.atividade.caminhoArquivo != null)
+    {
+        arquivo = "/arquivos/" + Model.atividade.caminhoArquivo;
+    }
 
+}
 
 <div>
     <h4>Atividade: @Model.atividade.nome</h4>
@@ -23,14 +31,24 @@
             <label asp-for="@Model.atividade.dataFim"></label>
             <input class="form-control" value="@Model.atividade.dataFim" readonly />
         </div>
-        <div>
-            <label asp-for="@Model.atividade.DataValidade"></label>
-            <input class="form-control" value="@Model.atividade.DataValidade" readonly />
-        </div>
+        @if (Model.atividade.DataValidade != null)
+        {
+            <div>
+                <label asp-for="@Model.atividade.DataValidade"></label>
+                <input class="form-control" value="@Model.atividade.DataValidade" readonly />
+            </div>
+        }
         <div class="form-group">
             <label asp-for="@Model.tipoAtividade.NomeAtividade"></label>
             <input class="form-control" value="@Model.tipoAtividade.NomeAtividade" readonly />
         </div>
-        <!-- Adicionar a visualização de anexo dos arquivos!!!!-->
+
+        <div class="form-group">
+            <label asp-for="@Model.atividade.Arquivo"></label>
+            <label> <a href="@arquivo" target="_blank">Clique aqui para abrir o arquivo.</a></label>
+            <embed src="@arquivo" width="450" height="500" />
+
+        </div>
+
     </div>
 </div>

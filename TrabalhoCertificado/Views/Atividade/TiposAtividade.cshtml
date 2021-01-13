@@ -53,7 +53,7 @@
 
 
 <div class="d-flex justify-content-around">
-    <button type="button" name="tiposAtividade" class="btn btn-outline-primary btn-lg btn-toolbar" data-toggle="modal" data-target="#ModalTiposAtividade">Cadastrar Novo Tipo Atividade</button>
+    <button type="button" name="tiposAtividade" class="btn btn-outline-primary btn-lg btn-toolbar btnNovoTipo" data-toggle="modal" data-target="#ModalNovoTipo">Cadastrar Novo Tipo Atividade</button>
 
 </div>
 
@@ -111,7 +111,6 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Editar</h5>
             </div>
             <div class="modal-body">
                 <div id="conteudoModalTipos">
@@ -124,7 +123,36 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="ModalNovoTipo" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Novo Tipo Atividade</h5>
+            </div>
+            <div class="modal-body">
+                <form method="post" asp-action="NovoTipoAtividade">
+                    <div class="form-group">
+                        <input asp-for="@Model.tipoAtividade.idUsuario" value="@TempData["id"]" type="hidden" />
+                        <label class="badge-success" asp-for="@Model.tipoAtividade.NomeAtividade"></label>
+                        <input asp-for="@Model.tipoAtividade.NomeAtividade" class="form-control" placeholder="Nome do tipo de atividade">
+                        <span asp-validation-for="@Model.tipoAtividade.NomeAtividade" class="text-danger mb-2"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="badge-success" asp-for="@Model.tipoAtividade.DescAtividade"></label>
+                        <input asp-for="@Model.tipoAtividade.DescAtividade" class="form-control" placeholder="Descrição do tipo de atividade">
+                        <span asp-validation-for="@Model.tipoAtividade.DescAtividade" class="text-danger mb-2"></span>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
 
+            </div>
+        </div>
+    </div>
+</div>
 
 
 @section scripts{

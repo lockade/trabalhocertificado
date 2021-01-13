@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -39,8 +40,11 @@ namespace TrabalhoCertificado.Models
         public DateTime? DataValidade { get; set; }
 
         [Display(Name = "Anexo de arquivos e/ou imagens")]
-        [DataType(DataType.Upload)]
-        public string anexo { get; set; }
+        public string caminhoArquivo { get; set; }
+        
+        [NotMapped]
+        [Display(Name = "Anexo de arquivos e/ou imagens")]
+        public IFormFile Arquivo { get; set; }
 
         public int idUsuario { get; set; }
     }

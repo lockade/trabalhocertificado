@@ -10,7 +10,7 @@ using TrabalhoCertificado.Data;
 namespace TrabalhoCertificado.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20201223065123_MigracaoInicial")]
+    [Migration("20210111234504_MigracaoInicial")]
     partial class MigracaoInicial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -31,7 +31,7 @@ namespace TrabalhoCertificado.Migrations
                     b.Property<DateTime?>("DataValidade")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("anexo")
+                    b.Property<string>("caminhoArquivo")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("dataFim")

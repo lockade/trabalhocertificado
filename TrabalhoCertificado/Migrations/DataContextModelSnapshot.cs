@@ -29,7 +29,7 @@ namespace TrabalhoCertificado.Migrations
                     b.Property<DateTime?>("DataValidade")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("anexo")
+                    b.Property<string>("caminhoArquivo")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("dataFim")

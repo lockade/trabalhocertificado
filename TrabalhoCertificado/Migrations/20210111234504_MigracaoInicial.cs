@@ -19,7 +19,7 @@ namespace TrabalhoCertificado.Migrations
                     dataInicio = table.Column<DateTime>(nullable: false),
                     dataFim = table.Column<DateTime>(nullable: false),
                     DataValidade = table.Column<DateTime>(nullable: true),
-                    anexo = table.Column<string>(nullable: true),
+                    caminhoArquivo = table.Column<string>(nullable: true),
                     idUsuario = table.Column<int>(nullable: false)
                 },
                 constraints: table =>

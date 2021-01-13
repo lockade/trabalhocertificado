@@ -1,16 +1,21 @@
 ﻿@model AtividadeLink;
-
 @{
+    string arquivo = null;
     Layout = null;
+    if (Model.atividade.caminhoArquivo != null)
+    {
+        arquivo = "/arquivos/" + Model.atividade.caminhoArquivo;
+    }
+
 }
-<form method="post" asp-action="Editar">
+<form method="post" enctype="multipart/form-data" asp-action="Editar">
     <div>
         <h4>Editar: @Model.atividade.nome</h4>
 
         <div class="modal-body">
             <input asp-for="@Model.atividade.ID" value="@Model.atividade.ID" type="hidden" />
             <input asp-for="@Model.atividade.idUsuario" value="@TempData["id"]" type="hidden" />
-
+            <input asp-for="@Model.atividade.caminhoArquivo" value="@Model.atividade.caminhoArquivo" type="hidden" />
             <div class="form-group">
                 <label asp-for="@Model.atividade.nome"></label>
                 <input asp-for="@Model.atividade.nome" class="form-control" value="@Model.atividade.nome" />
@@ -24,15 +29,13 @@
 
             <div class="form-group">
                 <label asp-for="@Model.atividade.dataInicio"></label><br />
-                <span class="text-primary font-weight-light "> Data de inicio anterior: @Model.atividade.dataInicio.ToShortDateString() </span>
-                <input asp-for="@Model.atividade.dataInicio" class="form-control" value="@Model.atividade.dataInicio.ToShortDateString()" />
+                <input asp-for="@Model.atividade.dataInicio" class="form-control" />
                 <span asp-validation-for="@Model.atividade.dataInicio" class="text-danger font-weight-light "></span>
             </div>
 
             <div class="form-group">
                 <label asp-for="@Model.atividade.dataFim"></label><br />
-                <span class="text-primary font-weight-light "> Data de finalização anterior: @Model.atividade.dataFim.ToShortDateString() </span>
-                <input asp-for="@Model.atividade.dataFim" class="form-control" value="@Model.atividade.dataFim.ToShortDateString()" />
+                <input asp-for="@Model.atividade.dataFim" class="form-control" />
                 <span asp-validation-for="@Model.atividade.dataFim" class="text-danger font-weight-light "></span>
             </div>
 
@@ -47,42 +50,94 @@
                 }
                 else
                 {
-                    <span class="text-primary font-weight-light "> Data de validade anterior: @Model.atividade.DataValidade </span>
-                    <input asp-for="@Model.atividade.DataValidade" class="form-control" placeholder="Data de validade da atividade">
+
+                    <input asp-for="@Model.atividade.DataValidade" class="form-control">
                     <span asp-validation-for="@Model.atividade.DataValidade" class="text-danger font-weight-light "></span>
                 }
             </div>
 
+            @if (arquivo == null)
+            {
+                <div class="form-group">
+                    <label asp-for="@Model.atividade.Arquivo"></label>
+                    <div class="custom-file">
+                        <input asp-for="@Model.atividade.Arquivo" onchange="GetNomeArquivo()" class="form-control custom-file-input" id="ArquivoInput" />
+                        <label class="custom-file-label" id="ArquivoNome">Escolha o arquivo ...</label>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div id="RemoverArquivo" style="display:block">
+                    <div class="form-group">
+                        <label>Já existe um arquivo disponível para essa atividade</label>
+                        <embed src="@arquivo" width="450" height="500" />
+                        Clique <a href="@arquivo" target="_blank">aqui</a> para abrir o arquivo.
+                        <label>Caso queira adicionar outro, irá substutir.</label>
+                        <div class="form-group">
+                            <label asp-for="@Model.atividade.Arquivo"></label>
+                            <div class="custom-file">
+                                <input asp-for="@Model.atividade.Arquivo" onchange="GetNomeArquivo()" class="form-control custom-file-input" id="ArquivoInput" />
+                                <label class="custom-file-label" id="ArquivoNome">Escolha outro arquivo, ou deixe esse campo vazio ...</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
 
 
 
-            <div class="form-group">
-                <label asp-for="@Model.atividade.idTipoAtiv"></label>
-                @if (Model.tipoAtividades.Count() == 0)
-                {
-                    <br /><span class="text-sm-center"> É necessário cadastrar um tipo de atividade para definir uma atividade!</span>
-                }
-                else
-                {
-                    <select asp-for="@Model.atividade.idTipoAtiv" id="atividades" class="user-select-auto">
-                        @foreach (TipoAtividade tipoAtividade in Model.tipoAtividades)
-                        {
-                            if (tipoAtividade.idUsuario == (int)TempData["id"])
-                            {
-                                <option value="@tipoAtividade.ID"> @tipoAtividade.NomeAtividade</option>
-                            }
-                        }
-                    </select>
-                }
-            </div>
-            <!-- Adicionar a visualização de anexo dos arquivos!!!!-->
 
 
-            <button class="btn btn-primary" asp-action="Editar" type="submit"> Submeter </button>
 
         </div>
+        <div class="form-group">
+            <label asp-for="@Model.atividade.idTipoAtiv"></label>
+            @if (Model.tipoAtividades.Count() == 0)
+            {
+                <br /><span class="text-sm-center"> É necessário cadastrar um tipo de atividade para definir uma atividade!</span>
+            }
+            else
+            {
+                <select asp-for="@Model.atividade.idTipoAtiv" id="atividades" class="user-select-auto">
+                    @foreach (TipoAtividade tipoAtividade in Model.tipoAtividades)
+                    {
+                        if (tipoAtividade.idUsuario == (int)TempData["id"])
+                        {
+                            <option value="@tipoAtividade.ID"> @tipoAtividade.NomeAtividade</option>
+                        }
+                    }
+                </select>
+            }
+        </div>
+        <!-- Adicionar a visualização de anexo dos arquivos!!!!-->
+
+        <button class="btn btn-primary" asp-action="Editar" type="submit"> Submeter </button>
+
     </div>
 </form>
+
+
+<div class="modal bg-dark" id="modalDeletarArquivo" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Deletando arquivos</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form asp-action="DeletandoArquivos" method="post">
+                <div class="form-group">
+                    <label>Ao deletar o arquivo, te dará a oportunidade de adicionar outro no lugar. Entretanto, esse arquivo será deletado.</label>
+                    <input asp-for="atividade.ID" hidden />
+                    <button type="submit" class="btn btn-outline-danger btn-lg" id="deletarArquivo">Deletar</button>
+                    <button class="btn btn-outline-success btn-lg">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 <script type="text/javascript">
     function CheckFunc1() {
         var checkBox1 = document.getElementById("checkbox1");
@@ -94,5 +149,17 @@
         }
     }
 </script>
+
+
+
+<script type="text/javascript">
+    function GetNomeArquivo() {
+        var nomearquivo = document.getElementById("ArquivoInput").value;
+        nomearquivo = nomearquivo.split("\\").pop();
+        document.getElementById("ArquivoNome").innerHTML = nomearquivo;
+    }
+
+</script>
+
 <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
 <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
