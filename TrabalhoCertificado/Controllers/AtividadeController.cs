@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net.Mime;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -16,6 +17,7 @@ using TrabalhoCertificado.Models;
 //Atualização de datas: data min pode ser maior que data max.
 namespace TrabalhoCertificado.Controllers
 {
+    [Authorize(Roles = "usuario")]
     public class AtividadeController : Controller
     {
         private readonly DataContext context;
@@ -76,8 +78,6 @@ namespace TrabalhoCertificado.Controllers
             {
                 TempData["erro"] = "Usuario não encontrado!";
             }
-
-
             return PartialView(atividadesLink);
 
         }

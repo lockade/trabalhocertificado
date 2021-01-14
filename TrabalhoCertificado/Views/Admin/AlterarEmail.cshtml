@@ -6,23 +6,23 @@
 
 
 
-    <div class="container">
-        <h2>Alterar Email</h2>
+    <div class="container text-center mx-auto align-items-center">
+        <center>
+            <h2 class="col-md-7">Alterar Email</h2>
 
-        @if (TempData["sucesso"] != null)
-        {
-            <div class="alert alert-success">@TempData["sucesso"]</div>
-        }
+            @if (TempData["sucesso"] != null)
+            {
+                <div class="alert alert-success">@TempData["sucesso"]</div>
+            }
 
-        @if (TempData["erro"] != null)
-        {
-            <div class="alert alert-danger">@TempData["erro"]</div>
-        }
+            @if (TempData["erro"] != null)
+            {
+                <div class="alert alert-danger">@TempData["erro"]</div>
+            }
 
-        <div class="container row mx-auto">
             @if (Model != null)
             {
-                <form method="post" asp-controller="Admin" asp-action="AlterarEmail" class="container-fluid col-12">
+                <form method="post" asp-controller="Admin" asp-action="AlterarEmail" class="col-md-7">
                     <input type="hidden" asp-for="ID" />
 
 
@@ -32,15 +32,15 @@
                         <span asp-validation-for="Email" class="text-danger small"></span>
                     </div>
 
-                    <div class="form-group ">
-                        <button type="submit" class="btn btn-primary mx-auto">Salvar</button>
+                    <div class="form-group text-right">
+                        <button type="submit" class="btn btn-success mx-auto">Salvar</button>
                     </div>
 
 
 
                 </form>
             }
-        </div>
+        </center>
     </div>
 
 

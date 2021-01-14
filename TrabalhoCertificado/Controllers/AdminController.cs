@@ -46,7 +46,7 @@ namespace TrabalhoCertificado.Controllers
             ViewBag.Acao = "UsuariosAtivos";
             if (s != null)
             {
-                List<Usuario> u = context.TBUsuario.OrderBy(c => c.ativado).ThenBy(c => c.nome).Where(x => x.nome.Contains(s) || x.Email.Contains(s) && x.ativado == true).ToList();
+                List<Usuario> u = context.TBUsuario.OrderBy(c => c.ativado).ThenBy(c => c.nome).Where(x => (x.nome.Contains(s) || x.Email.Contains(s)) && x.ativado == true).ToList();
                 return View("Index", u);
             }
             else
@@ -62,7 +62,7 @@ namespace TrabalhoCertificado.Controllers
             ViewBag.Acao = "UsuariosDesativados";
             if (s != null)
             {
-                List<Usuario> u = context.TBUsuario.OrderBy(c => c.ativado).ThenBy(c => c.nome).Where(x => x.nome.Contains(s) || x.Email.Contains(s) && x.ativado == false).ToList();
+                List<Usuario> u = context.TBUsuario.OrderBy(c => c.ativado).ThenBy(c => c.nome).Where(x => (x.nome.Contains(s) || x.Email.Contains(s)) && x.ativado == false).ToList();
                 return View("Index", u);
             }
             else

@@ -6,12 +6,12 @@
 
 @if (TempData["sucesso"] != null)
 {
-    <div class="alert alert-success">@TempData["sucesso"]</div>
+    <div class="alert alert-success container">@TempData["sucesso"]</div>
 }
 
 @if (TempData["erro"] != null)
 {
-    <div class="alert alert-danger">@TempData["erro"]</div>
+    <div class="alert alert-danger container">@TempData["erro"]</div>
 }
 
 <div class="container">
@@ -25,7 +25,7 @@
 
         <form class="mx-auto row" method="get" asp-controller="Admin" asp-action="@ViewBag.Acao">
             <div class="input-group mb-3">
-                <input type="text" class="form-control" placeholder="Pesquise por nome e email" aria-describedby="basic-addon2">
+                <input type="text" class="form-control" placeholder="Pesquise por nome e email" name="s" aria-describedby="basic-addon2">
                 <button class="btn btn-outline-primary" type="submit" id="button-addon2"><i class="fas fa-search fa-sm"></i></button>
             </div>
         </form>
@@ -38,33 +38,34 @@
             {
                 @if (usuario.ativado)
                 {
-                    ViewBag.sucDang = "border border-success";
+                    ViewBag.sucDang = "background-color: rgba(0, 255, 0, 0.35)";
                 }
                 else
                 {
-                    ViewBag.sucDang = "border border-danger";
+                    ViewBag.sucDang = "background-color: rgba(255, 0, 0, 0.35)";
                 }
 
-                <div class="card m-2 @ViewBag.sucDang col-lg-5" style="width: 18rem;">
+                <div class="card m-2 col-lg-5" style="width: 18rem; @ViewBag.sucDang; color: black">
                     <div class="card-body ">
                         <p class="card-text">@Html.DisplayNameFor(model => model.ID): @usuario.ID </p>
                         <p class="card-text">@Html.DisplayNameFor(model => model.nome): @usuario.nome </p>
                         <p class="card-text">@Html.DisplayNameFor(model => model.Email): @usuario.Email </p>
                         <p class="card-text">@Html.DisplayNameFor(model => model.previlegios): @usuario.previlegios </p>
 
-                        @if (usuario.ativado)
-                        {
-                            <p class="text-black">@Html.DisplayNameFor(model => model.ativado):<span class="card-text text-success">Sim</span></p>
-                            <a class='btn btn-sm btn-danger text-white mx-auto' data-toggle='modal' data-target='#modalDesativar' data-code='@usuario.ID' data-nome="@usuario.nome" data-email="@usuario.Email">Desativar</a>
+                        <div class="text-center">
+                            @if (usuario.ativado)
+                            {
+                                <p class="text-black text-left">@Html.DisplayNameFor(model => model.ativado):<span class="card-text"> Sim</span></p>
+                                <a class='btn btn-danger mx-auto text-center  border border-light rounded' data-toggle='modal' data-target='#modalDesativar' data-code='@usuario.ID' data-nome="@usuario.nome" data-email="@usuario.Email">Desativar</a>
 
-                        }
-                        else
-                        {
-                            <p class="text-black">@Html.DisplayNameFor(model => model.ativado):<span class="card-text text-danger">Não</span></p>
-                            <a class='btn btn-sm btn-success text-white mx-auto' data-toggle='modal' data-target='#modalAtivar' data-code='@usuario.ID' data-nome="@usuario.nome" data-email="@usuario.Email">Ativar</a>
-                        }
-
-                        <a class="btn btn-sm btn-info" asp-controller="Admin" asp-action="AlterarEmail" asp-route-id="@usuario.ID">Alterar Email</a>
+                            }
+                            else
+                            {
+                                <p class="text-black text-left">@Html.DisplayNameFor(model => model.ativado):<span class="card-text"> Não</span></p>
+                                <a class='btn btn-success mx-auto text-center border border-light rounded' data-toggle='modal' data-target='#modalAtivar' data-code='@usuario.ID' data-nome="@usuario.nome" data-email="@usuario.Email">Ativar</a>
+                            }
+                            <a class="btn btn-warning mx-auto text-center border border-light rounded" style="color: black" asp-controller="Admin" asp-action="AlterarEmail" asp-route-id="@usuario.ID">Alterar Email</a>
+                        </div>
 
                     </div>
                 </div>
@@ -77,7 +78,7 @@
     <div class="modal" id="modalDesativar" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
-                <div class="modal-body">
+                <div class="modal-body text-center">
                     <div class="d-flex justify-content-center">
                         <div>
                             <i class="fa fa-4x fa-minus-circle text-danger"></i>
@@ -87,12 +88,12 @@
                         <span class="h4">Tem certeza?</span>
                     </div>
                     <div>
-                        <small style="text-align: center"><span id="ss" class="text-center"></span></small>
+                        <small style="text-align: center"><span id="spanDesativado" class="text-center"></span></small>
                     </div>
                 </div>
                 <div class="modal-footer d-flex justify-content-center" style="border-top: 0px;">
                     <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-sm btn-danger text-white" asp-action="Desativar" asp-controller="Usuario" id="btnDesativar">Desativar</button>
+                    <button type="submit" class="btn btn-sm btn-danger link-btn text-white" asp-action="Desativar" asp-controller="Usuario" id="btnDesativar">Desativar</button>
                 </div>
             </div>
         </div>
@@ -103,7 +104,7 @@
     <div class="modal" id="modalAtivar" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
-                <div class="modal-body">
+                <div class="modal-body text-center">
                     <div class="d-flex justify-content-center">
                         <div>
                             <i class="fa fa-4x fa-minus-circle text-success"></i>
@@ -118,7 +119,7 @@
                 </div>
                 <div class="modal-footer d-flex justify-content-center" style="border-top: 0px;">
                     <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-sm btn-success text-white" asp-action="Ativar" asp-controller="Usuario" id="btnAtivar">Ativar</button>
+                    <button type="submit" class="btn btn-sm btn-success text-white link-btn" asp-action="Ativar" asp-controller="Usuario" id="btnAtivar">Ativar</button>
                 </div>
             </div>
         </div>
@@ -133,20 +134,26 @@
             let code = $(e.relatedTarget).data('code');
             let nome = $(e.relatedTarget).data('nome');
             let email = $(e.relatedTarget).data('email');
-            let s = document.getElementById('btnDesativar').getAttribute('formaction');
+            //let s = document.getElementById('btnDesativar').getAttribute('formaction');
             $("#spanDesativado").html("Deseja realmente desativar este cadastro com o nome \"" + nome + "\" e email \"" + email + "\" do sistema ?");
             document.getElementById('btnDesativar').removeAttribute('formaction');
-            document.getElementById('btnDesativar').setAttribute('formaction', s + '/' + code);
+            document.getElementById('btnDesativar').setAttribute('formaction', "Usuario/Desativar" + '/' + code);
         });
 
         $('#modalAtivar').on('show.bs.modal', function (e) {
             let code = $(e.relatedTarget).data('code');
             let nome = $(e.relatedTarget).data('nome');
             let email = $(e.relatedTarget).data('email');
-            let s = document.getElementById('btnAtivar').getAttribute('formaction');
+            //let s = document.getElementById('btnAtivar').getAttribute('formaction');
             $("#spanAtivado").html("Deseja realmente ativar este cadastro com o nome \"" + nome + "\" e email \"" + email + "\" do sistema ?");
             document.getElementById('btnAtivar').removeAttribute('formaction');
-            document.getElementById('btnAtivar').setAttribute('formaction', s + '/' + code);
+            document.getElementById('btnAtivar').setAttribute('formaction', "Usuario/Ativar" + '/' + code);
         });
     }
+
+    $(".link-btn").click(function () {
+        var t = $(this).html();
+        var s = "Aguarde...";
+        $(this).html(s);
+    })
 </script>

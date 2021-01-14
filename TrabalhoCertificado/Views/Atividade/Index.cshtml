@@ -150,123 +150,126 @@
             }
         }
     </style>
-    <div class="form-text">
-        <button class="tracking-in-contract-bck-top  btn btn-outline-primary btn-lg" data-toggle="modal" data-target="#ModalBemVindo" >
-            <h3 >Bem vindo a página de</h3><h1 class="focus-in-expand-fwd"> Atividades</h1>
-        </button>    </div>
-        <br />
 
-    <div class="modal fade float-right" id="ModalBemVindo" tabindex="-1" role="dialog" aria-labelledby="exampleModalPreviewLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-body">
-                    <div class="alert alert-success " id="alerta" role="alert" style="display:block">
-                        <h4 class="alert-heading">Bem-vindo a página de Atividades</h4>
-                        <p>
-                            Certo, aqui você pode criar, visualizar, editar e deletar atividades. Você pode cadastrar atividades que serão concluídas, ou não foram concluídas.
-                            Já os tipos de atividades, é um tipo para tais atividades. Por exemplo: eu tenho feito um curso de inglês. O tipo de atividade é o "curso", e atividade é inglês.
-                        </p>
-                        <hr>
-                        <p class="mb-0">Clique no nome e/ou no identificador para checar os detalhes das atividades.</p>
+    <div class="container">
+
+        <div class="form-text mx-auto text-center mb-3">
+            <button class="tracking-in-contract-bck-top  btn btn-outline-primary btn-lg" data-toggle="modal" data-target="#ModalBemVindo">
+                <h3>Bem vindo a página de</h3><h1 class="focus-in-expand-fwd"> Atividades</h1>
+            </button>
+        </div>
+
+        <div class="modal fade float-right" id="ModalBemVindo" tabindex="-1" role="dialog" aria-labelledby="exampleModalPreviewLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <div class="alert alert-success " id="alerta" role="alert" style="display:block">
+                            <h4 class="alert-heading">Bem-vindo a página de Atividades</h4>
+                            <p>
+                                Aqui você pode criar, visualizar, editar e deletar atividades. Você pode cadastrar atividades que serão concluídas, ou não foram concluídas.
+                                Já os tipos de atividades, é um tipo para tais atividades. Por exemplo: eu tenho feito um curso de inglês. O tipo de atividade é o "curso", e atividade é inglês.
+                            </p>
+                            <hr>
+                            <p class="mb-0">Clique no nome e/ou no identificador para checar os detalhes das atividades.</p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-  
-
-    
-
-    <div class="d-flex justify-content-around">
-        <a asp-controller="Atividade" asp-action="TiposAtividade">
-            <input type="button" class="btn btn-outline-primary btn-lg btn-toolbar" value="Tipos de Atividade" />
-        </a>
 
 
-        <button type="button" name="novaatividade" class="btn btn-outline-success btn-lg btn-toolbar btnNovaAtividade" data-toggle="modal" data-target="#modalAtividade">Cadastrar nova atividade</button>
-    </div>
-
-    <br />
 
 
-    <div class="d-flex justify-content-start">
-        <div class="input-group input-group-lg">
-            <div class="input-group-prepend">
-                <span class="input-group-text d-inline p-2 bg-dark text-white">Buscar Atividade</span>
-            </div>
-            <input type="text" class="form-control">
+        <div class="d-flex justify-content-around">
+            <a asp-controller="Atividade" asp-action="TiposAtividade">
+                <input type="button" class="btn btn-outline-primary btn-lg btn-toolbar" value="Tipos de Atividade" />
+            </a>
+
+
+            <button type="button" name="novaatividade" class="btn btn-outline-success btn-lg btn-toolbar btnNovaAtividade" data-toggle="modal" data-target="#modalAtividade">Cadastrar nova atividade</button>
         </div>
-        <input type="button" class="btn btn-primary" value="Buscar" />
-    </div>
-    <br />
-    <table id="table" class="table table-striped table-dark">
-        <thead>
-            <tr>
-                <th class="p-1 mb-2 bg-info text-white"><label asp-for="@Model.atividade.ID"></label></th>
-                <th class="p-2 mb-2 bg-secondary text-white"><label asp-for="@Model.atividade.nome"></label></th>
-                <th class="p-2 mb-2 bg-primary text-white">Arquivo</th>
-                <th class="p-2 mb-2 bg-info text-white">Tipo de Atividade</th>
-                <th class="p-2 mb-2 bg-warning text-dark"><label> Editar</label></th>
-                <th class="p-2 mb-2 bg-danger text-white">Remover</th>
-            </tr>
-        </thead>
-        <tbody>
 
-            @if (Model.atividades != null)
-            {
-                @foreach (Atividade atividade in Model.atividades)
+        <br />
+
+
+        <div class="d-flex justify-content-start">
+            <div class="input-group input-group-lg">
+                <div class="input-group-prepend">
+                    <span class="input-group-text d-inline p-2 bg-dark text-white">Buscar Atividade</span>
+                </div>
+                <input type="text" class="form-control">
+            </div>
+            <input type="button" class="btn btn-primary" value="Buscar" />
+        </div>
+        <br />
+        <table id="table" class="table table-striped table-dark">
+            <thead>
+                <tr>
+                    <th class="p-1 mb-2 bg-info text-white"><label asp-for="@Model.atividade.ID"></label></th>
+                    <th class="p-2 mb-2 bg-secondary text-white"><label asp-for="@Model.atividade.nome"></label></th>
+                    <th class="p-2 mb-2 bg-primary text-white">Arquivo</th>
+                    <th class="p-2 mb-2 bg-info text-white">Tipo de Atividade</th>
+                    <th class="p-2 mb-2 bg-warning text-dark"><label> Editar</label></th>
+                    <th class="p-2 mb-2 bg-danger text-white">Remover</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @if (Model.atividades != null)
                 {
-                    @if (atividade.idUsuario == (int)TempData["id"])
+                    @foreach (Atividade atividade in Model.atividades)
                     {
-
-
-                        string arquivo = null;
-                        if (atividade.caminhoArquivo != null)
+                        @if (atividade.idUsuario == (int)TempData["id"])
                         {
-                            arquivo = "/arquivos/" + atividade.caminhoArquivo;
-                        }
+                            string arquivo = null;
+                            if (atividade.caminhoArquivo != null)
+                            {
+                                arquivo = "/arquivos/" + atividade.caminhoArquivo;
+                            }
 
-                        <tr>
-                            <td class="btnDetalhes" data-title="ID" data-toggle="modal" data-target="#ModalDetalhes" data-value="@atividade.ID">@atividade.ID</td>
-                            <td data-title="Name" class="btnDetalhes" data-toggle="modal" data-target="#ModalDetalhes" data-value="@atividade.ID">@atividade.nome</td>
-                            @if (arquivo == null)
-                            {
-                                <td data-title="Link">Essa atividade ainda não possue um arquivo.</td>
-                            }
-                            else
-                            {
-                                <td data-title="Link"><a href="@arquivo" target="_blank">Arquivo da atividade</a></td>
-                            }
-                            @{
-                                string tipotividade = null;
-                                foreach (TipoAtividade tipo in Model.tipoAtividades)
+                            <tr>
+                                <td class="btnDetalhes" data-title="ID" data-toggle="modal" data-target="#ModalDetalhes" data-value="@atividade.ID">@atividade.ID</td>
+                                <td data-title="Name" class="btnDetalhes" data-toggle="modal" data-target="#ModalDetalhes" data-value="@atividade.ID">@atividade.nome</td>
+                                @if (arquivo == null)
                                 {
-                                    if (tipo.ID == atividade.idTipoAtiv)
+                                    <td data-title="Link">Essa atividade ainda não possue um arquivo.</td>
+                                }
+                                else
+                                {
+                                    <td data-title="Link"><a href="@arquivo" target="_blank">Arquivo da atividade</a></td>
+                                }
+                                @{
+                                    string tipotividade = null;
+                                    foreach (TipoAtividade tipo in Model.tipoAtividades)
                                     {
-                                        tipotividade = tipo.NomeAtividade;
+                                        if (tipo.ID == atividade.idTipoAtiv)
+                                        {
+                                            tipotividade = tipo.NomeAtividade;
+                                        }
                                     }
                                 }
-                            }
-                            @if (tipotividade != null)
-                            {
-                                <td class="btn-warning text-dark btnEditar">@tipotividade</td>
-                            }
-                            else
-                            {
-                                <td class="btn-warning text-dark btnEditar">Tipo de Atividade foi deletado ou perdido!</td>
-                            }
-                            <td class="btn-warning text-dark btnEditar" data-toggle="modal" data-target="#ModalEditar" data-value="@atividade.ID"> Editar </td>
-                            <td class="btn-danger text-white btnDeletar" data-toggle="modal" data-target="#ModalDeletar" data-value="@atividade.ID">Remover</td>
+                                @if (tipotividade != null)
+                                {
+                                    <td class="btn-warning text-dark btnEditar">@tipotividade</td>
+                                }
+                                else
+                                {
+                                    <td class="btn-warning text-dark btnEditar">Tipo de Atividade foi deletado ou perdido!</td>
+                                }
+                                <td class="btn-warning text-dark btnEditar" data-toggle="modal" data-target="#ModalEditar" data-value="@atividade.ID"> Editar </td>
+                                <td class="btn-danger text-white btnDeletar" data-toggle="modal" data-target="#ModalDeletar" data-value="@atividade.ID">Remover</td>
 
-                        </tr>
+                            </tr>
 
+                        }
                     }
                 }
-            }
 
-        </tbody>
+            </tbody>
 
-    </table>
+        </table>
+
+    </div>
     <style type="text/css">
         .bounce-in-top {
             animation: bounce-in-top 1.1s both
