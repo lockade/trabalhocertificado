@@ -26,16 +26,31 @@
         <br />
     }
 }
-<div class="alert alert-success col-6" id="alerta1" role="alert" style="display:block">
-    <h4 class="alert-heading">Bem-vindo a página de Atividades</h4>
-    <p>
-        Certo, aqui você pode criar, visualizar, editar e deletar atividades. Você pode cadastrar atividades que serão concluídas, ou não foram concluídas.
-        Já os tipos de atividades, é um tipo para tais atividades. Por exemplo: eu tenho feito um curso de inglês. O tipo de atividade é o "curso", e atividade é inglês.
-    </p>
-    <hr>
-    <p class="mb-0">Clique no nome e/ou no identificador para checar os detalhes das atividades.</p>
-    <button class="btn btn-outline-primary" id="btnConclusao1" onclick="FuncAlerta1()">Certo, entendi</button>
+<div class="form-text">
+    <button class="tracking-in-contract-bck-top  btn btn-outline-primary btn-lg" data-toggle="modal" data-target="#ModalBemVindo">
+        <h3>Bem vindo a página de</h3><h1 class="focus-in-expand-fwd"> Tipo Atividades</h1>
+    </button>
 </div>
+<br />
+
+<div class="modal fade float-right" id="ModalBemVindo" tabindex="-1" role="dialog" aria-labelledby="exampleModalPreviewLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="alert alert-success " id="alerta" role="alert" style="display:block">
+                    <h4 class="alert-heading">Bem-vindo a página de Tipo de Atividades</h4>
+                    <p>
+                        Certo, aqui você pode criar, visualizar, editar e deletar atividades. Você pode cadastrar atividades que serão concluídas, ou não foram concluídas.
+                        Já os tipos de atividades, é um tipo para tais atividades. Por exemplo: eu tenho feito um curso de inglês. O tipo de atividade é o "curso", e atividade é inglês.
+                    </p>
+                    <hr>
+                    <p class="mb-0">Clique no nome e/ou no identificador para checar os detalhes das atividades.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <div class="d-flex justify-content-start">
     <a asp-controller="Atividade" asp-action="Index">

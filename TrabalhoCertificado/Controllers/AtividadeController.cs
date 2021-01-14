@@ -226,7 +226,8 @@ namespace TrabalhoCertificado.Controllers
             TipoAtividade tipoAtividade = context.TBTiposAtividades.Find(atividade.idTipoAtiv);
             if (tipoAtividade == null)
             {
-                return NotFound("Tipo de atividade não foi encontrado!");
+                tipoAtividade = new TipoAtividade();
+                tipoAtividade.NomeAtividade = "Erro 404 - Essa atividade foi deletada ou perdida.";
             }
             AtividadeLink atividadeLink = new AtividadeLink();
             atividadeLink.atividade = atividade;
