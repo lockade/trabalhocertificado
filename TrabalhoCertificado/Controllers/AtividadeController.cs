@@ -29,15 +29,20 @@ namespace TrabalhoCertificado.Controllers
             this.hostingEnvironment = hostingEnviroment;
         }
         [HttpGet]
-        public ActionResult Index()
+        public ActionResult Index(string buscar)
         {
             Models.AtividadeLink atividadesLink = new Models.AtividadeLink();
 
            
-           
+           if(buscar == null) { 
             atividadesLink.tipoAtividades = context.TBTiposAtividades.ToList();
             atividadesLink.atividades = context.TBAtividades.ToList();
-
+            }
+            else
+            {
+                atividadesLink.tipoAtividades = context.TBTiposAtividades.ToList();
+                atividadesLink.atividades = context.TBAtividades.Where(x => x.nome.Contains(buscar)).ToList();
+            }
 
             Usuario usuario = null;
             try
@@ -55,6 +60,7 @@ namespace TrabalhoCertificado.Controllers
 
             return View(atividadesLink);
         }
+
         public ActionResult NovaAtividade()
         {
             Models.AtividadeLink atividadesLink = new Models.AtividadeLink();
@@ -448,12 +454,21 @@ namespace TrabalhoCertificado.Controllers
                 return PartialView(atividadeLink);
             }
 
-            public ActionResult TiposAtividade()
+            public ActionResult TiposAtividade(string buscar)
             {
                 List<TipoAtividade> atividades;
                 try
                 {
+                if (buscar == null)
+                {
                     atividades = context.TBTiposAtividades.ToList();
+                    
+                }
+                else
+                {
+                    atividades = context.TBTiposAtividades.Where(x => x.NomeAtividade.Contains(buscar)).ToList();                    
+                }
+                
                 }
                 catch
                 {
