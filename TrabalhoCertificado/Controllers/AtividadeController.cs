@@ -32,16 +32,17 @@ namespace TrabalhoCertificado.Controllers
         public ActionResult Index(string buscar)
         {
             Models.AtividadeLink atividadesLink = new Models.AtividadeLink();
-
+            List<TipoAtividade> tipoAtividades = context.TBTiposAtividades.ToList();
            
            if(buscar == null) { 
             atividadesLink.tipoAtividades = context.TBTiposAtividades.ToList();
             atividadesLink.atividades = context.TBAtividades.ToList();
+            
             }
             else
             {
                 atividadesLink.tipoAtividades = context.TBTiposAtividades.ToList();
-                atividadesLink.atividades = context.TBAtividades.Where(x => x.nome.Contains(buscar)).ToList();
+               // atividadesLink.atividades = context.TBAtividades.Where(x => x.nome.Contains(buscar) || tipoAtividades.Find(a => a.ID == x.idTipoAtiv).Contains(buscar)).ToList();
             }
 
             Usuario usuario = null;
@@ -88,8 +89,95 @@ namespace TrabalhoCertificado.Controllers
 
         }
 
+        public ActionResult AtividadeDataDeValidade(string buscar)
+        {
+            Models.AtividadeLink atividadesLink = new Models.AtividadeLink();
+            List<Atividade> atividades = new List<Atividade>();
+            atividadesLink.tipoAtividades = context.TBTiposAtividades.ToList();
+            if (buscar == null)
+            {
+                foreach(Atividade atividade in context.TBAtividades.ToList())
+                {
+                    if (atividade.DataValidade != null)
+                    {
+                        atividades.Add(atividade);
+                    }
+                }
+                atividadesLink.atividades = atividades;
+            }
+            else
+            {
+                foreach (Atividade atividade in context.TBAtividades.ToList())
+                {
+                    if (atividade.DataValidade != null)
+                    {
+                        atividades.Add(atividade);
+                    }
+                }
+                atividadesLink.atividades = atividades.Where(x => x.nome.Contains(buscar)).ToList();
+            }
+            
+            Usuario usuario = null;
+            try
+            {
+                var sid = int.Parse(User.Claims.Where(c => c.Type == ClaimTypes.Sid).Select(c => c.Value).SingleOrDefault());
+                usuario = context.TBUsuario.FirstOrDefault(x => x.ID == sid);
+                TempData["id"] = usuario.ID;
+                TempData["nome"] = usuario.nome;
+            }
+            catch
+            {
+                TempData["erro"] = "Usuario não encontrado!";
+            }
 
 
+            return View(atividadesLink);
+        }
+
+        public ActionResult AtividadePossuemArquivos(string buscar)
+        {
+            Models.AtividadeLink atividadesLink = new Models.AtividadeLink();
+
+            atividadesLink.tipoAtividades = context.TBTiposAtividades.ToList();
+            List<Atividade> atividades = new List<Atividade>();
+            if (buscar == null)
+            {
+                foreach (Atividade atividade in context.TBAtividades.ToList())
+                {
+                    if (atividade.caminhoArquivo != null)
+                    {
+                        atividades.Add(atividade);
+                    }
+                }
+                atividadesLink.atividades = atividades ;
+            }
+            else
+            {
+                foreach (Atividade atividade in context.TBAtividades.ToList())
+                {
+                    if (atividade.caminhoArquivo != null)
+                    {
+                        atividades.Add(atividade);
+                    }
+                }
+                atividadesLink.atividades = atividades.Where(x => x.nome.Contains(buscar)).ToList();
+            }
+            Usuario usuario = null;
+            try
+            {
+                var sid = int.Parse(User.Claims.Where(c => c.Type == ClaimTypes.Sid).Select(c => c.Value).SingleOrDefault());
+                usuario = context.TBUsuario.FirstOrDefault(x => x.ID == sid);
+                TempData["id"] = usuario.ID;
+                TempData["nome"] = usuario.nome;
+            }
+            catch
+            {
+                TempData["erro"] = "Usuario não encontrado!";
+            }
+
+
+            return View(atividadesLink);
+        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -177,6 +265,15 @@ namespace TrabalhoCertificado.Controllers
         {
             if (ModelState.IsValid)
             {
+                foreach (TipoAtividade tipo in context.TBTiposAtividades.ToList())
+                {
+                    if(tipo.NomeAtividade == item.tipoAtividade.NomeAtividade)
+                    {
+                        TempData["ErroTipoAtividadeNome"] = "Não é possível adicionar o mesmo nome no tipo de atividade";
+                        return RedirectToAction("TiposAtividade");
+                    }
+                }
+
                 try
                 {
                     context.TBTiposAtividades.Add(item.tipoAtividade);
@@ -585,8 +682,32 @@ namespace TrabalhoCertificado.Controllers
                 {
                     return NotFound("Tipo Atividade não foi encontrado!");
                 }
+            List<Atividade> atividades = new List<Atividade>();
+            try
+            {
+                foreach(Atividade atividade in context.TBAtividades.ToList())
+                {
+                    if(atividade.idTipoAtiv == tipoAtividade.ID)
+                    {
+                        atividades.Add(atividade);
+                    }
+                }
+            }
+            catch
+            {
+                return BadRequest("Não foi possível acessar as atividades");
+            }
+
+                Usuario usuario;
+                var sid = int.Parse(User.Claims.Where(c => c.Type == ClaimTypes.Sid).Select(c => c.Value).SingleOrDefault());
+                usuario = context.TBUsuario.FirstOrDefault(x => x.ID == sid);
+                TempData["id"] = usuario.ID;
+                TempData["nome"] = usuario.nome;
+            
+            
                 AtividadeLink atividadeLink = new AtividadeLink();
                 atividadeLink.tipoAtividade = tipoAtividade;
+                atividadeLink.atividades = atividades;
                 return PartialView(atividadeLink);
             }
 
@@ -618,6 +739,16 @@ namespace TrabalhoCertificado.Controllers
                 {
                     return new BadRequestResult();
                 }
+
+                foreach(Atividade atividade in context.TBAtividades.ToList())
+                {
+                    if(atividade.idTipoAtiv == item.tipoAtividade.ID)
+                    {
+                        TempData["deletarTipoAtividade"] = false;
+                    TempData["deletarTipoAtividadeTXT"] = "Não foi possível deletar o tipo de atividade, pois existe atividades sincronizadas a ela.";
+                    return RedirectToAction("TiposAtividade");
+                    }
+                }   
                 try
                 {
 

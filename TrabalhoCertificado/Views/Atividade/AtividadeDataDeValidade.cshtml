@@ -192,7 +192,7 @@
         <br />
 
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-        <form method="get" asp-controller="Atividade" asp-action="Index">
+        <form method="get" asp-controller="Atividade" asp-action="AtividadeDataDeValidade">
             <div class="d-flex justify-content-start">
                 <div class="input-group input-group-lg">
                     <div class="input-group-prepend">
@@ -206,19 +206,19 @@
         </form>
         <br />
         <table id="table" class="table table-striped table-dark">
-            
-                <thead>
-                    <tr>
-                        <th class="p-1 mb-2 bg-info text-white">Identificador</th>
-                        <th class="p-2 mb-2 bg-secondary text-white">Nome da Atividade</th>
-                        <th class="p-2 mb-2 bg-primary text-white">Arquivo</th>
-                        <th class="p-2 mb-2 bg-info text-white">Tipo de Atividade</th>
-                        <th class="p-2 mb-2 bg-warning text-dark">Editar</th>
-                        <th class="p-2 mb-2 bg-danger text-white">Remover</th>
-                    </tr>
 
-                </thead>
-            
+            <thead>
+                <tr>
+                    <th class="p-1 mb-2 bg-info text-white">Identificador</th>
+                    <th class="p-2 mb-2 bg-secondary text-white">Nome da Atividade</th>
+                    <th class="p-2 mb-2 bg-primary text-white">Arquivo</th>
+                    <th class="p-2 mb-2 bg-info text-white">Tipo de Atividade</th>
+                    <th class="p-2 mb-2 bg-warning text-dark">Editar</th>
+                    <th class="p-2 mb-2 bg-danger text-white">Remover</th>
+                </tr>
+
+            </thead>
+
             <tbody>
 
                 @if (Model.atividades != null)

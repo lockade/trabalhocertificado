@@ -55,7 +55,7 @@
             <div class="form-group">
                 <label asp-for="@Model.atividade.Arquivo"></label>
                 <div class="custom-file">
-                    <input asp-for="@Model.atividade.Arquivo" onchange="GetNomeArquivo()" class="form-control custom-file-input" id="ArquivoInput" />
+                    <input asp-for="@Model.atividade.Arquivo" accept="image/png, image/jpeg, @System.Net.Mime.MediaTypeNames.Application.Pdf, @System.Net.Mime.MediaTypeNames.Application.Rtf, image/bmp" onchange="GetNomeArquivo()" class="form-control custom-file-input" id="ArquivoInput" />
                     <label class="custom-file-label" id="ArquivoNome">Escolha o arquivo ...</label>
                 </div>
             </div>

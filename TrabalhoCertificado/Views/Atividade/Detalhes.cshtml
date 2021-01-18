@@ -25,11 +25,11 @@
         </div>
         <div class="form-group">
             <label asp-for="@Model.atividade.dataInicio"></label>
-            <input class="form-control" value="@Model.atividade.dataInicio" readonly />
+            <input class="form-control" value="@Model.atividade.dataInicio.ToShortDateString()" readonly />
         </div>
         <div class="form-group">
             <label asp-for="@Model.atividade.dataFim"></label>
-            <input class="form-control" value="@Model.atividade.dataFim" readonly />
+            <input class="form-control" value="@Model.atividade.dataFim.ToShortDateString()" readonly />
         </div>
         @if (Model.atividade.DataValidade != null)
         {

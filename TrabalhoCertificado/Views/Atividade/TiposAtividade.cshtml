@@ -17,11 +17,23 @@
 
 
 }
+@if(TempData["ErroTipoAtividadeNome"] != null)
+{
+<span class="alert alert-danger">TempData["ErroTipoAtividadeNome"]</span>
+<br />
+<br />
+}
 @if (TempData["deletarTipoAtividade"] != null)
 {
     if ((bool)TempData["deletarTipoAtividade"] == true)
     {
         <span class="alert alert-success">Tipo de atividade removida com sucesso!</span>
+        <br />
+        <br />
+    }
+    else
+    {
+<span class="alert alert-danger">@TempData["deletarTipoAtividadeTXT"]</span>
         <br />
         <br />
     }

@@ -19,8 +19,56 @@
             }
             else
             {
-            <input class="form-control" value="@Model.tipoAtividade.DescAtividade" readonly />
+                <input class="form-control" value="@Model.tipoAtividade.DescAtividade" readonly />
             }
         </div>
     </div>
+    <h5>Atividades Sincronizadas em @Model.tipoAtividade.NomeAtividade</h5>
+    <table id="table" class="table table-striped table-info">
+        <thead>
+            <tr>
+                <th class="p-1 mb-2 bg-info text-white"><label asp-for="@Model.atividade.ID"></label></th>
+                <th class="p-2 mb-2 bg-secondary text-white"><label asp-for="@Model.atividade.nome"></label></th>
+                <th class="p-2 mb-2 bg-primary text-white">Arquivo</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @if (Model.atividades != null)
+            {
+                @foreach (Atividade atividade in Model.atividades)
+                {
+                    @if (atividade.idUsuario == (int)TempData["id"])
+                    {
+                        string arquivo = null;
+                        if (atividade.caminhoArquivo != null)
+                        {
+                            arquivo = "/arquivos/" + atividade.caminhoArquivo;
+                        }
+
+                        <tr>
+                            <td class="btnDetalhes" data-title="ID" >@atividade.ID</td>
+                            <td data-title="Name" class="btnDetalhes" >@atividade.nome</td>
+                            @if (arquivo == null)
+                            {
+                                <td data-title="Link">Essa atividade ainda não possue um arquivo.</td>
+                            }
+                            else
+                            {
+                                <td data-title="Link"><a class="text-hov-white" href="@arquivo" target="_blank">Arquivo da atividade</a></td>
+                            }
+                            
+
+                        </tr>
+
+                    }
+                }
+            }
+            else
+            {
+                Write("Não foi encontrado nada!");
+            }
+        </tbody>
+
+    </table>
 </div>
