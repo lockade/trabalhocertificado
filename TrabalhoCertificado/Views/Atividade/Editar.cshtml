@@ -4,7 +4,8 @@
     Layout = null;
     if (Model.atividade.caminhoArquivo != null)
     {
-        arquivo = "/arquivos/" + Model.atividade.caminhoArquivo;
+        arquivo = "/arquivos?parametro=" + Model.atividade.caminhoArquivo;
+
     }
 
 }
@@ -73,9 +74,8 @@
             {
                 <div id="RemoverArquivo" style="display:block">
                     <div class="form-group">
-                        <label>Já existe um arquivo disponível para essa atividade</label>
-                        <embed src="@arquivo" width="450" height="500" />
-                        Clique <a href="@arquivo" target="_blank">aqui</a> para abrir o arquivo.
+                        <label>Já existe um arquivo disponível para essa atividade</label>                        
+                        Clique <a href="@arquivo" target="_blank">aqui</a> para baixar o arquivo.
                         <label>Caso queira adicionar outro, irá substutir.</label>
                         <div class="form-group">
                             <label asp-for="@Model.atividade.Arquivo"></label>

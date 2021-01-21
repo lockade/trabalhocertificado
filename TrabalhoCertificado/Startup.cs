@@ -55,28 +55,9 @@ namespace TrabalhoCertificado
             }
             app.UseHttpsRedirection();
             app.UseRouting();
-
+            app.UseStaticFiles();
             app.UseAuthentication();
             app.UseAuthorization();
-            app.UseStaticFiles(new StaticFileOptions
-            {
-                OnPrepareResponse = ctx =>
-                {
-                    
-                    if (!ctx.Context.User.Identity.IsAuthenticated)
-                    {
-                        // responde HTTP 401 não está autorizado.
-                        ctx.Context.Response.StatusCode = (int)System.Net.HttpStatusCode.Unauthorized;
-
-                        ctx.Context.Response.ContentLength = 0;
-                        ctx.Context.Response.Body = Stream.Null;
-
-                    }
-                }
-            });
-
-
-
 
                     app.UseEndpoints(endpoints =>
                     {

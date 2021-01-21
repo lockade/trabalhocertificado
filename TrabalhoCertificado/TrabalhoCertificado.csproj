@@ -6,6 +6,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="NovaPasta\**" />
+    <Content Remove="NovaPasta\**" />
+    <EmbeddedResource Remove="NovaPasta\**" />
+    <None Remove="NovaPasta\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="Migrations\20201219203145_MigracaoInicial.cs" />
     <Compile Remove="Migrations\20201219203145_MigracaoInicial.Designer.cs" />
     <Compile Remove="Migrations\20201221075648_MigracaoInicial.cs" />
@@ -31,6 +38,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="arquivos\" />
     <Folder Include="wwwroot\arquivos\" />
   </ItemGroup>
 

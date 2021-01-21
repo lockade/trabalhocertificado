@@ -13,8 +13,9 @@ using TrabalhoCertificado.Data;
 using TrabalhoCertificado.Models;
 
 //O que falta?
-//Anexo de arquivos
-//Atualização de datas: data min pode ser maior que data max.
+//Alguns bugs que consegui localizar:
+//Colocar a data de inicio, de fim e de validade, um parametro para não adicionar uma antes da outra.
+//E terminar a pesquisa para as outras views de atividade.
 namespace TrabalhoCertificado.Controllers
 {
     [Authorize(Roles = "usuario")]
@@ -41,8 +42,29 @@ namespace TrabalhoCertificado.Controllers
             }
             else
             {
+                List<Atividade> atividades = new List<Atividade>();
+               foreach(Models.Atividade atividade in context.TBAtividades.ToList())
+                {
+                    if(atividade.DataValidade == null) { 
+                    if (atividade.nome.Contains(buscar) || atividade.dataInicio.ToShortDateString().Contains(buscar) 
+                        || atividade.dataFim.ToShortDateString().Contains(buscar))
+                    {
+                        atividades.Add(atividade);
+                    }
+                    }
+                    else
+                    {
+                        if (atividade.nome.Contains(buscar) || atividade.dataInicio.ToShortDateString().Contains(buscar)
+                        || atividade.dataFim.ToShortDateString().Contains(buscar) 
+                        || atividade.DataValidade.Value.ToShortDateString().Contains(buscar))
+                        {
+                            atividades.Add(atividade);
+                        }
+
+                    }
+                }
+                atividadesLink.atividades = atividades;
                 atividadesLink.tipoAtividades = context.TBTiposAtividades.ToList();
-               // atividadesLink.atividades = context.TBAtividades.Where(x => x.nome.Contains(buscar) || tipoAtividades.Find(a => a.ID == x.idTipoAtiv).Contains(buscar)).ToList();
             }
 
             Usuario usuario = null;
@@ -226,7 +248,7 @@ namespace TrabalhoCertificado.Controllers
                     return RedirectToAction("Index");
                 }
 
-                string arquivosPasta = Path.Combine(hostingEnvironment.WebRootPath, "arquivos");
+                string arquivosPasta = Path.Combine(hostingEnvironment.ContentRootPath, "arquivos");
                 nomedoArquivo = Guid.NewGuid().ToString() + "_" + item.atividade.Arquivo.FileName;
                 string caminhoArquivo = Path.Combine(arquivosPasta, nomedoArquivo);
                 item.atividade.Arquivo.CopyTo(new FileStream(caminhoArquivo, FileMode.Create));
@@ -360,7 +382,7 @@ namespace TrabalhoCertificado.Controllers
             {
                 return BadRequest("Atividade não foi localizada");
             }
-            string arquivosPasta = Path.Combine(hostingEnvironment.WebRootPath, "arquivos");
+            string arquivosPasta = Path.Combine(hostingEnvironment.ContentRootPath, "arquivos");
             string arquivo = Path.Combine(arquivosPasta, atividade.caminhoArquivo);
             if (System.IO.File.Exists(arquivo))
             {
@@ -421,7 +443,7 @@ namespace TrabalhoCertificado.Controllers
                 if (item.atividade.Arquivo != null)
                 {
 
-                    string arquivosPasta = Path.Combine(hostingEnvironment.WebRootPath, "arquivos");
+                    string arquivosPasta = Path.Combine(hostingEnvironment.ContentRootPath, "arquivos");
                     if (item.atividade.caminhoArquivo != null)
                     {
 

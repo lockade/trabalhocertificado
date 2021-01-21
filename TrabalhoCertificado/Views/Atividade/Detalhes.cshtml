@@ -1,10 +1,14 @@
 ﻿@model AtividadeLink;
+
+
 @{
+
     string arquivo = null;
     Layout = null;
     if (Model.atividade.caminhoArquivo != null)
     {
-        arquivo = "/arquivos/" + Model.atividade.caminhoArquivo;
+        arquivo = "/arquivos?parametro=" + Model.atividade.caminhoArquivo;
+
     }
 
 }
@@ -44,9 +48,7 @@
         </div>
 
         <div class="form-group">
-            <label asp-for="@Model.atividade.Arquivo"></label>
-            <label> <a href="@arquivo" target="_blank">Clique aqui para abrir o arquivo.</a></label>
-            <embed src="@arquivo" width="450" height="500" />
+            <label> <a href="@arquivo" target="_blank">Clique aqui para baixar o arquivo.</a></label>            
 
         </div>
 
