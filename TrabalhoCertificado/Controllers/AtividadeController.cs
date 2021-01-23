@@ -45,9 +45,10 @@ namespace TrabalhoCertificado.Controllers
                 List<Atividade> atividades = new List<Atividade>();
                foreach(Models.Atividade atividade in context.TBAtividades.ToList())
                 {
+                    TipoAtividade tipo = context.TBTiposAtividades.Find(atividade.idTipoAtiv);
                     if(atividade.DataValidade == null) { 
                     if (atividade.nome.Contains(buscar) || atividade.dataInicio.ToShortDateString().Contains(buscar) 
-                        || atividade.dataFim.ToShortDateString().Contains(buscar))
+                        || atividade.dataFim.ToShortDateString().Contains(buscar) || tipo.NomeAtividade.Contains(buscar))
                     {
                         atividades.Add(atividade);
                     }
@@ -56,7 +57,8 @@ namespace TrabalhoCertificado.Controllers
                     {
                         if (atividade.nome.Contains(buscar) || atividade.dataInicio.ToShortDateString().Contains(buscar)
                         || atividade.dataFim.ToShortDateString().Contains(buscar) 
-                        || atividade.DataValidade.Value.ToShortDateString().Contains(buscar))
+                        || atividade.DataValidade.Value.ToShortDateString().Contains(buscar)
+                        || tipo.NomeAtividade.Contains(buscar))
                         {
                             atividades.Add(atividade);
                         }
@@ -118,7 +120,7 @@ namespace TrabalhoCertificado.Controllers
             atividadesLink.tipoAtividades = context.TBTiposAtividades.ToList();
             if (buscar == null)
             {
-                foreach(Atividade atividade in context.TBAtividades.ToList())
+                foreach (Atividade atividade in context.TBAtividades.ToList())
                 {
                     if (atividade.DataValidade != null)
                     {
@@ -129,16 +131,22 @@ namespace TrabalhoCertificado.Controllers
             }
             else
             {
-                foreach (Atividade atividade in context.TBAtividades.ToList())
+                foreach (Models.Atividade atividade in context.TBAtividades.ToList())
                 {
+                    TipoAtividade tipo = context.TBTiposAtividades.Find(atividade.idTipoAtiv);
                     if (atividade.DataValidade != null)
                     {
-                        atividades.Add(atividade);
+                        if (atividade.nome.Contains(buscar) || atividade.dataInicio.ToShortDateString().Contains(buscar)
+                            || atividade.dataFim.ToShortDateString().Contains(buscar) || tipo.NomeAtividade.Contains(buscar))
+                        {
+                            atividades.Add(atividade);
+                        }
                     }
+                    atividadesLink.atividades = atividades;
+                    atividadesLink.tipoAtividades = context.TBTiposAtividades.ToList();
                 }
-                atividadesLink.atividades = atividades.Where(x => x.nome.Contains(buscar)).ToList();
             }
-            
+
             Usuario usuario = null;
             try
             {
@@ -175,14 +183,33 @@ namespace TrabalhoCertificado.Controllers
             }
             else
             {
-                foreach (Atividade atividade in context.TBAtividades.ToList())
+                foreach (Models.Atividade atividade in context.TBAtividades.ToList())
                 {
-                    if (atividade.caminhoArquivo != null)
+                    if(atividade.caminhoArquivo != null) { 
+                    TipoAtividade tipo = context.TBTiposAtividades.Find(atividade.idTipoAtiv);
+                    if (atividade.DataValidade == null)
                     {
-                        atividades.Add(atividade);
+                        if (atividade.nome.Contains(buscar) || atividade.dataInicio.ToShortDateString().Contains(buscar)
+                            || atividade.dataFim.ToShortDateString().Contains(buscar) || tipo.NomeAtividade.Contains(buscar))
+                        {
+                            atividades.Add(atividade);
+                        }
+                    }
+                    else
+                    {
+                        if (atividade.nome.Contains(buscar) || atividade.dataInicio.ToShortDateString().Contains(buscar)
+                        || atividade.dataFim.ToShortDateString().Contains(buscar)
+                        || atividade.DataValidade.Value.ToShortDateString().Contains(buscar)
+                        || tipo.NomeAtividade.Contains(buscar))
+                        {
+                            atividades.Add(atividade);
+                        }
+
                     }
                 }
-                atividadesLink.atividades = atividades.Where(x => x.nome.Contains(buscar)).ToList();
+                }
+                atividadesLink.atividades = atividades;
+                atividadesLink.tipoAtividades = context.TBTiposAtividades.ToList();
             }
             Usuario usuario = null;
             try
