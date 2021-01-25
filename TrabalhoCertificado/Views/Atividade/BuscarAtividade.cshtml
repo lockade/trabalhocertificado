@@ -1,0 +1,48 @@
+﻿@model AtividadeLink;
+<form method="get" asp-controller="Atividade" asp-action="Index">
+
+    <div class="form-group">
+
+        <div class="input-group-prepend">
+            <span class="input-group-text d-inline bg-dark text-white">Buscar por nome</span>
+            <input type="text" name="buscar" class="form-control"><br />
+        </div>
+
+        <div class="input-group-prepend">
+            <span class="input-group-text d-inline bg-dark text-white">Buscar por data</span>
+            <input type="date" name="data" class="form-control"><br />
+        </div>
+        <div class="input-group-prepend">
+            <span class="input-group-text d-inline bg-dark text-white">Atividade possui arquivo?</span>
+            <input type="checkbox" name="arquivo" class="form-control"><br />
+        </div>
+
+        <div class="input-group-prepend">
+            <span class="input-group-text d-inline bg-dark text-white">Buscar por tipo de atividade</span>
+            <select asp-for="@Model.atividade.idTipoAtiv"name="tipoAtividade" id="atividades">
+                @foreach (TipoAtividade tipoAtividade in Model.tipoAtividades)
+                {
+                    if (tipoAtividade.idUsuario == (int)TempData["id"])
+                    {
+                        <option value="@tipoAtividade.ID"> @tipoAtividade.NomeAtividade</option>
+                    }
+                }
+                <option selected value="">Vazio</option>
+            </select>
+        </div>
+
+
+    </div>
+
+    <button class="btn btn-primary" type="submit">Buscar Atividade</button>
+
+
+
+
+
+
+
+
+
+
+</form>

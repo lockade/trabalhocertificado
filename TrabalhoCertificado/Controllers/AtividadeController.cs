@@ -13,9 +13,7 @@ using TrabalhoCertificado.Data;
 using TrabalhoCertificado.Models;
 
 //O que falta?
-//Alguns bugs que consegui localizar:
-//Colocar a data de inicio, de fim e de validade, um parametro para não adicionar uma antes da outra.
-//E terminar a pesquisa para as outras views de atividade.
+//Implemento de busca por formulário!
 namespace TrabalhoCertificado.Controllers
 {
     [Authorize(Roles = "usuario")]
@@ -30,62 +28,135 @@ namespace TrabalhoCertificado.Controllers
             this.hostingEnvironment = hostingEnviroment;
         }
         [HttpGet]
-        public ActionResult Index(string buscar)
+        public ActionResult Index(string buscar, string data, string arquivo, string tipoAtividade)
         {
             Models.AtividadeLink atividadesLink = new Models.AtividadeLink();
             List<TipoAtividade> tipoAtividades = context.TBTiposAtividades.ToList();
-           
-           if(buscar == null) { 
-            atividadesLink.tipoAtividades = context.TBTiposAtividades.ToList();
-            atividadesLink.atividades = context.TBAtividades.ToList();
-            
+
+            if (buscar == null && data == null && arquivo == null && tipoAtividade == null)
+            {
+                atividadesLink.tipoAtividades = context.TBTiposAtividades.ToList();
+                atividadesLink.atividades = context.TBAtividades.ToList();
+
             }
             else
             {
                 List<Atividade> atividades = new List<Atividade>();
-               foreach(Models.Atividade atividade in context.TBAtividades.ToList())
+                TipoAtividade tipo = new TipoAtividade();
+                if (tipoAtividade != null)
+                    tipo = context.TBTiposAtividades.Find(tipoAtividade);
+
+
+
+                foreach (Models.Atividade atividade in context.TBAtividades.ToList())
                 {
-                    TipoAtividade tipo = context.TBTiposAtividades.Find(atividade.idTipoAtiv);
-                    if(atividade.DataValidade == null) { 
-                    if (atividade.nome.Contains(buscar) || atividade.dataInicio.ToShortDateString().Contains(buscar) 
-                        || atividade.dataFim.ToShortDateString().Contains(buscar) || tipo.NomeAtividade.Contains(buscar))
+                    if (tipo.NomeAtividade != null)
                     {
-                        atividades.Add(atividade);
-                    }
+                        if (tipo.ID == atividade.idTipoAtiv)
+                        {
+                            if (arquivo != null)
+                            {
+                                if (atividade.caminhoArquivo != null)
+                                {
+                                    if (atividade.DataValidade == null)
+                                    {
+                                        if (atividade.nome.Contains(buscar) || atividade.dataInicio.ToShortDateString().Contains(data)
+                                            || atividade.dataFim.ToShortDateString().Contains(data))
+                                        {
+                                            atividades.Add(atividade);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (atividade.nome.Contains(buscar) || atividade.dataInicio.ToShortDateString().Contains(buscar)
+                                        || atividade.dataFim.ToShortDateString().Contains(buscar)
+                                        || atividade.DataValidade.Value.ToShortDateString().Contains(buscar)
+                                        || tipo.NomeAtividade.Contains(buscar))
+                                        {
+                                            atividades.Add(atividade);
+                                        }
+
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                if (atividade.DataValidade == null)
+                                {
+                                    if (atividade.nome.Contains(buscar) || atividade.dataInicio.ToShortDateString().Contains(data)
+                                        || atividade.dataFim.ToShortDateString().Contains(data))
+                                    {
+                                        atividades.Add(atividade);
+                                    }
+                                }
+                                else
+                                {
+                                    if (atividade.nome.Contains(buscar) || atividade.dataInicio.ToShortDateString().Contains(buscar)
+                                    || atividade.dataFim.ToShortDateString().Contains(buscar)
+                                    || atividade.DataValidade.Value.ToShortDateString().Contains(buscar)
+                                    || tipo.NomeAtividade.Contains(buscar))
+                                    {
+                                        atividades.Add(atividade);
+                                    }
+
+                                }
+                            }
+                        }
                     }
                     else
                     {
-                        if (atividade.nome.Contains(buscar) || atividade.dataInicio.ToShortDateString().Contains(buscar)
-                        || atividade.dataFim.ToShortDateString().Contains(buscar) 
-                        || atividade.DataValidade.Value.ToShortDateString().Contains(buscar)
-                        || tipo.NomeAtividade.Contains(buscar))
+                        if (atividade.DataValidade == null)
                         {
-                            atividades.Add(atividade);
+                            if (atividade.nome.Contains(buscar) || atividade.dataInicio.ToShortDateString().Contains(data)
+                                || atividade.dataFim.ToShortDateString().Contains(data))
+                            {
+                                atividades.Add(atividade);
+                            }
                         }
+                        else
+                        {
+                            if (atividade.nome.Contains(buscar) || atividade.dataInicio.ToShortDateString().Contains(buscar)
+                            || atividade.dataFim.ToShortDateString().Contains(buscar)
+                            || atividade.DataValidade.Value.ToShortDateString().Contains(buscar)
+                            || tipo.NomeAtividade.Contains(buscar))
+                            {
+                                atividades.Add(atividade);
+                            }
 
+                        }
                     }
+
+                    atividadesLink.atividades = atividades;
+                    atividadesLink.tipoAtividades = context.TBTiposAtividades.ToList();
                 }
-                atividadesLink.atividades = atividades;
-                atividadesLink.tipoAtividades = context.TBTiposAtividades.ToList();
-            }
 
-            Usuario usuario = null;
-            try
-            {
-                var sid = int.Parse(User.Claims.Where(c => c.Type == ClaimTypes.Sid).Select(c => c.Value).SingleOrDefault());
-                usuario = context.TBUsuario.FirstOrDefault(x => x.ID == sid);
-                TempData["id"] = usuario.ID;
-                TempData["nome"] = usuario.nome;
-            }
-            catch
-            {
-                TempData["erro"] = "Usuario não encontrado!";
-            }
+                Usuario usuario = null;
+                try
+                {
+                    var sid = int.Parse(User.Claims.Where(c => c.Type == ClaimTypes.Sid).Select(c => c.Value).SingleOrDefault());
+                    usuario = context.TBUsuario.FirstOrDefault(x => x.ID == sid);
+                    TempData["id"] = usuario.ID;
+                    TempData["nome"] = usuario.nome;
+                }
+                catch
+                {
+                    TempData["erro"] = "Usuario não encontrado!";
+                }
 
 
-            return View(atividadesLink);
+                return View(atividadesLink);
+            }
         }
-
+    
+        public ActionResult BuscarAtividade()
+        {
+            AtividadeLink atividade = new AtividadeLink();
+            atividade.tipoAtividades = context.TBTiposAtividades.ToList();
+            var sid = int.Parse(User.Claims.Where(c => c.Type == ClaimTypes.Sid).Select(c => c.Value).SingleOrDefault());
+            Usuario usuario = context.TBUsuario.FirstOrDefault(x => x.ID == sid);
+            TempData["id"] = usuario.ID;
+            return PartialView(atividade);
+        }
         public ActionResult NovaAtividade()
         {
             Models.AtividadeLink atividadesLink = new Models.AtividadeLink();

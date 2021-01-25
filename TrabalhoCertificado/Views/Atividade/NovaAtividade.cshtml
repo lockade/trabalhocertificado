@@ -1,5 +1,5 @@
 ﻿@model AtividadeLink;
-@{ 
+@{
     Layout = null;
 }
 <form enctype="multipart/form-data" method="post" asp-action="NovaAtividade">
@@ -18,12 +18,13 @@
         </div>
         <div class="form-group">
             <label asp-for="@Model.atividade.dataInicio"></label>
-            <input asp-for="@Model.atividade.dataInicio" class="form-control" placeholder="Data de inicio da atividade">
+            <input id="datainicio" asp-for="@Model.atividade.dataInicio" class="form-control" placeholder="Data de inicio da atividade">
             <span asp-validation-for="@Model.atividade.dataInicio" class="text-danger font-weight-light "></span>
+            <span id="alertadatainicio" class="text-danger font-weight-light" style="display:none">Data inicio está maior que a data de fim da atividade</span>
         </div>
         <div class="form-group">
             <label asp-for="@Model.atividade.dataFim"></label>
-            <input asp-for="@Model.atividade.dataFim" class="form-control" placeholder="Data de inicio da atividade">
+            <input id="datafim" asp-for="@Model.atividade.dataFim" class="form-control" placeholder="Data de inicio da atividade">
             <span asp-validation-for="@Model.atividade.dataFim" class="text-danger font-weight-light "></span>
         </div>
         <div class="form-group">
@@ -45,20 +46,24 @@
                 </select>
             }
             <br />Possui data de validade? Sim <input type="checkbox" id="checkbox" onclick="CheckFunc()">
-            <div class="form-group" id="informacoes" style="display:none">
-                <label asp-for="@Model.atividade.DataValidade"></label>
-                <input asp-for="@Model.atividade.DataValidade" class="form-control" placeholder="Data de validade da atividade">
-                <span asp-validation-for="@Model.atividade.DataValidade" class="text-danger font-weight-light "></span>
-            </div>
+                                               <div class="form-group" id="informacoes" style="display:none">
+                                                   <label asp-for="@Model.atividade.DataValidade"></label>
+                                                   <input id="datavalidade" asp-for="@Model.atividade.DataValidade" class="form-control" placeholder="Data de validade da atividade">
+                                                   <span asp-validation-for="@Model.atividade.DataValidade" class="text-danger font-weight-light "></span>
+                                                   <span id="alertadataval" class="text-danger font-weight-light" style="display:none">Data de validade está inválida, pois ela está indiferente com as outras datas.</span>
+                                               </div>
 
 
-            <div class="form-group">
-                <label asp-for="@Model.atividade.Arquivo"></label>
-                <div class="custom-file">
-                    <input asp-for="@Model.atividade.Arquivo" accept="image/png, image/jpeg, @System.Net.Mime.MediaTypeNames.Application.Pdf, @System.Net.Mime.MediaTypeNames.Application.Rtf, image/bmp" onchange="GetNomeArquivo()" class="form-control custom-file-input" id="ArquivoInput" />
-                    <label class="custom-file-label" id="ArquivoNome">Escolha o arquivo ...</label>
-                </div>
-            </div>
+                                               <div class="form-group">
+                                                   <label asp-for="@Model.atividade.Arquivo"></label>
+                                                   <div class="custom-file">
+                                                       <input asp-for="@Model.atividade.Arquivo" accept="image/png, image/jpeg, @System.Net.Mime.MediaTypeNames.Application.Pdf, @System.Net.Mime.MediaTypeNames.Application.Rtf, image/bmp" onchange="GetNomeArquivo()" class="form-control custom-file-input" id="ArquivoInput" />
+                                                       <label class="custom-file-label" id="ArquivoNome">Escolha o arquivo ...</label>
+                                                   </div>
+                                                   <span class="badge badge-pill badge-warning text-dark">Antes de fazer o envio de arquivo, você deveria saber:</span>
+                                                   <span class="badge badge-pill badge-primary text-white">Os formatos/extensões permitidas estão entre: jpg, png e pdf.</span>
+                                                   <span class="badge badge-pill badge-danger text-white">O arquivo deve conter um máximo de 2MBs.</span>
+                                               </div>
 
 
             <button type="button" name="novotipoatividade" class="btn btn-outline-danger btn-sm btn-block" data-dismiss="modal" aria-label="Close" data-toggle="modal" data-target="#modaltipoAtividade">
@@ -73,7 +78,7 @@
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-        <button type="submit" class="btn btn-primary">Salvar</button>
+        <button type="submit" id="btnSalvar" class="btn btn-primary">Salvar</button>
     </div>
 </form>
 <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
@@ -86,6 +91,47 @@
         document.getElementById("ArquivoNome").innerHTML = nomearquivo;
     }
 
+</script>
+<script>
+    var datainicio = document.getElementById("datainicio");
+    var datafinal = document.getElementById("datafim");
+    var datavalidade = document.getElementById("datavalidade");
+
+    datainicio.addEventListener('change', testeData);
+    datafinal.addEventListener('change', testeData);
+    datavalidade.addEventListener('change', testeData);
+
+
+    function testeData () {
+
+        if (datafinal != null && datainicio != null) {
+            var datain = new Date(datainicio.value);
+            datain.setDate(datain.getDate() + 1);
+            var datafim = new Date(datafinal.value);
+            datafim.setDate(datafim.getDate() + 1);
+
+
+            if (datavalidade != null) {
+                var dataval = new Date(datavalidade.value);
+                if (dataval < datain || dataval == datain || dataval < datafinal || dataval == datafinal) {
+                    document.getElementById("alertadataval").style.display = "block";
+                    document.getElementById("btnSalvar").disabled = true;
+                } else {
+                    document.getElementById("alertadataval").style.display = "none";
+                    document.getElementById("btnSalvar").disabled = false;
+                }
+            }
+
+            if (datain > datafim) {
+                document.getElementById("alertadatainicio").style.display = "block";
+                document.getElementById("btnSalvar").disabled = true;
+            }
+            else {
+                document.getElementById("alertadatainicio").style.display = "none";
+                document.getElementById("btnSalvar").disabled = false;
+            }
+        }
+    }
 </script>
 <script type="text/javascript">
     function CheckFunc() {
