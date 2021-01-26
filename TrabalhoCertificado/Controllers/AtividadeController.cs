@@ -5,13 +5,13 @@ using System.Linq;
 using System.Net.Mime;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using ICSharpCode.SharpZipLib.Zip;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TrabalhoCertificado.Data;
 using TrabalhoCertificado.Models;
-
 //O que falta?
 //Implemento de busca por formulário!
 namespace TrabalhoCertificado.Controllers
@@ -33,7 +33,7 @@ namespace TrabalhoCertificado.Controllers
         {
             Models.AtividadeLink atividadesLink = new Models.AtividadeLink();
             List<TipoAtividade> tipoAtividades = context.TBTiposAtividades.ToList();
-            
+
             if (buscar == null && date == null && arquivo == null && tipoAtividade == null)
             {
                 atividadesLink.tipoAtividades = context.TBTiposAtividades.ToList();
@@ -51,7 +51,7 @@ namespace TrabalhoCertificado.Controllers
                 {
                     data = DateTime.MinValue;
                 }
-                
+
                 List<Atividade> atividades = new List<Atividade>();
                 TipoAtividade tipo = new TipoAtividade();
                 if (tipoAtividade != null)
@@ -63,17 +63,17 @@ namespace TrabalhoCertificado.Controllers
 
                 foreach (Models.Atividade atividade in context.TBAtividades.ToList())
                 {
-                    if(tipo != null)
+                    if (tipo != null)
                     {
-                        if(tipo.ID == atividade.idTipoAtiv)
+                        if (tipo.ID == atividade.idTipoAtiv)
                         {
-                            if(buscar != null)
+                            if (buscar != null)
                             {
-                                if(arquivo != null)
+                                if (arquivo != null)
                                 {
                                     if (atividade.caminhoArquivo != null)
                                     {
-                                        if(date != null)
+                                        if (date != null)
                                         {
                                             if (atividade.DataValidade == null)
                                             {
@@ -336,7 +336,7 @@ namespace TrabalhoCertificado.Controllers
                     }
 
 
-                  
+
                     atividadesLink.atividades = atividades;
                     atividadesLink.tipoAtividades = context.TBTiposAtividades.ToList();
                 }
@@ -359,7 +359,7 @@ namespace TrabalhoCertificado.Controllers
 
             return View(atividadesLink);
         }
-    
+
         public ActionResult BuscarAtividade()
         {
             AtividadeLink atividade = new AtividadeLink();
@@ -462,34 +462,35 @@ namespace TrabalhoCertificado.Controllers
                         atividades.Add(atividade);
                     }
                 }
-                atividadesLink.atividades = atividades ;
+                atividadesLink.atividades = atividades;
             }
             else
             {
                 foreach (Models.Atividade atividade in context.TBAtividades.ToList())
                 {
-                    if(atividade.caminhoArquivo != null) { 
-                    TipoAtividade tipo = context.TBTiposAtividades.Find(atividade.idTipoAtiv);
-                    if (atividade.DataValidade == null)
+                    if (atividade.caminhoArquivo != null)
                     {
-                        if (atividade.nome.Contains(buscar) || atividade.dataInicio.ToShortDateString().Contains(buscar)
-                            || atividade.dataFim.ToShortDateString().Contains(buscar) || tipo.NomeAtividade.Contains(buscar))
+                        TipoAtividade tipo = context.TBTiposAtividades.Find(atividade.idTipoAtiv);
+                        if (atividade.DataValidade == null)
                         {
-                            atividades.Add(atividade);
+                            if (atividade.nome.Contains(buscar) || atividade.dataInicio.ToShortDateString().Contains(buscar)
+                                || atividade.dataFim.ToShortDateString().Contains(buscar) || tipo.NomeAtividade.Contains(buscar))
+                            {
+                                atividades.Add(atividade);
+                            }
                         }
-                    }
-                    else
-                    {
-                        if (atividade.nome.Contains(buscar) || atividade.dataInicio.ToShortDateString().Contains(buscar)
-                        || atividade.dataFim.ToShortDateString().Contains(buscar)
-                        || atividade.DataValidade.Value.ToShortDateString().Contains(buscar)
-                        || tipo.NomeAtividade.Contains(buscar))
+                        else
                         {
-                            atividades.Add(atividade);
-                        }
+                            if (atividade.nome.Contains(buscar) || atividade.dataInicio.ToShortDateString().Contains(buscar)
+                            || atividade.dataFim.ToShortDateString().Contains(buscar)
+                            || atividade.DataValidade.Value.ToShortDateString().Contains(buscar)
+                            || tipo.NomeAtividade.Contains(buscar))
+                            {
+                                atividades.Add(atividade);
+                            }
 
+                        }
                     }
-                }
                 }
                 atividadesLink.atividades = atividades;
                 atividadesLink.tipoAtividades = context.TBTiposAtividades.ToList();
@@ -599,7 +600,7 @@ namespace TrabalhoCertificado.Controllers
             {
                 foreach (TipoAtividade tipo in context.TBTiposAtividades.ToList())
                 {
-                    if(tipo.NomeAtividade == item.tipoAtividade.NomeAtividade)
+                    if (tipo.NomeAtividade == item.tipoAtividade.NomeAtividade)
                     {
                         TempData["ErroTipoAtividadeNome"] = "Não é possível adicionar o mesmo nome no tipo de atividade";
                         return RedirectToAction("TiposAtividade");
@@ -748,7 +749,7 @@ namespace TrabalhoCertificado.Controllers
 
 
                 string nomedoArquivo = null;
-             
+
 
                 if (item.atividade.Arquivo != null)
                 {
@@ -781,7 +782,7 @@ namespace TrabalhoCertificado.Controllers
 
 
                         int tipos = 0;
-                        while(tipos <= tiposArquivos.Count)
+                        while (tipos <= tiposArquivos.Count)
                         {
                             if (tipos == tiposArquivos.Count)
                             {
@@ -793,7 +794,7 @@ namespace TrabalhoCertificado.Controllers
                             {
                                 break;
                             }
-                            
+
                             tipos++;
                         }
 
@@ -803,23 +804,23 @@ namespace TrabalhoCertificado.Controllers
 
 
 
-                        if(item.atividade.Arquivo.Length > 2000000)
+                        if (item.atividade.Arquivo.Length > 2000000)
                         {
                             TempData["erroTamanhoArquivo"] = true;
                             return RedirectToAction("Index");
                         }
-                       //ESSE TAMANHO FOI ESCOLHIDO, POIS UM ARQUIVO PDF DE 2MBS, TEM CERCA DE 30 PÁGINAS. Logo, um "simples" arquivo de atividade, não é necessário passar disso.
-                        
+                        //ESSE TAMANHO FOI ESCOLHIDO, POIS UM ARQUIVO PDF DE 2MBS, TEM CERCA DE 30 PÁGINAS. Logo, um "simples" arquivo de atividade, não é necessário passar disso.
+
                         nomedoArquivo = Guid.NewGuid().ToString() + "_" + item.atividade.Arquivo.FileName;
                         string caminhoArquivo = Path.Combine(arquivosPasta, nomedoArquivo);
 
-                        using(System.IO.Stream a = item.atividade.Arquivo.OpenReadStream())
+                        using (System.IO.Stream a = item.atividade.Arquivo.OpenReadStream())
                         {
                             a.CopyTo(new FileStream(caminhoArquivo, FileMode.CreateNew));
                             a.Close();
                         }
 
-                       
+
                         item.atividade.caminhoArquivo = nomedoArquivo;
 
                     }
@@ -838,188 +839,188 @@ namespace TrabalhoCertificado.Controllers
                     }
                 }
 
-                    try
-                    {
+                try
+                {
 
-                        context.TBAtividades.Update(item.atividade);
-                        context.SaveChanges();
+                    context.TBAtividades.Update(item.atividade);
+                    context.SaveChanges();
                     if (System.IO.File.Exists(arquivoAntigo))
                     {
                         System.IO.File.Delete(arquivoAntigo);
                     }
-                    }
-                    catch(Exception e)
-                    {
+                }
+                catch (Exception e)
+                {
                     //erro na hora de salvar
                     return BadRequest("É impossível enviar o arquivo:" + e);
-                    }
+                }
 
-                    TempData["EditarAtividade"] = true;
-                    return RedirectToAction("Index");
-                }
-                else
-                {
-                    TempData["EditarAtividade"] = false;
-                    return RedirectToAction("Index");
-                }
+                TempData["EditarAtividade"] = true;
+                return RedirectToAction("Index");
             }
-        
-    
-            public ActionResult RemoverAtividade(int? id)
+            else
             {
-                if (id == null)
-                {
-                    return new BadRequestResult();
-                }
-                Atividade atividade = context.TBAtividades.Find(id);
-                if (atividade == null)
-                {
-                    return NotFound("Atividade não foi encontrado!");
-                }
+                TempData["EditarAtividade"] = false;
+                return RedirectToAction("Index");
+            }
+        }
 
-                AtividadeLink atividadeLink = new AtividadeLink();
-                atividadeLink.atividade = atividade;
-                TempData["id"] = atividade.idUsuario;
-                return PartialView(atividadeLink);
+
+        public ActionResult RemoverAtividade(int? id)
+        {
+            if (id == null)
+            {
+                return new BadRequestResult();
+            }
+            Atividade atividade = context.TBAtividades.Find(id);
+            if (atividade == null)
+            {
+                return NotFound("Atividade não foi encontrado!");
             }
 
-            public ActionResult TiposAtividade(string buscar)
+            AtividadeLink atividadeLink = new AtividadeLink();
+            atividadeLink.atividade = atividade;
+            TempData["id"] = atividade.idUsuario;
+            return PartialView(atividadeLink);
+        }
+
+        public ActionResult TiposAtividade(string buscar)
+        {
+            List<TipoAtividade> atividades;
+            try
             {
-                List<TipoAtividade> atividades;
-                try
-                {
                 if (buscar == null)
                 {
                     atividades = context.TBTiposAtividades.ToList();
-                    
+
                 }
                 else
                 {
-                    atividades = context.TBTiposAtividades.Where(x => x.NomeAtividade.Contains(buscar)).ToList();                    
-                }
-                
-                }
-                catch
-                {
-                    TempData["ErroTipoAtividades"] = true;
-                    return RedirectToAction("Index");
+                    atividades = context.TBTiposAtividades.Where(x => x.NomeAtividade.Contains(buscar)).ToList();
                 }
 
-                Usuario usuario = null;
-                try
-                {
-                    var sid = int.Parse(User.Claims.Where(c => c.Type == ClaimTypes.Sid).Select(c => c.Value).SingleOrDefault());
-                    usuario = context.TBUsuario.FirstOrDefault(x => x.ID == sid);
-                    TempData["id"] = usuario.ID;
-                    TempData["nome"] = usuario.nome;
-                }
-                catch
-                {
-                    TempData["erro"] = "Usuario não encontrado!";
-                    return RedirectToAction("Index");
-                }
-
-
-                AtividadeLink atividadeLink = new AtividadeLink();
-                atividadeLink.tipoAtividades = atividades;
-                return View(atividadeLink);
+            }
+            catch
+            {
+                TempData["ErroTipoAtividades"] = true;
+                return RedirectToAction("Index");
             }
 
-            [HttpPost]
-            public ActionResult RemoverAtividade(AtividadeLink item)
+            Usuario usuario = null;
+            try
+            {
+                var sid = int.Parse(User.Claims.Where(c => c.Type == ClaimTypes.Sid).Select(c => c.Value).SingleOrDefault());
+                usuario = context.TBUsuario.FirstOrDefault(x => x.ID == sid);
+                TempData["id"] = usuario.ID;
+                TempData["nome"] = usuario.nome;
+            }
+            catch
+            {
+                TempData["erro"] = "Usuario não encontrado!";
+                return RedirectToAction("Index");
+            }
+
+
+            AtividadeLink atividadeLink = new AtividadeLink();
+            atividadeLink.tipoAtividades = atividades;
+            return View(atividadeLink);
+        }
+
+        [HttpPost]
+        public ActionResult RemoverAtividade(AtividadeLink item)
+        {
+
+            item.atividade = context.TBAtividades.Find(item.atividade.ID);
+
+            if (item == null || item.atividade == null)
+            {
+                return new BadRequestResult();
+            }
+            try
             {
 
-                item.atividade = context.TBAtividades.Find(item.atividade.ID);
+                context.TBAtividades.Remove(item.atividade);
+                context.SaveChanges();
+            }
+            catch
+            {
+                //erro na hora de deletar
+                return NotFound("Não foi possivel deletar a atividade.");
+            }
 
-                if (item == null || item.atividade == null)
+            TempData["deletarAtividade"] = true;
+            return RedirectToAction("Index");
+
+
+
+        }
+
+        public ActionResult TiposEditar(int? id)
+        {
+            if (id == null)
+            {
+                return new BadRequestResult();
+            }
+            TipoAtividade atividade = context.TBTiposAtividades.Find(id);
+            if (atividade == null)
+            {
+                return NotFound("Atividade não foi encontrado!");
+            }
+
+            AtividadeLink atividadeLink = new AtividadeLink();
+            atividadeLink.tipoAtividade = atividade;
+            TempData["id"] = atividade.idUsuario;
+            return PartialView(atividadeLink);
+        }
+
+        [HttpPost]
+        public ActionResult TiposEditar(AtividadeLink item)
+        {
+
+            if (ModelState.IsValid)
+            {
+                if (item == null)
                 {
                     return new BadRequestResult();
                 }
                 try
                 {
-
-                    context.TBAtividades.Remove(item.atividade);
+                    context.TBTiposAtividades.Update(item.tipoAtividade);
                     context.SaveChanges();
                 }
                 catch
                 {
-                    //erro na hora de deletar
-                    return NotFound("Não foi possivel deletar a atividade.");
+                    //erro na hora de salvar
+                    ViewBag.MensagemErro = "A atividade não pode ser cadastrado";
                 }
 
-                TempData["deletarAtividade"] = true;
-                return RedirectToAction("Index");
-
-
-
+                TempData["EditarTipoAtividade"] = true;
+                return RedirectToAction("TiposAtividade");
             }
-
-            public ActionResult TiposEditar(int? id)
+            else
             {
-                if (id == null)
-                {
-                    return new BadRequestResult();
-                }
-                TipoAtividade atividade = context.TBTiposAtividades.Find(id);
-                if (atividade == null)
-                {
-                    return NotFound("Atividade não foi encontrado!");
-                }
-
-                AtividadeLink atividadeLink = new AtividadeLink();
-                atividadeLink.tipoAtividade = atividade;
-                TempData["id"] = atividade.idUsuario;
-                return PartialView(atividadeLink);
+                TempData["EditarTiposAtividade"] = false;
+                return RedirectToAction("TiposAtividade");
             }
+        }
 
-            [HttpPost]
-            public ActionResult TiposEditar(AtividadeLink item)
+        public ActionResult TiposDetalhes(int? id)
+        {
+            if (id == null)
             {
-
-                if (ModelState.IsValid)
-                {
-                    if (item == null)
-                    {
-                        return new BadRequestResult();
-                    }
-                    try
-                    {
-                        context.TBTiposAtividades.Update(item.tipoAtividade);
-                        context.SaveChanges();
-                    }
-                    catch
-                    {
-                        //erro na hora de salvar
-                        ViewBag.MensagemErro = "A atividade não pode ser cadastrado";
-                    }
-
-                    TempData["EditarTipoAtividade"] = true;
-                    return RedirectToAction("TiposAtividade");
-                }
-                else
-                {
-                    TempData["EditarTiposAtividade"] = false;
-                    return RedirectToAction("TiposAtividade");
-                }
+                return new BadRequestResult();
             }
-
-            public ActionResult TiposDetalhes(int? id)
+            TipoAtividade tipoAtividade = context.TBTiposAtividades.Find(id);
+            if (tipoAtividade == null)
             {
-                if (id == null)
-                {
-                    return new BadRequestResult();
-                }
-                TipoAtividade tipoAtividade = context.TBTiposAtividades.Find(id);
-                if (tipoAtividade == null)
-                {
-                    return NotFound("Tipo Atividade não foi encontrado!");
-                }
+                return NotFound("Tipo Atividade não foi encontrado!");
+            }
             List<Atividade> atividades = new List<Atividade>();
             try
             {
-                foreach(Atividade atividade in context.TBAtividades.ToList())
+                foreach (Atividade atividade in context.TBAtividades.ToList())
                 {
-                    if(atividade.idTipoAtiv == tipoAtividade.ID)
+                    if (atividade.idTipoAtiv == tipoAtividade.ID)
                     {
                         atividades.Add(atividade);
                     }
@@ -1030,89 +1031,89 @@ namespace TrabalhoCertificado.Controllers
                 return BadRequest("Não foi possível acessar as atividades");
             }
 
-                Usuario usuario;
-                var sid = int.Parse(User.Claims.Where(c => c.Type == ClaimTypes.Sid).Select(c => c.Value).SingleOrDefault());
-                usuario = context.TBUsuario.FirstOrDefault(x => x.ID == sid);
-                TempData["id"] = usuario.ID;
-                TempData["nome"] = usuario.nome;
-            
-            
-                AtividadeLink atividadeLink = new AtividadeLink();
-                atividadeLink.tipoAtividade = tipoAtividade;
-                atividadeLink.atividades = atividades;
-                return PartialView(atividadeLink);
+            Usuario usuario;
+            var sid = int.Parse(User.Claims.Where(c => c.Type == ClaimTypes.Sid).Select(c => c.Value).SingleOrDefault());
+            usuario = context.TBUsuario.FirstOrDefault(x => x.ID == sid);
+            TempData["id"] = usuario.ID;
+            TempData["nome"] = usuario.nome;
+
+
+            AtividadeLink atividadeLink = new AtividadeLink();
+            atividadeLink.tipoAtividade = tipoAtividade;
+            atividadeLink.atividades = atividades;
+            return PartialView(atividadeLink);
+        }
+
+        public ActionResult RemoverTipoAtividade(int? id)
+        {
+            if (id == null)
+            {
+                return new BadRequestResult();
+            }
+            TipoAtividade atividade = context.TBTiposAtividades.Find(id);
+            if (atividade == null)
+            {
+                return NotFound("Tipo Atividade não foi encontrado!");
             }
 
-            public ActionResult RemoverTipoAtividade(int? id)
-            {
-                if (id == null)
-                {
-                    return new BadRequestResult();
-                }
-                TipoAtividade atividade = context.TBTiposAtividades.Find(id);
-                if (atividade == null)
-                {
-                    return NotFound("Tipo Atividade não foi encontrado!");
-                }
+            AtividadeLink atividadeLink = new AtividadeLink();
+            atividadeLink.tipoAtividade = atividade;
+            TempData["id"] = atividade.idUsuario;
+            return PartialView(atividadeLink);
+        }
 
-                AtividadeLink atividadeLink = new AtividadeLink();
-                atividadeLink.tipoAtividade = atividade;
-                TempData["id"] = atividade.idUsuario;
-                return PartialView(atividadeLink);
+        [HttpPost]
+        public ActionResult RemoverTipoAtividade(AtividadeLink item)
+        {
+
+            item.tipoAtividade = context.TBTiposAtividades.Find(item.tipoAtividade.ID);
+
+            if (item == null || item.tipoAtividade == null)
+            {
+                return new BadRequestResult();
             }
 
-            [HttpPost]
-            public ActionResult RemoverTipoAtividade(AtividadeLink item)
+            foreach (Atividade atividade in context.TBAtividades.ToList())
             {
-
-                item.tipoAtividade = context.TBTiposAtividades.Find(item.tipoAtividade.ID);
-
-                if (item == null || item.tipoAtividade == null)
+                if (atividade.idTipoAtiv == item.tipoAtividade.ID)
                 {
-                    return new BadRequestResult();
-                }
-
-                foreach(Atividade atividade in context.TBAtividades.ToList())
-                {
-                    if(atividade.idTipoAtiv == item.tipoAtividade.ID)
-                    {
-                        TempData["deletarTipoAtividade"] = false;
+                    TempData["deletarTipoAtividade"] = false;
                     TempData["deletarTipoAtividadeTXT"] = "Não foi possível deletar o tipo de atividade, pois existe atividades sincronizadas a ela.";
                     return RedirectToAction("TiposAtividade");
-                    }
-                }   
-                try
-                {
-
-                    context.TBTiposAtividades.Remove(item.tipoAtividade);
-                    context.SaveChanges();
                 }
-                catch
-                {
-                    //erro na hora de deletar
-                    return NotFound("Não foi possivel deletar a atividade.");
-                }
-
-                TempData["deletarTipoAtividade"] = true;
-                return RedirectToAction("TiposAtividade");
-
-
-
             }
+            try
+            {
+
+                context.TBTiposAtividades.Remove(item.tipoAtividade);
+                context.SaveChanges();
+            }
+            catch
+            {
+                //erro na hora de deletar
+                return NotFound("Não foi possivel deletar a atividade.");
+            }
+
+            TempData["deletarTipoAtividade"] = true;
+            return RedirectToAction("TiposAtividade");
+
+
+
+        }
 
         public ActionResult baixarAnexos()
         {
             AtividadeLink atividade = new AtividadeLink();
-            
+
 
             Usuario usuario;
             var sid = int.Parse(User.Claims.Where(c => c.Type == ClaimTypes.Sid).Select(c => c.Value).SingleOrDefault());
             usuario = context.TBUsuario.FirstOrDefault(x => x.ID == sid);
-            atividade.atividades = context.TBAtividades.Where(a=>a.idUsuario == usuario.ID);
+            atividade.atividades = context.TBAtividades.Where(a => a.idUsuario == usuario.ID);
             atividade.tipoAtividades = context.TBTiposAtividades.Where(a => a.idUsuario == usuario.ID);
             List<int> anos = new List<int>();
 
-            foreach(Atividade ativ in atividade.atividades)
+            foreach (Atividade ativ in atividade.atividades)
             {
                 if (!anos.Contains(ativ.dataInicio.Year))
                 {
@@ -1129,9 +1130,9 @@ namespace TrabalhoCertificado.Controllers
                         anos.Add(ativ.DataValidade.Value.Year);
                     }
                 }
-            }           
+            }
 
-                atividade.anos = anos;
+            atividade.anos = anos;
             return PartialView(atividade);
         }
         [HttpPost]
@@ -1139,28 +1140,81 @@ namespace TrabalhoCertificado.Controllers
         {
             TipoAtividade tipo = context.TBTiposAtividades.Find(int.Parse(tipoAtividade));
 
-            List<Atividade> atividades = context.TBAtividades.Where(a => a.idTipoAtiv == tipo.ID && a.dataInicio.Year == atividadeLink.ano ||
+            List<Atividade> atividade1 = context.TBAtividades.Where(a => a.idTipoAtiv == tipo.ID && a.caminhoArquivo != null && a.dataInicio.Year == atividadeLink.ano ||
             a.dataFim.Year == atividadeLink.ano || a.DataValidade.Value.Year == atividadeLink.ano).ToList();
-
-            List<string> atividadescaminho = new List<string>();
-
-            foreach(Atividade atividade in atividades)
+            Usuario usuario;
+            var sid = int.Parse(User.Claims.Where(c => c.Type == ClaimTypes.Sid).Select(c => c.Value).SingleOrDefault());
+            usuario = context.TBUsuario.FirstOrDefault(x => x.ID == sid);
+            List<Atividade> atividades = new List<Atividade>();
+            foreach (Atividade ativ in atividade1)
             {
-                atividadescaminho.Add(hostingEnvironment.ContentRootPath + @"/arquivos/" + atividade.caminhoArquivo);
+                if(ativ.caminhoArquivo != null)
+                {
+                    if (ativ.idUsuario == usuario.ID)
+                        atividades.Add(ativ);
+                }
             }
-            //ZipOutputStream
+            List<string> arquivosCaminhos = new List<string>();
+
+            foreach (Atividade atividade in atividades)
+            {
+                arquivosCaminhos.Add(hostingEnvironment.ContentRootPath + @"\arquivos\" + atividade.caminhoArquivo);
+            }
+
+            string nomedoArquivo = "AtividadesAnexos.zip";
+            string caminhoDoArquivo = hostingEnvironment.ContentRootPath + @"\arquivos\" + nomedoArquivo;
+
+            using (ZipOutputStream zipout = new ZipOutputStream(System.IO.File.Create(caminhoDoArquivo)))
+            {
+                zipout.SetLevel(9);
+                byte[] buffer = new byte[4096];
+                foreach (string caminho in arquivosCaminhos)
+                {
+                    ZipEntry entry = new ZipEntry(Path.GetFileName(caminho));
+                    entry.DateTime = DateTime.Now;
+                    entry.IsUnicodeText = true;
+                    zipout.PutNextEntry(entry);
+                    using (FileStream arquivo = System.IO.File.OpenRead(caminho))
+                    {
+                        int bytesPadroes;
+                        do
+                        {
+                            bytesPadroes = arquivo.Read(buffer, 0, buffer.Length);
+                            zipout.Write(buffer, 0, bytesPadroes);
+                        } while (bytesPadroes > 0);
+                    }
+                }
+                zipout.Finish();
+                zipout.Flush();
+                zipout.Close();
+            }
+            byte[] resultadoFinal = System.IO.File.ReadAllBytes(caminhoDoArquivo);
+            if (System.IO.File.Exists(caminhoDoArquivo))
+            {
+                System.IO.File.Delete(caminhoDoArquivo);
+            }
+            if(resultadoFinal == null)
+            {
+                return BadRequest();
+            }
+
+            return File(resultadoFinal, "application/zip", nomedoArquivo);
 
 
 
+
+            //return null;
             //byte[] fileBytes = System.IO.File.ReadAllBytes(hostingEnvironment.ContentRootPath + @"/arquivos/" + arquivo.caminhoArquivo);
             //string fileName = arquivo.caminhoArquivo;
             //return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, fileName);
         }
-
-
-        }
-
     }
+}
+
+
+        
+
+    
 
 
 

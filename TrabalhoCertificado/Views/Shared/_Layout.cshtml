@@ -111,26 +111,11 @@
                 </style>
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <div class="dropdown">
-                            <button class="btn btn-default dropdown-toggle scale-up-hor-left" type="button" data-toggle="dropdown">
-                                Atividade
-                                <span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu bg-info slide-in-blurred-top">
-                                <li><a class="collapse-item" asp-controller="Atividade" asp-action="Index">Todas atividades</a></li>
-                                <li><a class="collapse-item" asp-controller="Atividade" asp-action="AtividadePossuemArquivos">Atividades que possuem arquivos</a></li>
-                                <li><a class="collapse-item" asp-controller="Atividade" asp-action="AtividadeDataDeValidade">Atividades que possuem data de validade</a></li>
-                            </ul>
-                        </div>
-                        <div class="dropdown">
-                            <button class="btn btn-default dropdown-toggle scale-up-hor-left" type="button" data-toggle="dropdown">
-                                Tipos Atividade
-                                <span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu bg-success slide-in-blurred-top ">
-                                <li><a class="collapse-item" asp-controller="Atividade" asp-action="TiposAtividade">Todos tipos de atividade</a></li>
-                            </ul>
-                        </div>
+                        <div class="list-group">
+                           
+                            <a class="collapse-item scale-up-hor-left" asp-controller="Atividade" asp-action="Index">Todas atividades</a>
+                            <a class="collapse-item scale-up-hor-left" asp-controller="Atividade" asp-action="TiposAtividade">Todos tipos de atividade</a>
+                        </div>                        
                     </div>
                 </div>
                 <a class="nav-link" data-toggle="collapse" data-target="#collapse3" aria-expanded="true" aria-controls="collapse3">
