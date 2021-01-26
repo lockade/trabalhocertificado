@@ -38,32 +38,32 @@
                 <select asp-for="@Model.atividade.idTipoAtiv" id="atividades" class="user-select-auto">
                     @foreach (TipoAtividade tipoAtividade in Model.tipoAtividades)
                     {
-                        if (tipoAtividade.idUsuario == (int)TempData["id"])
-                        {
+                        
                             <option value="@tipoAtividade.ID"> @tipoAtividade.NomeAtividade</option>
-                        }
+
+                        
                     }
                 </select>
             }
             <br />Possui data de validade? Sim <input type="checkbox" id="checkbox" onclick="CheckFunc()">
-                                               <div class="form-group" id="informacoes" style="display:none">
-                                                   <label asp-for="@Model.atividade.DataValidade"></label>
-                                                   <input id="datavalidade" asp-for="@Model.atividade.DataValidade" class="form-control" placeholder="Data de validade da atividade">
-                                                   <span asp-validation-for="@Model.atividade.DataValidade" class="text-danger font-weight-light "></span>
-                                                   <span id="alertadataval" class="text-danger font-weight-light" style="display:none">Data de validade está inválida, pois ela está indiferente com as outras datas.</span>
-                                               </div>
+            <div class="form-group" id="informacoes" style="display:none">
+                <label asp-for="@Model.atividade.DataValidade"></label>
+                <input id="datavalidade" asp-for="@Model.atividade.DataValidade" class="form-control" placeholder="Data de validade da atividade">
+                <span asp-validation-for="@Model.atividade.DataValidade" class="text-danger font-weight-light "></span>
+                <span id="alertadataval" class="text-danger font-weight-light" style="display:none">Data de validade está inválida, pois ela está indiferente com as outras datas.</span>
+            </div>
 
 
-                                               <div class="form-group">
-                                                   <label asp-for="@Model.atividade.Arquivo"></label>
-                                                   <div class="custom-file">
-                                                       <input asp-for="@Model.atividade.Arquivo" accept="image/png, image/jpeg, @System.Net.Mime.MediaTypeNames.Application.Pdf, @System.Net.Mime.MediaTypeNames.Application.Rtf, image/bmp" onchange="GetNomeArquivo()" class="form-control custom-file-input" id="ArquivoInput" />
-                                                       <label class="custom-file-label" id="ArquivoNome">Escolha o arquivo ...</label>
-                                                   </div>
-                                                   <span class="badge badge-pill badge-warning text-dark">Antes de fazer o envio de arquivo, você deveria saber:</span>
-                                                   <span class="badge badge-pill badge-primary text-white">Os formatos/extensões permitidas estão entre: jpg, png e pdf.</span>
-                                                   <span class="badge badge-pill badge-danger text-white">O arquivo deve conter um máximo de 2MBs.</span>
-                                               </div>
+            <div class="form-group">
+                <label asp-for="@Model.atividade.Arquivo"></label>
+                <div class="custom-file">
+                    <input asp-for="@Model.atividade.Arquivo" accept="image/png, image/jpeg, @System.Net.Mime.MediaTypeNames.Application.Pdf, @System.Net.Mime.MediaTypeNames.Application.Rtf, image/bmp" onchange="GetNomeArquivo()" class="form-control custom-file-input" id="ArquivoInput" />
+                    <label class="custom-file-label" id="ArquivoNome">Escolha o arquivo ...</label>
+                </div>
+                <span class="badge badge-pill badge-warning text-dark">Antes de fazer o envio de arquivo, você deveria saber:</span>
+                <span class="badge badge-pill badge-primary text-white">Os formatos/extensões permitidas estão entre: jpg, png e pdf.</span>
+                <span class="badge badge-pill badge-danger text-white">O arquivo deve conter um máximo de 2MBs.</span>
+            </div>
 
 
             <button type="button" name="novotipoatividade" class="btn btn-outline-danger btn-sm btn-block" data-dismiss="modal" aria-label="Close" data-toggle="modal" data-target="#modaltipoAtividade">
@@ -102,7 +102,7 @@
     datavalidade.addEventListener('change', testeData);
 
 
-    function testeData () {
+    function testeData() {
 
         if (datafinal != null && datainicio != null) {
             var datain = new Date(datainicio.value);

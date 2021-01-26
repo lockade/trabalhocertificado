@@ -372,14 +372,6 @@ namespace TrabalhoCertificado.Controllers
         public ActionResult NovaAtividade()
         {
             Models.AtividadeLink atividadesLink = new Models.AtividadeLink();
-
-            List<Atividade> atividades = context.TBAtividades.ToList();
-            List<TipoAtividade> tipoAtividades = context.TBTiposAtividades.ToList();
-
-            atividadesLink.tipoAtividades = tipoAtividades;
-            atividadesLink.atividades = atividades;
-
-
             Usuario usuario = null;
             try
             {
@@ -392,6 +384,14 @@ namespace TrabalhoCertificado.Controllers
             {
                 TempData["erro"] = "Usuario não encontrado!";
             }
+            List<Atividade> atividades = context.TBAtividades.ToList();
+            List<TipoAtividade> tipoAtividades = context.TBTiposAtividades.Where(a => a.idUsuario == usuario.ID).ToList();
+
+            atividadesLink.tipoAtividades = tipoAtividades;
+            atividadesLink.atividades = atividades;
+
+
+           
             return PartialView(atividadesLink);
 
         }
