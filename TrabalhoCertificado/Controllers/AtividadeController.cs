@@ -27,13 +27,14 @@ namespace TrabalhoCertificado.Controllers
             context = _context;
             this.hostingEnvironment = hostingEnviroment;
         }
+        //DESCULPA POR ESSE CÓDIGO GIGANTESCO, NÃO TIVE MUITO TEMPO PARA FAZER UM ALGORITMO MAIS TRANQUILO;
         [HttpGet]
-        public ActionResult Index(string buscar, string data, string arquivo, string tipoAtividade)
+        public ActionResult Index(string buscar, string date, string arquivo, string tipoAtividade)
         {
             Models.AtividadeLink atividadesLink = new Models.AtividadeLink();
             List<TipoAtividade> tipoAtividades = context.TBTiposAtividades.ToList();
-
-            if (buscar == null && data == null && arquivo == null && tipoAtividade == null)
+            
+            if (buscar == null && date == null && arquivo == null && tipoAtividade == null)
             {
                 atividadesLink.tipoAtividades = context.TBTiposAtividades.ToList();
                 atividadesLink.atividades = context.TBAtividades.ToList();
@@ -41,111 +42,322 @@ namespace TrabalhoCertificado.Controllers
             }
             else
             {
+                DateTime data;
+                if (date != null)
+                {
+                    data = DateTime.Parse(date);
+                }
+                else
+                {
+                    data = DateTime.MinValue;
+                }
+                
                 List<Atividade> atividades = new List<Atividade>();
                 TipoAtividade tipo = new TipoAtividade();
                 if (tipoAtividade != null)
-                    tipo = context.TBTiposAtividades.Find(tipoAtividade);
+                    tipo = context.TBTiposAtividades.Find(int.Parse(tipoAtividade));
+                else
+                    tipo = null;
 
 
 
                 foreach (Models.Atividade atividade in context.TBAtividades.ToList())
                 {
-                    if (tipo.NomeAtividade != null)
+                    if(tipo != null)
                     {
-                        if (tipo.ID == atividade.idTipoAtiv)
+                        if(tipo.ID == atividade.idTipoAtiv)
                         {
-                            if (arquivo != null)
+                            if(buscar != null)
                             {
-                                if (atividade.caminhoArquivo != null)
+                                if(arquivo != null)
                                 {
-                                    if (atividade.DataValidade == null)
+                                    if (atividade.caminhoArquivo != null)
                                     {
-                                        if (atividade.nome.Contains(buscar) || atividade.dataInicio.ToShortDateString().Contains(data)
-                                            || atividade.dataFim.ToShortDateString().Contains(data))
+                                        if(date != null)
                                         {
-                                            atividades.Add(atividade);
+                                            if (atividade.DataValidade == null)
+                                            {
+                                                if (atividade.nome.Contains(buscar) || atividade.dataInicio.ToShortDateString().Contains(data.ToShortDateString())
+                                                    || atividade.dataFim.ToShortDateString().Contains(data.ToShortDateString()))
+                                                {
+                                                    atividades.Add(atividade);
+                                                }
+                                            }
+                                            else
+                                            {
+                                                if (atividade.nome.Contains(buscar) || atividade.dataInicio.ToShortDateString().Contains(data.ToShortDateString())
+                                                || atividade.dataFim.ToShortDateString().Contains(data.ToShortDateString())
+                                                || atividade.DataValidade.Value.ToShortDateString().Contains(data.ToShortDateString()))
+                                                {
+                                                    atividades.Add(atividade);
+                                                }
+
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if (atividade.nome.Contains(buscar))
+                                            {
+                                                atividades.Add(atividade);
+                                            }
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    if (date != null)
+                                    {
+                                        if (atividade.DataValidade == null)
+                                        {
+                                            if (atividade.nome.Contains(buscar) || atividade.dataInicio.ToShortDateString().Contains(data.ToShortDateString())
+                                                || atividade.dataFim.ToShortDateString().Contains(data.ToShortDateString()))
+                                            {
+                                                atividades.Add(atividade);
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if (atividade.nome.Contains(buscar) || atividade.dataInicio.ToShortDateString().Contains(data.ToShortDateString())
+                                            || atividade.dataFim.ToShortDateString().Contains(data.ToShortDateString())
+                                            || atividade.DataValidade.Value.ToShortDateString().Contains(data.ToShortDateString()))
+                                            {
+                                                atividades.Add(atividade);
+                                            }
+
                                         }
                                     }
                                     else
                                     {
-                                        if (atividade.nome.Contains(buscar) || atividade.dataInicio.ToShortDateString().Contains(buscar)
-                                        || atividade.dataFim.ToShortDateString().Contains(buscar)
-                                        || atividade.DataValidade.Value.ToShortDateString().Contains(buscar)
-                                        || tipo.NomeAtividade.Contains(buscar))
+                                        if (atividade.nome.Contains(buscar))
                                         {
                                             atividades.Add(atividade);
                                         }
-
                                     }
                                 }
                             }
                             else
                             {
-                                if (atividade.DataValidade == null)
+                                if (arquivo != null)
                                 {
-                                    if (atividade.nome.Contains(buscar) || atividade.dataInicio.ToShortDateString().Contains(data)
-                                        || atividade.dataFim.ToShortDateString().Contains(data))
+                                    if (atividade.caminhoArquivo != null)
                                     {
-                                        atividades.Add(atividade);
+                                        if (date != null)
+                                        {
+                                            if (atividade.DataValidade == null)
+                                            {
+                                                if (atividade.dataInicio.ToShortDateString().Contains(data.ToShortDateString())
+                                                    || atividade.dataFim.ToShortDateString().Contains(data.ToShortDateString()))
+                                                {
+                                                    atividades.Add(atividade);
+                                                }
+                                            }
+                                            else
+                                            {
+                                                if (atividade.dataInicio.ToShortDateString().Contains(data.ToShortDateString())
+                                                || atividade.dataFim.ToShortDateString().Contains(data.ToShortDateString())
+                                                || atividade.DataValidade.Value.ToShortDateString().Contains(data.ToShortDateString()))
+                                                {
+                                                    atividades.Add(atividade);
+                                                }
+
+                                            }
+                                        }
+                                        else
+                                        {
+                                            atividades.Add(atividade);
+                                        }
                                     }
                                 }
                                 else
                                 {
-                                    if (atividade.nome.Contains(buscar) || atividade.dataInicio.ToShortDateString().Contains(buscar)
-                                    || atividade.dataFim.ToShortDateString().Contains(buscar)
-                                    || atividade.DataValidade.Value.ToShortDateString().Contains(buscar)
-                                    || tipo.NomeAtividade.Contains(buscar))
+                                    if (date != null)
+                                    {
+                                        if (atividade.DataValidade == null)
+                                        {
+                                            if (atividade.dataInicio.ToShortDateString().Contains(data.ToShortDateString())
+                                                || atividade.dataFim.ToShortDateString().Contains(data.ToShortDateString()))
+                                            {
+                                                atividades.Add(atividade);
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if (atividade.dataInicio.ToShortDateString().Contains(data.ToShortDateString())
+                                            || atividade.dataFim.ToShortDateString().Contains(data.ToShortDateString())
+                                            || atividade.DataValidade.Value.ToShortDateString().Contains(data.ToShortDateString()))
+                                            {
+                                                atividades.Add(atividade);
+                                            }
+
+                                        }
+                                    }
+                                    else
                                     {
                                         atividades.Add(atividade);
                                     }
-
                                 }
                             }
                         }
                     }
                     else
                     {
-                        if (atividade.DataValidade == null)
+                        if (buscar != null)
                         {
-                            if (atividade.nome.Contains(buscar) || atividade.dataInicio.ToShortDateString().Contains(data)
-                                || atividade.dataFim.ToShortDateString().Contains(data))
+                            if (arquivo != null)
                             {
-                                atividades.Add(atividade);
+                                if (atividade.caminhoArquivo != null)
+                                {
+                                    if (date != null)
+                                    {
+                                        if (atividade.DataValidade == null)
+                                        {
+                                            if (atividade.nome.Contains(buscar) || atividade.dataInicio.ToShortDateString().Contains(data.ToShortDateString())
+                                                || atividade.dataFim.ToShortDateString().Contains(data.ToShortDateString()))
+                                            {
+                                                atividades.Add(atividade);
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if (atividade.nome.Contains(buscar) || atividade.dataInicio.ToShortDateString().Contains(data.ToShortDateString())
+                                            || atividade.dataFim.ToShortDateString().Contains(data.ToShortDateString())
+                                            || atividade.DataValidade.Value.ToShortDateString().Contains(data.ToShortDateString()))
+                                            {
+                                                atividades.Add(atividade);
+                                            }
+
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (atividade.nome.Contains(buscar))
+                                        {
+                                            atividades.Add(atividade);
+                                        }
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                if (date != null)
+                                {
+                                    if (atividade.DataValidade == null)
+                                    {
+                                        if (atividade.nome.Contains(buscar) || atividade.dataInicio.ToShortDateString().Contains(data.ToShortDateString())
+                                            || atividade.dataFim.ToShortDateString().Contains(data.ToShortDateString()))
+                                        {
+                                            atividades.Add(atividade);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (atividade.nome.Contains(buscar) || atividade.dataInicio.ToShortDateString().Contains(data.ToShortDateString())
+                                        || atividade.dataFim.ToShortDateString().Contains(data.ToShortDateString())
+                                        || atividade.DataValidade.Value.ToShortDateString().Contains(data.ToShortDateString()))
+                                        {
+                                            atividades.Add(atividade);
+                                        }
+
+                                    }
+                                }
+                                else
+                                {
+                                    if (atividade.nome.Contains(buscar))
+                                    {
+                                        atividades.Add(atividade);
+                                    }
+                                }
                             }
                         }
                         else
                         {
-                            if (atividade.nome.Contains(buscar) || atividade.dataInicio.ToShortDateString().Contains(buscar)
-                            || atividade.dataFim.ToShortDateString().Contains(buscar)
-                            || atividade.DataValidade.Value.ToShortDateString().Contains(buscar)
-                            || tipo.NomeAtividade.Contains(buscar))
+                            if (arquivo != null)
                             {
-                                atividades.Add(atividade);
-                            }
+                                if (atividade.caminhoArquivo != null)
+                                {
+                                    if (date != null)
+                                    {
+                                        if (atividade.DataValidade == null)
+                                        {
+                                            if (atividade.dataInicio.ToShortDateString().Contains(data.ToShortDateString())
+                                                || atividade.dataFim.ToShortDateString().Contains(data.ToShortDateString()))
+                                            {
+                                                atividades.Add(atividade);
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if (atividade.dataInicio.ToShortDateString().Contains(data.ToShortDateString())
+                                            || atividade.dataFim.ToShortDateString().Contains(data.ToShortDateString())
+                                            || atividade.DataValidade.Value.ToShortDateString().Contains(data.ToShortDateString()))
+                                            {
+                                                atividades.Add(atividade);
+                                            }
 
+                                        }
+                                    }
+                                    else
+                                    {
+
+                                        atividades.Add(atividade);
+
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                if (date != null)
+                                {
+                                    if (atividade.DataValidade == null)
+                                    {
+                                        if (atividade.dataInicio.ToShortDateString().Contains(data.ToShortDateString())
+                                            || atividade.dataFim.ToShortDateString().Contains(data.ToShortDateString()))
+                                        {
+                                            atividades.Add(atividade);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (atividade.dataInicio.ToShortDateString().Contains(data.ToShortDateString())
+                                        || atividade.dataFim.ToShortDateString().Contains(data.ToShortDateString())
+                                        || atividade.DataValidade.Value.ToShortDateString().Contains(data.ToShortDateString()))
+                                        {
+                                            atividades.Add(atividade);
+                                        }
+
+                                    }
+                                }
+                                else
+                                {
+                                    atividades.Add(atividade);
+                                }
+                            }
                         }
                     }
 
+
+                  
                     atividadesLink.atividades = atividades;
                     atividadesLink.tipoAtividades = context.TBTiposAtividades.ToList();
                 }
 
-                Usuario usuario = null;
-                try
-                {
-                    var sid = int.Parse(User.Claims.Where(c => c.Type == ClaimTypes.Sid).Select(c => c.Value).SingleOrDefault());
-                    usuario = context.TBUsuario.FirstOrDefault(x => x.ID == sid);
-                    TempData["id"] = usuario.ID;
-                    TempData["nome"] = usuario.nome;
-                }
-                catch
-                {
-                    TempData["erro"] = "Usuario não encontrado!";
-                }
 
-
-                return View(atividadesLink);
             }
+            Usuario usuario = null;
+            try
+            {
+                var sid = int.Parse(User.Claims.Where(c => c.Type == ClaimTypes.Sid).Select(c => c.Value).SingleOrDefault());
+                usuario = context.TBUsuario.FirstOrDefault(x => x.ID == sid);
+                TempData["id"] = usuario.ID;
+                TempData["nome"] = usuario.nome;
+            }
+            catch
+            {
+                TempData["erro"] = "Usuario não encontrado!";
+            }
+
+
+            return View(atividadesLink);
         }
     
         public ActionResult BuscarAtividade()
@@ -887,6 +1099,63 @@ namespace TrabalhoCertificado.Controllers
 
 
             }
+
+        public ActionResult baixarAnexos()
+        {
+            AtividadeLink atividade = new AtividadeLink();
+            
+
+            Usuario usuario;
+            var sid = int.Parse(User.Claims.Where(c => c.Type == ClaimTypes.Sid).Select(c => c.Value).SingleOrDefault());
+            usuario = context.TBUsuario.FirstOrDefault(x => x.ID == sid);
+            atividade.atividades = context.TBAtividades.Where(a=>a.idUsuario == usuario.ID);
+            atividade.tipoAtividades = context.TBTiposAtividades.Where(a => a.idUsuario == usuario.ID);
+            List<int> anos = new List<int>();
+
+            foreach(Atividade ativ in atividade.atividades)
+            {
+                if (!anos.Contains(ativ.dataInicio.Year))
+                {
+                    anos.Add(ativ.dataInicio.Year);
+                }
+                if (!anos.Contains(ativ.dataFim.Year))
+                {
+                    anos.Add(ativ.dataFim.Year);
+                }
+                if (ativ.DataValidade.HasValue)
+                {
+                    if (!anos.Contains(ativ.DataValidade.Value.Year))
+                    {
+                        anos.Add(ativ.DataValidade.Value.Year);
+                    }
+                }
+            }           
+
+                atividade.anos = anos;
+            return PartialView(atividade);
+        }
+        [HttpPost]
+        public ActionResult baixarAnexos(AtividadeLink atividadeLink, string tipoAtividade)
+        {
+            TipoAtividade tipo = context.TBTiposAtividades.Find(int.Parse(tipoAtividade));
+
+            List<Atividade> atividades = context.TBAtividades.Where(a => a.idTipoAtiv == tipo.ID && a.dataInicio.Year == atividadeLink.ano ||
+            a.dataFim.Year == atividadeLink.ano || a.DataValidade.Value.Year == atividadeLink.ano).ToList();
+
+            List<string> atividadescaminho = new List<string>();
+
+            foreach(Atividade atividade in atividades)
+            {
+                atividadescaminho.Add(hostingEnvironment.ContentRootPath + @"/arquivos/" + atividade.caminhoArquivo);
+            }
+            //ZipOutputStream
+
+
+
+            //byte[] fileBytes = System.IO.File.ReadAllBytes(hostingEnvironment.ContentRootPath + @"/arquivos/" + arquivo.caminhoArquivo);
+            //string fileName = arquivo.caminhoArquivo;
+            //return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, fileName);
+        }
 
 
         }

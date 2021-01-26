@@ -10,9 +10,11 @@ namespace TrabalhoCertificado.Models
         //POST
         public Atividade atividade { get; set; }
         public TipoAtividade tipoAtividade {get;set;}
+        public int ano { get; set; }
         //GET
         public IEnumerable<Atividade> atividades { get; set; }
         public IEnumerable<TipoAtividade> tipoAtividades { get; set; }
+        public IEnumerable<int> anos { get; set; }
     }
 
 }

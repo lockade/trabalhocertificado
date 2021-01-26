@@ -1,0 +1,33 @@
+﻿@model AtividadeLink;
+
+
+@{
+    Layout = null;
+}
+
+<form method="post" asp-action="baixarAnexos">
+    <div class="input-group-prepend">
+        <span class="input-group-text d-inline bg-dark text-white">Selecione o tipo de atividade</span>
+        <select asp-for="@Model.tipoAtividade" name="tipoAtividade" class="user-select-auto">
+            @foreach (TipoAtividade tipoAtividade in Model.tipoAtividades)
+            {
+
+                <option value="@tipoAtividade.ID"> @tipoAtividade.NomeAtividade</option>
+
+            }
+        </select>
+    </div>
+
+
+    <div class="input-group-prepend">
+        <span class="input-group-text d-inline bg-dark text-white">Selecione a data para baixar o anexo das Atividades</span>
+        <select asp-for="@Model.ano" class="user-select-auto">
+            @foreach (int ano in Model.anos)
+            {
+                <option value="@ano">@ano</option>
+            }
+        </select>
+    </div>
+
+    <button type="submit">Concluir</button>
+</form>
