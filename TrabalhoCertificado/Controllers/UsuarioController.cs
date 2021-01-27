@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using TrabalhoCertificado.Data;
@@ -22,10 +23,11 @@ namespace TrabalhoCertificado.Controllers
     {
 
         private readonly DataContext context;
-
-        public UsuarioController(DataContext _context)
+        private readonly IHostingEnvironment hostingEnvironment;
+        public UsuarioController(DataContext _context, IHostingEnvironment hostingEnvironment)
         {
             context = _context;
+            this.hostingEnvironment = hostingEnvironment;
         }
 
         public IActionResult Index()
@@ -439,6 +441,25 @@ namespace TrabalhoCertificado.Controllers
 
 
                 //DEVE-SE REMOVER TODOS OS DADOS TAMBEM
+                AtividadeLink link = new AtividadeLink();
+                link.atividades = context.TBAtividades.Where(a => a.idUsuario == c.ID);
+                link.tipoAtividades = context.TBTiposAtividades.Where(a => a.idUsuario == c.ID);
+                string caminho = hostingEnvironment.ContentRootPath + @"/arquivos/";
+                foreach (Atividade atividade in link.atividades)
+                {
+                    if(atividade.caminhoArquivo != null)
+                    {
+                        if (System.IO.File.Exists(System.IO.Path.Combine(caminho, atividade.caminhoArquivo))){
+                            System.IO.File.Delete(System.IO.Path.Combine(caminho, atividade.caminhoArquivo));
+                        }
+                    }
+                    context.TBAtividades.Remove(atividade);
+                }
+
+                foreach(TipoAtividade tipo in link.tipoAtividades)
+                {
+                    context.TBTiposAtividades.Remove(tipo);
+                }
 
                 context.TBUsuario.Remove(c);
                 context.SaveChanges();

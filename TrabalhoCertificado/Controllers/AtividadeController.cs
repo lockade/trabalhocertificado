@@ -63,6 +63,8 @@ namespace TrabalhoCertificado.Controllers
 
                 foreach (Models.Atividade atividade in context.TBAtividades.ToList())
                 {
+                    buscar = buscar.ToLower();
+                    atividade.nome = atividade.nome.ToLower();
                     if (tipo != null)
                     {
                         if (tipo.ID == atividade.idTipoAtiv)
