@@ -1,5 +1,5 @@
 ﻿@{
-    Layout = "LayoutUsuario";
+    Layout = "LayoutLogin";
 }
 @model Usuario;
 
@@ -12,20 +12,20 @@
     <span class="login100-form-title p-b-34 p-t-27">Entrar
     </span>
 
-    <div class="wrap-input100 validate-input" data-validate="Enter username">
+    <div class="wrap-input100" data-validate="Enter username">
         <input class="input100" type="text" asp-for="Email" placeholder="Email">
         <span class="focus-input100" data-placeholder="&#xf207;"></span>
     </div>
     <span asp-validation-for="Email" class="text-danger"></span>
 
-    <div class="wrap-input100 validate-input" data-validate="Enter password">
+    <div class="wrap-input100" data-validate="Enter password">
         <input class="input100" type="password" asp-for="Senha" placeholder="Senha">
         <span class="focus-input100" data-placeholder="&#xf191;"></span>
     </div>
 
     @if (ViewBag.Erro != null)
     {
-        <div class="alert alert-danger text-center">@ViewBag.Erro</div>
+        <div class="alert alert-danger text-center" id="divresp">@ViewBag.Erro</div>
     }
 
     <div class="container-login100-form-btn">
@@ -42,3 +42,11 @@
             Recuperar Senha
         </a>
     </div>
+
+    <script>
+        $("input").on("change paste keyup", function () {
+            $("#divresp").html("")
+        })
+
+
+    </script>

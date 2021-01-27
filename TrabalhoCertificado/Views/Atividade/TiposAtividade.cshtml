@@ -1,5 +1,6 @@
 ﻿@model AtividadeLink;
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers;
+
 @if (TempData["EditarTipoAtividade"] != null)
 {
     if ((bool)TempData["EditarTipoAtividade"] == true)
@@ -38,7 +39,7 @@
         <br />
     }
 }
-<div class="form-text">
+<div class="form-text mx-auto text-center">
     <button class="tracking-in-contract-bck-top  btn btn-outline-primary btn-lg" data-toggle="modal" data-target="#ModalBemVindo">
         <h3>Bem vindo a página de</h3><h1 class="focus-in-expand-fwd"> Tipo Atividades</h1>
     </button>
@@ -79,7 +80,7 @@
 
 
 
-<div class="d-flex justify-content-around">
+<div class="d-flex justify-content-around mb-2">
     <button type="button" name="tiposAtividade" class="btn btn-outline-primary btn-lg btn-toolbar btnNovoTipo" data-toggle="modal" data-target="#ModalNovoTipo">Cadastrar Novo Tipo Atividade</button>
 
 </div>

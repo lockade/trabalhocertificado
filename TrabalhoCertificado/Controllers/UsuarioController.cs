@@ -282,8 +282,6 @@ namespace TrabalhoCertificado.Controllers
             {
                 ViewBag.Erro = "Campos não preenchidos.";
             }
-           
-
             
             return View();
 

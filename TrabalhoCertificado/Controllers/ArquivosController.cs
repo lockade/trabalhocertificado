@@ -17,6 +17,7 @@ namespace TrabalhoCertificado.Controllers
             context = _context;
             this.hostingEnvironment = hostingEnviroment;
         }
+
         [HttpGet]
         public IActionResult Index(string parametro)
         {

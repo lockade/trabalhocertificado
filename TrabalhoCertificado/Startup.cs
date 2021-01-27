@@ -66,7 +66,7 @@ namespace TrabalhoCertificado
                             pattern: "{controller=Home}/{action=Index}/{id?}");
                     });
 
-                }
+            }
         }
     }
 

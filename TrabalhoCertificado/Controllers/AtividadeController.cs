@@ -562,7 +562,9 @@ namespace TrabalhoCertificado.Controllers
                 string arquivosPasta = Path.Combine(hostingEnvironment.ContentRootPath, "arquivos");
                 nomedoArquivo = Guid.NewGuid().ToString() + "_" + item.atividade.Arquivo.FileName;
                 string caminhoArquivo = Path.Combine(arquivosPasta, nomedoArquivo);
-                item.atividade.Arquivo.CopyTo(new FileStream(caminhoArquivo, FileMode.Create));
+                FileStream arq = new FileStream(caminhoArquivo, FileMode.Create);
+                item.atividade.Arquivo.CopyTo(arq);
+                arq.Close();
 
             }
 
